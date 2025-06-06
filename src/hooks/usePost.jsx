@@ -12,7 +12,7 @@ export function usePost(token) {
     try {
       const res = await axios.post(url, body, {
         headers: {
-        //   Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -21,10 +21,10 @@ export function usePost(token) {
       toast.success(res.data.message);
       return res.data;
     } catch (err) {
-      setError(err);
+      const message = err.response?.data?.message || err.message;
+      setError(message); // ✅ Only store the message
       setResponse(null);
-      toast.error(`Error: ${err.response?.data?.message || err.message}`);
-     
+      toast.error(`Error: ${message}`);
     } finally {
       setLoading(false);
     }
