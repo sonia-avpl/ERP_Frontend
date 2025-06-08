@@ -18,6 +18,7 @@ import ToggleButton from "./buttons/ToggleButton";
 import { useGet } from "../hooks/useGet";
 import { baseUrl } from "../utilis";
 import { useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 const Sidebar = ({ userRole }) => {
   const [isTeamOpen, setIsTeamOpen] = useState(false);
@@ -26,7 +27,17 @@ const Sidebar = ({ userRole }) => {
   const isResizing = useRef(false);
   const { data: projects, setData } = useGet(`${baseUrl}/projects`);
   const navigate = useNavigate();
+ const [showModal, setShowModal] = useState(false);
+  const [projectName, setProjectName] = useState("");
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (projectName.trim()) {
+      addProject(projectName);
+      setProjectName("");
+      setShowModal(false);
+    }
+  };
   const addProject = (newProject) => {
     setData((prev) => [...prev, newProject]);
   };
@@ -46,7 +57,7 @@ const Sidebar = ({ userRole }) => {
 
   return (
     <div
-      className="flex"
+      className="flex text-sm"
       onMouseMove={handleResizing}
       onMouseUp={stopResizing}
       onMouseLeave={stopResizing}
@@ -103,19 +114,31 @@ const Sidebar = ({ userRole }) => {
               >
                 R&D Modules
               </div>
-              <button onClick={()=>navigate("/component-design")} className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+              <button
+                onClick={() => navigate("/component-design")}
+                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+              >
                 <CubeIcon className="h-5 w-5" />
                 {isSidebarExpanded && <span>Component Design</span>}
               </button>
-              <button onClick={()=>navigate("/prototype-management")} className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+              <button
+                onClick={() => navigate("/prototype-management")}
+                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+              >
                 <BeakerIcon className="h-5 w-5" />
                 {isSidebarExpanded && <span>Prototype Management</span>}
               </button>
-              <button onClick={()=>navigate("/testing-validation")} className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+              <button
+                onClick={() => navigate("/testing-validation")}
+                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+              >
                 <ClipboardDocumentCheckIcon className="h-5 w-5" />
                 {isSidebarExpanded && <span>Testing & Validation</span>}
               </button>
-              <button onClick={()=>navigate("/compliance-docs")} className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+              <button
+                onClick={() => navigate("/compliance-docs")}
+                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+              >
                 <PuzzlePieceIcon className="h-5 w-5" />
                 {isSidebarExpanded && <span>Compliance & Docs</span>}
               </button>
@@ -168,6 +191,11 @@ const Sidebar = ({ userRole }) => {
                 setIsTeamOpen={setIsTeamOpen}
                 isTeamOpen={isTeamOpen}
                 onAddProject={addProject}
+                handleSubmit={handleSubmit}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                projectName={projectName}
+                setProjectName={setProjectName}
               />
               {isTeamOpen && isSidebarExpanded && (
                 <div className="ml-4 mt-2 space-y-1">
@@ -197,6 +225,10 @@ const Sidebar = ({ userRole }) => {
               </button>
             </div>
           )}
+          <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+            <LogOut className="h-5 w-5" />
+            {isSidebarExpanded && <span>Logout</span>}
+          </button>
         </div>
 
         {/* Resize Handle only for md+ */}

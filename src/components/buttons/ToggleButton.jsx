@@ -8,18 +8,8 @@ import {
 import ProjectCreateModal from "../modals/ProjectCreateModal";
 
 
-const ToggleButton = ({ setIsTeamOpen, isTeamOpen, onAddProject }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [projectName, setProjectName] = useState("");
+const ToggleButton = ({ setIsTeamOpen, isTeamOpen,handleSubmit,showModal,setShowModal,projectName,setProjectName }) => {
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (projectName.trim()) {
-      onAddProject(projectName);
-      setProjectName("");
-      setShowModal(false);
-    }
-  };
 
   return (
     <div className="relative">
@@ -30,7 +20,7 @@ const ToggleButton = ({ setIsTeamOpen, isTeamOpen, onAddProject }) => {
           className="flex items-center gap-2 w-full"
         >
           <UsersIcon className="h-5 w-5" />
-          <span>Team Space</span>
+          <span>Project Managment</span>
           {isTeamOpen ? (
             <ChevronUpIcon className="h-4 w-4 ml-auto" />
           ) : (

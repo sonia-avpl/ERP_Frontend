@@ -16,7 +16,7 @@ const certifications = [
     meta: ["Approved: May 15, 2023", "Valid until: May 14, 2025"],
   },
   {
-    title: "Air Operator Certificate",
+    title: "Other Operator Certificate",
     status: "Draft",
     statusColor: "bg-gray-200 text-gray-700",
     description: "Authorization for commercial operations",

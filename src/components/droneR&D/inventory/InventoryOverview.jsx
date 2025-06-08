@@ -1,8 +1,12 @@
 import { ArrowsRightLeftIcon, ArrowTrendingDownIcon, ArrowTrendingUpIcon, FunnelIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { inventoryData, inventoryStats } from "../../../data/inventory";
+import { useGet } from "../../../hooks/useGet";
+import { baseUrl } from "../../../utilis";
 
 
 const InventoryOverview = () => {
+  const {data,setData, loading, error}=useGet(`${baseUrl}/inventory`)
+
   return (
     <div className="bg-white rounded shadow p-6 flex-[2]">
       <div className="flex justify-between items-center mb-4">

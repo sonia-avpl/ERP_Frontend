@@ -1,4 +1,4 @@
-import React from 'react';
+
 import InventoryHeader from '../../components/droneR&D/inventory/InventoryHeader';
 import InventoryOverview from '../../components/droneR&D/inventory/InventoryOverview';
 import InventoryCategories from '../../components/droneR&D/inventory/InventoryCategories';

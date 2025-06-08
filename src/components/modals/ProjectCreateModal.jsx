@@ -25,7 +25,7 @@ const ProjectCreateModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="absolute z-50 top-12 left-52 w-64 bg-white text-black rounded shadow p-4">
+    <div className="absolute z-50 top-12 left-0 w-64 bg-white text-black rounded shadow p-4">
       <button
         onClick={onClose}
         className="absolute top-2 right-2 text-red-500 hover:text-red-800"

@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Dashboard from "../Pages/Dashboard";
 import ProjectDetail from "../Pages/ProjectDetail";
 import List from "../Pages/ProjectManagmentSystem/teamSpace/List";
@@ -42,9 +41,9 @@ const AllRoutes = () => {
           <Route
             path="/projects/:projectId"
             element={
-              <RoleProtectedRoute allowedRoles={["R&D"]}>
+              // <RoleProtectedRoute allowedRoles={["R&D"]}>
                 <ProjectDetail />
-              </RoleProtectedRoute>
+              // </RoleProtectedRoute>
             }
           >
             <Route index element={<Navigate to="board" replace />} />
