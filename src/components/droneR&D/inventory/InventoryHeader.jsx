@@ -18,7 +18,7 @@ const buttonVariants = {
   }),
 };
 
-const InventoryHeader = () => {
+const InventoryHeader = ({refetch}) => {
   const [showModal, setShowModal] = useState(false);
 
   const buttons = [
@@ -78,7 +78,7 @@ const InventoryHeader = () => {
       </div>
 
       {/* Modal Component */}
-      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} refetch={refetch}/>
     </>
   );
 };

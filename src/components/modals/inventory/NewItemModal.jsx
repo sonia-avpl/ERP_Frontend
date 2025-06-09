@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { baseUrl } from "../../../utilis";
 import SelectField from "../../form/SelectField";
-import axios from "axios";
 import { usePostFile } from "../../../hooks/usePostFile";
-
-const CreateInventoryModal = ({ isOpen, onClose }) => {
+import * as XLSX from "xlsx";
+import XlsxPopulate from "xlsx-populate/browser/xlsx-populate";
+const CreateInventoryModal = ({ isOpen, onClose,refetch }) => {
   const [formData, setFormData] = useState({
     itemName: "",
     category: "",
@@ -80,9 +80,152 @@ const handleSubmit = async (e) => {
 
   if (result?.success) {
     onClose();
+    refetch()
+      setFormData({
+      itemName: "",
+      category: "",
+      location: "",
+      currentStock: 0,
+      minStock: 0,
+      maxStock: 1,
+      unitCost: 0,
+      unitPrice: "",
+      supplier: "",
+      supplierCode: "",
+      description: "",
+      tags: [],
+      notes: "",
+      images: [],
+    });
+    setImagePreviews([]);
+  
   } else {
     alert(result?.error || "Something went wrong!");
   }
+};
+
+
+const handleDownloadTemplate = async () => {
+  const categories = [
+    "Drone Frame",
+    "Battery",
+    "Flight Controller",
+    "Propeller",
+    "Landing Gear",
+    "GPS Module",
+  ];
+  const locations = ["Gurgaon", "Bihar", "Others"];
+
+  const workbook = await XlsxPopulate.fromBlankAsync();
+
+  const sheet = workbook.sheet(0);
+  sheet.name("Inventory Template");
+
+  // Headers
+  const headers = [
+    "Item Name",
+    "Category",
+    "Location",
+    "Current Stock",
+    "Min Stock",
+    "Max Stock",
+    "Unit Cost",
+    "Unit Price",
+    "Supplier",
+    "Supplier Code",
+    "Description",
+    "Tags",
+    "Notes",
+  ];
+  headers.forEach((header, i) => sheet.cell(1, i + 1).value(header));
+
+  // Create hidden sheet for validation lists
+  const hidden = workbook.addSheet("DataValidation");
+  categories.forEach((val, i) => hidden.cell(i + 1, 1).value(val));
+  locations.forEach((val, i) => hidden.cell(i + 1, 2).value(val));
+  hidden.hidden(true); // Hide the sheet
+
+  // Set dropdowns in main sheet
+  sheet.range("B2:B100").dataValidation({
+    type: "list",
+    allowBlank: true,
+    formula1: `=DataValidation!$A$1:$A$${categories.length}`,
+    showDropDown: true,
+  });
+
+  sheet.range("C2:C100").dataValidation({
+    type: "list",
+    allowBlank: true,
+    formula1: `=DataValidation!$B$1:$B$${locations.length}`,
+    showDropDown: true,
+  });
+
+  // Download
+  const blob = await workbook.outputAsync();
+  const url = window.URL.createObjectURL(new Blob([blob]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "Inventory_Template.xlsx";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
+const handleExcelUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (evt) => {
+    const data = evt.target.result;
+    const workbook = XLSX.read(data, { type: "binary" });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+    if (!rows.length) return alert("No data found in Excel");
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    // Send each row as a new inventory item
+    for (let row of rows) {
+      const form = new FormData();
+      const fields = {
+        itemName: row.itemName,
+        category: row.category,
+        location: row.location,
+        currentStock: row.currentStock,
+        minStock: row.minStock,
+        maxStock: row.maxStock,
+        unitCost: row.unitCost,
+        unitPrice: row.unitPrice,
+        supplier: row.supplier,
+        supplierCode: row.supplierCode,
+        description: row.description,
+        tags: typeof row.tags === "string" ? row.tags.split(",").map(t => t.trim()) : [],
+        notes: row.notes,
+        createdBy: user._id,
+      };
+
+      for (let key in fields) {
+        if (key === "tags") {
+          form.append(key, JSON.stringify(fields[key]));
+        } else {
+          form.append(key, fields[key]);
+        }
+      }
+
+      const result = await postData(`${baseUrl}/inventory/create`, form);
+      if (!result?.success) {
+        console.error(`Failed to upload row: ${row.itemName}`, result?.error);
+      }
+    }
+
+    alert("Inventory data uploaded successfully!");
+    refetch();
+  };
+
+  reader.readAsBinaryString(file);
 };
 
 
@@ -100,6 +243,22 @@ const handleSubmit = async (e) => {
         <h2 className="text-2xl font-semibold mb-6 text-center">
           Add New Inventory
         </h2>
+<div className="flex flex-col md:flex-row gap-4 mb-4">
+  <button
+    onClick={handleDownloadTemplate}
+    type="button"
+    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium"
+  >
+    Download Excel Template
+  </button>
+
+  <input
+    type="file"
+    accept=".xlsx, .xls"
+    onChange={handleExcelUpload}
+    className="border p-2 rounded w-full md:w-auto"
+  />
+</div>
 
         <form
           onSubmit={handleSubmit}
