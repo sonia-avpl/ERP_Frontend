@@ -57,7 +57,7 @@ function Register() {
           />
           <InputField
             label="Phone No."
-            type="number"
+            type="text"
             name="phone"
             value={formData.phone}
             onChange={handleChange}

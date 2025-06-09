@@ -6,20 +6,19 @@ export function useGet(url, token) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchData = () => {
     if (!url) return;
 
     setLoading(true);
     axios
       .get(url, {
         headers: {
-          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         setData(res.data);
-        console.log("res",res.data)
         setError(null);
       })
       .catch((err) => {
@@ -29,7 +28,11 @@ export function useGet(url, token) {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [url, token]);
 
-  return { data,setData, loading, error };
+  return { data, setData, loading, error, refetch: fetchData };
 }
