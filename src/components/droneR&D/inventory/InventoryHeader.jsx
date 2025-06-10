@@ -6,7 +6,7 @@ import {
   ArrowUpTrayIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
-import NewItemModal from "../../modals/inventory/NewItemModal";
+import NewItemModal from "../../modals/inventory/CreateInventoryModal";
 
 
 const buttonVariants = {
@@ -18,7 +18,7 @@ const buttonVariants = {
   }),
 };
 
-const InventoryHeader = ({refetch}) => {
+const InventoryHeader = ({refetch,categories}) => {
   const [showModal, setShowModal] = useState(false);
 
   const buttons = [
@@ -78,7 +78,7 @@ const InventoryHeader = ({refetch}) => {
       </div>
 
       {/* Modal Component */}
-      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} refetch={refetch}/>
+      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} refetch={refetch} categories={categories}/>
     </>
   );
 };

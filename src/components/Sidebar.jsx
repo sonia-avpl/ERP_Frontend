@@ -19,6 +19,7 @@ import { useGet } from "../hooks/useGet";
 import { baseUrl } from "../utilis";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { useAuth } from "./context/AuthContext";
 
 const Sidebar = ({ userRole }) => {
   const [isTeamOpen, setIsTeamOpen] = useState(false);
@@ -27,8 +28,9 @@ const Sidebar = ({ userRole }) => {
   const isResizing = useRef(false);
   const { data: projects, setData } = useGet(`${baseUrl}/projects`);
   const navigate = useNavigate();
- const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const { logout } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -62,7 +64,6 @@ const Sidebar = ({ userRole }) => {
       onMouseUp={stopResizing}
       onMouseLeave={stopResizing}
     >
-      {/* Toggle button - only visible on small screens */}
       <button
         className="md:hidden fixed top-2 left-4 z-50  rounded shadow"
         onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
@@ -225,7 +226,13 @@ const Sidebar = ({ userRole }) => {
               </button>
             </div>
           )}
-          <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
+          <button
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+            className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+          >
             <LogOut className="h-5 w-5" />
             {isSidebarExpanded && <span>Logout</span>}
           </button>

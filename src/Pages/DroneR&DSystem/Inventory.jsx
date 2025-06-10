@@ -27,10 +27,11 @@ const Inventory = () => {
   }, [page, filters]);
 
   const { data, loading, error, refetch } = useGet(`${baseUrl}/inventory?${queryParams}`);
-
+  const { data:catData, loading:catLoading, error:catError, refetch:catRefectch } = useGet(`${baseUrl}/inventory/category`);
+  const categories = catData?.data;
   return (
     <>
-      <InventoryHeader refetch={refetch} />
+      <InventoryHeader refetch={refetch} categories={categories}/>
       <div className="flex flex-col lg:flex-row gap-4">
         <InventoryOverview
           data={data}
@@ -40,8 +41,10 @@ const Inventory = () => {
           setPage={setPage}
           filters={filters}
           setFilters={setFilters}
+          refetch={refetch}
+          categories={categories}
         />
-        <InventoryCategories />
+        <InventoryCategories data={categories} refetch={catRefectch} loading={catLoading} error={catError}/>
       </div>
       <ReorderAlerts />
       <InventoryAnalytics />

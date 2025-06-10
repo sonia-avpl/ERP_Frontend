@@ -21,9 +21,10 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchUserData = async () => {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("token"));
 
     if (!token) {
+      console.warn("No token found, skipping user fetch.");
       setUser(null);
       setLoading(false);
       return;
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.get(`${baseUrl}/auth/me`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // ✅ CORRECT
         },
       });
 
@@ -44,26 +45,27 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Invalid response");
       }
     } catch (err) {
-      console.error("Fetch user failed:", err);
+      console.error("Fetch user failed:", err.response?.data || err.message);
       setError("Session expired or invalid.");
-      logout(); // clears localStorage
+      setUser(null); // clear user on failure
+      // localStorage.removeItem("user");
+      // localStorage.removeItem("token");
     } finally {
       setLoading(false);
     }
   };
-
   const logout = () => {
     setUser(null);
+    setError(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   };
-
   useEffect(() => {
     fetchUserData();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, logout }}>
+    <AuthContext.Provider value={{ user, loading, error, fetchUserData ,logout}}>
       {children}
     </AuthContext.Provider>
   );
