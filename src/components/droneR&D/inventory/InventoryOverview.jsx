@@ -1,5 +1,4 @@
 import {
-  ArrowsRightLeftIcon,
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
   FunnelIcon,
@@ -141,7 +140,7 @@ const InventoryOverview = ({
       </div>
 
       {/* Inventory Table */}
-      <InventoryTable data={data} loading={loading} error={error} refetch={refetch}/>
+      <InventoryTable data={data} loading={loading} error={error} refetch={refetch} categories={categories}/>
 
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>

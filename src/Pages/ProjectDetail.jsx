@@ -10,6 +10,7 @@ const tabs = [
 const ProjectDetail = () => {
   return (
     <div>
+      
       <nav className="border-b border-gray-300 mb-4">
         <ul className="flex space-x-6">
           {tabs.map(({ name, path, icon: Icon }) => (
@@ -31,8 +32,6 @@ const ProjectDetail = () => {
           ))}
         </ul>
       </nav>
-
-      {/* Nested routes render here */}
       <Outlet />
     </div>
   );

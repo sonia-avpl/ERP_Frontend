@@ -1,25 +1,11 @@
 import { useState, useRef } from "react";
-import {
-  HomeIcon,
-  FolderIcon,
-  CubeIcon,
-  PuzzlePieceIcon,
-  BeakerIcon,
-  ClipboardDocumentCheckIcon,
-  ArchiveBoxIcon,
-  TruckIcon,
-  ShieldCheckIcon,
-  Cog6ToothIcon,
-  ChartBarIcon,
-  UserGroupIcon,
-  Bars3Icon,
-} from "@heroicons/react/24/outline";
-import ToggleButton from "./buttons/ToggleButton";
+import { Bars3Icon} from "@heroicons/react/24/outline";
 import { useGet } from "../hooks/useGet";
 import { baseUrl } from "../utilis";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "./context/AuthContext";
+import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
 
 const Sidebar = ({ userRole }) => {
   const [isTeamOpen, setIsTeamOpen] = useState(false);
@@ -31,6 +17,7 @@ const Sidebar = ({ userRole }) => {
   const [showModal, setShowModal] = useState(false);
   const [projectName, setProjectName] = useState("");
   const { logout } = useAuth();
+  const location = useLocation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,7 +43,9 @@ const Sidebar = ({ userRole }) => {
       setSidebarWidth(newWidth);
     }
   };
-
+  const roleMenus = menuConfig[userRole] || [];
+  const topMenus = [...topCommonMenus, ...roleMenus];
+  const bottomMenus = [...bottomCommonMenus];
   return (
     <div
       className="flex text-sm"
@@ -65,14 +54,14 @@ const Sidebar = ({ userRole }) => {
       onMouseLeave={stopResizing}
     >
       <button
-        className="md:hidden fixed top-2 left-4 z-50  rounded shadow"
+        className="md:hidden fixed top-2 left-4 z-50 rounded shadow"
         onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
       >
-        <Bars3Icon className="h-6 w-6 text-gray-300" />
+        <Bars3Icon className="h-6 w-6 " />
       </button>
 
       <div
-        className={`bg-gray-900 text-white h-screen relative overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out ${
+        className={`bg-white h-screen relative overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out ${
           isSidebarExpanded ? "w-64 pt-16" : "w-16"
         } md:pt-0`}
         style={{
@@ -86,152 +75,65 @@ const Sidebar = ({ userRole }) => {
               !isSidebarExpanded && "hidden md:block"
             }`}
           >
-            ClickUp Clone
+            ERP
           </div>
-          <div>
-            <div
-              className={`text-xs text-gray-400 uppercase mb-2 px-2 ${
-                !isSidebarExpanded && "hidden md:block"
-              }`}
-            >
-              Main
-            </div>
-            <button
-              className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-              onClick={() => navigate("/")}
-            >
-              <HomeIcon className="h-5 w-5" />
-              {isSidebarExpanded && <span>Dashboard</span>}
-            </button>
-          </div>
-
-          {/* R&D MODULES */}
-          {userRole === "R&D" && (
+          <div className="flex flex-col h-full justify-between">
             <div>
-              <div
-                className={`text-xs text-gray-400 uppercase mb-2 px-2 ${
-                  !isSidebarExpanded && "hidden md:block"
-                }`}
-              >
-                R&D Modules
-              </div>
-              <button
-                onClick={() => navigate("/component-design")}
-                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-              >
-                <CubeIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Component Design</span>}
-              </button>
-              <button
-                onClick={() => navigate("/prototype-management")}
-                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-              >
-                <BeakerIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Prototype Management</span>}
-              </button>
-              <button
-                onClick={() => navigate("/testing-validation")}
-                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-              >
-                <ClipboardDocumentCheckIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Testing & Validation</span>}
-              </button>
-              <button
-                onClick={() => navigate("/compliance-docs")}
-                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-              >
-                <PuzzlePieceIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Compliance & Docs</span>}
-              </button>
-            </div>
-          )}
-
-          {/* OPERATIONS */}
-          {userRole === "R&D" && (
-            <div>
-              <div
-                className={`text-xs text-gray-400 uppercase mb-2 px-2 ${
-                  !isSidebarExpanded && "hidden md:block"
-                }`}
-              >
-                Operations
-              </div>
-              <button
-                className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
-                onClick={() => navigate("/inventory")}
-              >
-                <ArchiveBoxIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Inventory</span>}
-              </button>
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <TruckIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Supply Chain</span>}
-              </button>
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <ShieldCheckIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Quality Control</span>}
-              </button>
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <Cog6ToothIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Manufacturing</span>}
-              </button>
-            </div>
-          )}
-
-          {/* ADMINISTRATION */}
-          {userRole === "R&D" && (
-            <div>
-              <div
-                className={`text-xs text-gray-400 uppercase mb-2 px-2 ${
-                  !isSidebarExpanded && "hidden md:block"
-                }`}
-              >
-                Administration
-              </div>
-              <ToggleButton
-                setIsTeamOpen={setIsTeamOpen}
-                isTeamOpen={isTeamOpen}
-                onAddProject={addProject}
-                handleSubmit={handleSubmit}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                projectName={projectName}
-                setProjectName={setProjectName}
-              />
-              {isTeamOpen && isSidebarExpanded && (
-                <div className="ml-4 mt-2 space-y-1">
-                  {projects.map((project) => (
+              {topMenus.map((section, idx) => (
+                <div key={idx} className="mb-4">
+                  <div className="text-xs uppercase mb-2 px-2">
+                    {section.section}
+                  </div>
+                  {section.items.map((item, itemIdx) => (
                     <button
-                      key={project._id}
-                      onClick={() => navigate(`/projects/${project._id}`)}
-                      className="flex items-center gap-2 hover:bg-gray-700 p-2 rounded w-full text-sm"
+                      key={itemIdx}
+                      onClick={() => navigate(item.to)}
+                      className={`flex items-center gap-2 p-2 rounded w-full ${
+                        location.pathname === item.to
+                          ? "bg-gray-800 text-white"
+                          : "hover:bg-gray-800 hover:text-white"
+                      }`}
                     >
-                      <FolderIcon className="h-4 w-4" />
-                      {project.name}
+                      {item.icon}
+                      {isSidebarExpanded && <span>{item.name}</span>}
                     </button>
                   ))}
                 </div>
-              )}
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <ChartBarIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Reporting</span>}
-              </button>
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <UserGroupIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>User Management</span>}
-              </button>
-              <button className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full">
-                <Cog6ToothIcon className="h-5 w-5" />
-                {isSidebarExpanded && <span>Settings</span>}
-              </button>
+              ))}
             </div>
-          )}
+
+            {/* Render Administration section at the bottom */}
+            <div className="mb-2">
+              {bottomMenus.map((section, idx) => (
+                <div key={idx}>
+                  <div className="text-xs uppercase mb-2 px-2">
+                    {section.section}
+                  </div>
+                  {section.items.map((item, itemIdx) => (
+                    <button
+                      key={itemIdx}
+                      onClick={() => navigate(item.to)}
+                      className={`flex items-center gap-2 p-2 rounded w-full ${
+                        location.pathname === item.to
+                          ? "bg-gray-800 text-white"
+                          : "hover:bg-gray-800 hover:text-white"
+                      }`}
+                    >
+                      {item.icon}
+                      {isSidebarExpanded && <span>{item.name}</span>}
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
           <button
             onClick={() => {
               logout();
               navigate("/login");
             }}
-            className="flex items-center gap-2 hover:bg-gray-800 p-2 rounded w-full"
+            className="flex items-center gap-2 hover:bg-gray-800 hover:text-white p-2 rounded w-full"
           >
             <LogOut className="h-5 w-5" />
             {isSidebarExpanded && <span>Logout</span>}

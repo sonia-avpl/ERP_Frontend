@@ -105,6 +105,7 @@ const CreateInventoryModal = ({
       setFormData({
         ...initialData,
         tags: parsedTags,
+        category: initialData.category?._id || "", // set category to its ID
         images: initialData.images || [], // keep existing images as [{ url }]
       });
 

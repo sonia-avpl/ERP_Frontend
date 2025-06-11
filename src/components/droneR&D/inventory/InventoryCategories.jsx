@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
-import InventoryCategoryList from './InventoryCategoryList';
-import NewCategoryModal from '../../modals/inventory/NewCategoryModal';
+import InventoryCategoryList from "./InventoryCategoryList";
+import NewCategoryModal from "../../modals/inventory/NewCategoryModal";
 
-
-const InventoryCategories = ({data,loading,error,refetch}) => {
+const InventoryCategories = ({ data, loading, error, refetch  }) => {
   const [showModal, setShowModal] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+
+  const handleEdit = (cat) => {
+    setEditingCategory(cat);
+    setShowModal(true);
+  };
   return (
     <div className="bg-white p-4 rounded shadow">
       <div className="flex justify-between items-center mb-4">
@@ -22,12 +27,16 @@ const InventoryCategories = ({data,loading,error,refetch}) => {
 
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-600">Error: {error.message}</p>}
-      {data && <InventoryCategoryList data={data} />}
+      {data && <InventoryCategoryList data={data} onEdit={handleEdit} />}
 
       <NewCategoryModal
         isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        onClose={() => {
+          setShowModal(false);
+          setEditingCategory(null);
+        }}
         refetch={refetch}
+        editingCategory={editingCategory}
       />
     </div>
   );

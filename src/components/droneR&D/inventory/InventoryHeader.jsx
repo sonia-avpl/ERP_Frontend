@@ -29,20 +29,15 @@ const InventoryHeader = ({refetch,categories}) => {
       onClick: () => setShowModal(true),
     },
     {
-      label: "Receive Stock",
-      icon: ArrowUpTrayIcon,
-      className: "bg-green-600 hover:bg-green-700",
-    },
-    {
       label: "Issue Stock",
       icon: ArrowDownTrayIcon,
       className: "bg-gray-500 hover:bg-gray-600",
     },
-    {
-      label: "Cycle Count",
-      icon: ArrowPathIcon,
-      className: "bg-gray-500 hover:bg-gray-600",
-    },
+    // {
+    //   label: "Cycle Count",
+    //   icon: ArrowPathIcon,
+    //   className: "bg-gray-500 hover:bg-gray-600",
+    // },
   ];
 
   return (

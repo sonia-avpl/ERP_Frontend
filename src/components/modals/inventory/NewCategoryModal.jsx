@@ -4,17 +4,32 @@ import TextAreaField from "../../form/TextAreaField";
 import CheckboxField from "../../form/CheckboxField";
 import { usePostFile } from "../../../hooks/usePostFile";
 import { baseUrl } from "../../../utilis";
+import { usePatchFile } from "../../../hooks/usePatchFile";
 
-const NewCategoryModal = ({ isOpen, onClose ,refetch}) => {
+const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     icon: null,
     isActive: true,
   });
-
-  const [previewUrl, setPreviewUrl] = useState(null);
   const { postData, isLoading, error } = usePostFile();
+  const { patchData } = usePatchFile();
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  useEffect(() => {
+    if (editingCategory) {
+      setFormData({
+        name: editingCategory.name || "",
+        description: editingCategory.description || "",
+        icon: null,
+        isActive: editingCategory.isActive ?? true,
+      });
+      setPreviewUrl(
+        editingCategory.icon ? `${baseUrl}${editingCategory.icon}` : null
+      );
+    }
+  }, [editingCategory]);
 
   useEffect(() => {
     if (formData.icon) {
@@ -46,22 +61,26 @@ const NewCategoryModal = ({ isOpen, onClose ,refetch}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const form = new FormData();
     form.append("name", formData.name);
     form.append("description", formData.description);
     form.append("isActive", formData.isActive);
-    if (formData.icon) {
-      form.append("icon", formData.icon);
-    }
+    if (formData.icon) form.append("icon", formData.icon);
 
-    const data = await postData(`${baseUrl}/inventory/category/create`, form);
+    const url = editingCategory
+      ? `${baseUrl}/inventory/category/${editingCategory._id}`
+      : `${baseUrl}/inventory/category/create`;
+
+    const data = editingCategory
+      ? await patchData(url, form)
+      : await postData(url, form);
+
     if (data?.success) {
       onClose();
-      refetch()
+      refetch();
       setFormData({ name: "", description: "", icon: null, isActive: true });
     } else {
-      alert(data?.message || "Error creating category");
+      alert(data?.message || "Something went wrong");
     }
   };
 
@@ -77,7 +96,9 @@ const NewCategoryModal = ({ isOpen, onClose ,refetch}) => {
         >
           &times;
         </button>
-        <h3 className="text-lg font-semibold mb-4">Create New Category</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          {editingCategory ? "Edit Category" : "Create New Category"}
+        </h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             label="Category Name"
@@ -127,7 +148,13 @@ const NewCategoryModal = ({ isOpen, onClose ,refetch}) => {
               className="px-4 py-2 bg-blue-600 text-white rounded"
               disabled={isLoading}
             >
-              {isLoading ? "Creating..." : "Create"}
+              {isLoading
+                ? editingCategory
+                  ? "Updating..."
+                  : "Creating..."
+                : editingCategory
+                ? "Update"
+                : "Create"}
             </button>
           </div>
           {error && (
