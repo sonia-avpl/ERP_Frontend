@@ -7,13 +7,13 @@ import Heading from "../../components/droneR&D/compliance-docs/Heading"
 
 const ComplianceDocs = () => {
   return (
-   <>
+   <div className="p-4">
    <Heading/>
    <CertificationDashboard/>
    <DocumentationRepo/>
    <DGCAProcess/>
    <ComplianceChecklist/>
-   </>
+   </div>
   )
 }
 

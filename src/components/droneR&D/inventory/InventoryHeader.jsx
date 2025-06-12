@@ -6,7 +6,7 @@ import {
   ArrowUpTrayIcon,
   ArrowPathIcon,
 } from "@heroicons/react/24/outline";
-import NewItemModal from "../../modals/inventory/NewItemModal";
+import NewItemModal from "../../modals/inventory/CreateInventoryModal";
 
 
 const buttonVariants = {
@@ -18,7 +18,7 @@ const buttonVariants = {
   }),
 };
 
-const InventoryHeader = ({refetch}) => {
+const InventoryHeader = ({refetch,categories}) => {
   const [showModal, setShowModal] = useState(false);
 
   const buttons = [
@@ -29,20 +29,15 @@ const InventoryHeader = ({refetch}) => {
       onClick: () => setShowModal(true),
     },
     {
-      label: "Receive Stock",
-      icon: ArrowUpTrayIcon,
-      className: "bg-green-600 hover:bg-green-700",
-    },
-    {
       label: "Issue Stock",
       icon: ArrowDownTrayIcon,
       className: "bg-gray-500 hover:bg-gray-600",
     },
-    {
-      label: "Cycle Count",
-      icon: ArrowPathIcon,
-      className: "bg-gray-500 hover:bg-gray-600",
-    },
+    // {
+    //   label: "Cycle Count",
+    //   icon: ArrowPathIcon,
+    //   className: "bg-gray-500 hover:bg-gray-600",
+    // },
   ];
 
   return (
@@ -78,7 +73,7 @@ const InventoryHeader = ({refetch}) => {
       </div>
 
       {/* Modal Component */}
-      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} refetch={refetch}/>
+      <NewItemModal isOpen={showModal} onClose={() => setShowModal(false)} refetch={refetch} categories={categories}/>
     </>
   );
 };

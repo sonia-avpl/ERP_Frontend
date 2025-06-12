@@ -4,11 +4,11 @@ import PrototypeVisualization from '../../components/droneR&D/prototype-managmen
 
 const PrototypeManagement = () => {
   return (
-  <>
+  <div className="p-4">
      <Heading/>
       <PrototypeVisualization />
 
-  </>
+  </div>
   )
 }
 

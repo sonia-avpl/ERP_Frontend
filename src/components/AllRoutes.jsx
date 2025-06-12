@@ -17,6 +17,12 @@ import ResetPassword from "../Pages/Auth/ResetPassword";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import RoleProtectedRoute from "./protectedRoute/RoleProtectedRoute";
 import Layout from "./layout/Layout";
+import SupplyChain from "../Pages/DroneR&DSystem/SupplyChain/SupplyChain";
+import ProjectManagement from "../Pages/ProjectManagmentSystem/ProjectManagement";
+import Documents from "../Pages/DroneR&DSystem/SupplyChain/Documents";
+import Overview from "../Pages/DroneR&DSystem/SupplyChain/Overview";
+import Supllier from "../Pages/DroneR&DSystem/SupplyChain/Supllier";
+
 
 const AllRoutes = () => {
   return (
@@ -32,7 +38,14 @@ const AllRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/project-managment" element={<ProjectManagement />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/supply-chain-dashboard" element={<SupplyChain />} >
+           <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<Overview />} />
+            <Route path="documents" element={<Documents />} />
+            <Route path="supplier" element={<Supllier />} />
+          </Route>
           <Route path="/testing-validation" element={<TestingValidation />} />
           <Route path="/compliance-docs" element={<ComplianceDocs />} />
           <Route path="/prototype-management" element={<PrototypeManagement />} />

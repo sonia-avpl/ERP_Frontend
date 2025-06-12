@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export function usePatch(token) {
+export function usePatchFile(token) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [response, setResponse] = useState(null);
@@ -13,12 +13,13 @@ export function usePatch(token) {
       const res = await axios.patch(url, body, {
         headers: {
         //   Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+           "Content-Type": "multipart/form-data",
         },
       });
       setResponse(res.data);
       setError(null);
-     toast.success(res.data.message);
+       toast.success(res.data.message);
+     
       return res.data;
     } catch (err) {
       setError(err);
