@@ -62,6 +62,7 @@ function Register() {
             value={formData.phone}
             onChange={handleChange}
             required
+            placeholder="+91"
           />
           <InputPassword
             label="Password"

@@ -1,4 +1,4 @@
-const InputField = ({ label, type, name, value, onChange, required = false }) => {
+const InputField = ({ label, type, name, value, onChange, required = false,placeholder="" }) => {
   return (
     <div>
       <label className="block text-sm font-semibold mb-1">
@@ -12,6 +12,7 @@ const InputField = ({ label, type, name, value, onChange, required = false }) =>
         className="w-full p-2 border border-gray-300 rounded-md"
         required={required}
         aria-required={required}
+        placeholder={placeholder}
       />
     </div>
   );
