@@ -84,7 +84,7 @@ function Login() {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Enter your professional email"
               required
             />
             <InputField
@@ -118,7 +118,7 @@ function Login() {
         <p className="text-sm mt-4 text-center">
          Don’t have an account?
           <Link to="/register" className="text-blue-600 hover:underline">
-            Sinup
+           Sign up
           </Link>
         </p>
         {error && (
