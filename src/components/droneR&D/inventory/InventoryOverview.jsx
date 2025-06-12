@@ -7,6 +7,7 @@ import { useState } from "react";
 import Pagination from "../../pagination/Pagination";
 import InventoryTable from "../table/InventoryTable";
 
+
 const InventoryOverview = ({
   data,
   loading,
@@ -16,10 +17,10 @@ const InventoryOverview = ({
   filters,
   setFilters,
   refetch,
-  categories
+  categories,
 }) => {
   const [showFilters, setShowFilters] = useState(false);
- 
+
   const inventoryStats = [
     {
       label: "Total Inventory Items",
@@ -140,7 +141,13 @@ const InventoryOverview = ({
       </div>
 
       {/* Inventory Table */}
-      <InventoryTable data={data} loading={loading} error={error} refetch={refetch} categories={categories}/>
+      <InventoryTable
+        data={data}
+        loading={loading}
+        error={error}
+        refetch={refetch}
+        categories={categories}
+      />
 
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
     </div>
