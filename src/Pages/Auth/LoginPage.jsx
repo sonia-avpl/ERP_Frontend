@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePost } from "../../hooks/usePost";
 import InputField from "../../components/form/InputField";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../utilis";
 
 function Login() {
@@ -19,23 +19,22 @@ function Login() {
     e.preventDefault();
     const data = await postData(`${baseUrl}/auth/login`, form);
     if (data) {
-     localStorage.setItem("token",JSON.stringify(data.token));
-     localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", JSON.stringify(data.token));
+      localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/");
     }
   };
 
-const handleForgotSubmit = async (e) => {
-  e.preventDefault();
-  const data = await postData(`${baseUrl}/auth/forgot-password`, {
-    email: forgotEmail,
-  });
-  if (data) {
-    localStorage.setItem("resetEmail", forgotEmail);
-    navigate("/login");
-  }
-};
-
+  const handleForgotSubmit = async (e) => {
+    e.preventDefault();
+    const data = await postData(`${baseUrl}/auth/forgot-password`, {
+      email: forgotEmail,
+    });
+    if (data) {
+      localStorage.setItem("resetEmail", forgotEmail);
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
@@ -43,6 +42,7 @@ const handleForgotSubmit = async (e) => {
         onSubmit={showForgot ? handleForgotSubmit : handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
       >
+           <img src="/logo/logo.png" alt="logo" className="w-28 mx-auto mb-6" />
         <h2 className="text-2xl font-semibold mb-6 text-center">
           {showForgot ? "Forgot Password" : "Login to your account"}
         </h2>
@@ -115,7 +115,12 @@ const handleForgotSubmit = async (e) => {
             </p>
           </>
         )}
-
+        <p className="text-sm mt-4 text-center">
+         Don’t have an account?
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Sinup
+          </Link>
+        </p>
         {error && (
           <p className="text-red-500 text-center mt-4">
             {error.message || "An error occurred"}

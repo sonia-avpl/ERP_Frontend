@@ -47,54 +47,53 @@ export const dashboardStats = [
   },
 ];
 
-export const droneModule=[
-    {
+export const droneModule = [
+  {
     title: "Project Management",
     desc: "Track R&D projects, timelines, resources, and milestones",
     icon: ClipboardDocumentCheckIcon,
-    // path:"/inventory"
+    path: "/project-managment",
   },
   {
     title: "Component Design",
     desc: "Design and document drone components and assemblies",
     icon: PuzzlePieceIcon,
-        path:"/component-design"
+    path: "/component-design",
   },
   {
     title: "Prototype Management",
     desc: "Track prototype builds, versions, and testing status",
     icon: CubeIcon,
-        path:"/prototype-management"
+    path: "/prototype-management",
   },
   {
     title: "Testing & Validation",
     desc: "Plan and document flight tests, stress tests, and validations",
     icon: BeakerIcon,
-        path:"/testing-validation"
+    path: "/testing-validation",
   },
   {
     title: "Compliance & Docs",
     desc: "Manage regulatory compliance and documentation",
     icon: DocumentTextIcon,
-        path:"/compliance-docs"
+    path: "/compliance-docs",
   },
   {
     title: "Inventory",
     desc: "Track R&D components, materials, and supplies",
     icon: ArchiveBoxIcon,
-        path:"/inventory"
+    path: "/inventory",
   },
   {
     title: "Supply Chain",
     desc: "Manage suppliers, orders, and component sourcing",
     icon: TruckIcon,
-        path:"/inventory"
+    path: "/supply-chain-dashboard",
   },
   {
     title: "Quality Control",
     desc: "Track defects, issues, and quality metrics",
     icon: WrenchScrewdriverIcon,
-        path:"/inventory"
+    path: "/inventory",
   },
-]
-
+];
