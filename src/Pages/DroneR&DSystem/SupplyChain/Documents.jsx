@@ -1,7 +1,10 @@
 import { ClockIcon, DocumentCheckIcon, EllipsisVerticalIcon, ExclamationTriangleIcon, EyeIcon, PencilIcon } from "@heroicons/react/24/outline"
+import { useState } from "react"
+import GrnInputForm from "../../../components/form/GrnInputForm";
 
 
 const Documents = () => {
+  const [showGrnForm, setShowGrnForm] = useState(false);
   return (
  <div className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -50,8 +53,9 @@ const Documents = () => {
                     <DocumentCheckIcon className="w-8 h-8 text-green-600 mx-auto mb-3" />
                     <h4 className="font-semibold text-gray-800 mb-2">Goods Received Note (GRN)</h4>
                     <p className="text-sm text-gray-600 mb-4">Record receipt of goods from suppliers</p>
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    <button onClick={() => setShowGrnForm(true)} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                       Create GRN
+                     {showGrnForm && <GrnInputForm onClose={() => setShowGrnForm(false)} />}
                     </button>
                   </div>
                   <div className="border-2 border-dashed border-red-300 rounded-lg p-6 text-center hover:border-red-500 hover:bg-red-50 transition-colors cursor-pointer">
