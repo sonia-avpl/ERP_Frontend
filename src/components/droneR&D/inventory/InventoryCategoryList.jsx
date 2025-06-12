@@ -35,7 +35,7 @@ const InventoryCategoryList = ({ data, onEdit }) => {
               </div>
               <div>
                 <div className="font-medium text-gray-800">{cat.name}</div>
-                <div className="text-sm text-gray-500">{cat.description}</div>
+                {/* <div className="text-sm text-gray-500">{cat.description}</div> */}
               </div>
             </div>
 

@@ -30,7 +30,7 @@ const Inventory = () => {
   const { data:catData, loading:catLoading, error:catError, refetch:catRefectch } = useGet(`${baseUrl}/inventory/category`);
   const categories = catData?.data;
   return (
-    <>
+    <div className='p-4'>
       <InventoryHeader refetch={refetch} categories={categories}/>
       <div className="flex flex-col lg:flex-row gap-4">
         <InventoryOverview
@@ -48,7 +48,7 @@ const Inventory = () => {
       </div>
       <ReorderAlerts />
       <InventoryAnalytics />
-    </>
+    </div>
   );
 };
 
