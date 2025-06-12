@@ -1,5 +1,11 @@
-import { PencilSquareIcon, ArrowsRightLeftIcon } from "@heroicons/react/24/outline";
+import {
+  PencilSquareIcon,
+  ArrowsRightLeftIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
+
+
+
 import CreateInventoryModal from "../../modals/inventory/CreateInventoryModal";
 import { usePatch } from "../../../hooks/usePatch";
 import { baseUrl } from "../../../utilis";
@@ -23,7 +29,9 @@ const InventoryTable = ({ loading, error, data, refetch, categories }) => {
       {loading ? (
         <div className="text-center text-gray-500 py-6">Loading...</div>
       ) : error ? (
-        <div className="text-center text-red-500 py-6">Error loading inventory.</div>
+        <div className="text-center text-red-500 py-6">
+          Error loading inventory.
+        </div>
       ) : (
         <table className="min-w-full text-sm border-t">
           <thead className="bg-gray-100 text-left">
@@ -39,7 +47,9 @@ const InventoryTable = ({ loading, error, data, refetch, categories }) => {
                 "Status",
                 "Actions",
               ].map((col, idx) => (
-                <th key={idx} className="px-4 py-2 font-medium text-gray-700">{col}</th>
+                <th key={idx} className="px-4 py-2 font-medium text-gray-700">
+                  {col}
+                </th>
               ))}
             </tr>
           </thead>
@@ -48,17 +58,29 @@ const InventoryTable = ({ loading, error, data, refetch, categories }) => {
               <tr key={item._id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-2">{item.sku}</td>
                 <td className="px-4 py-2">{item.itemName}</td>
-                <td className="px-4 py-2">{item.category?.name || item.category}</td>
-                <td className="px-4 py-2">{item.location?.name || item.location}</td>
+                <td className="px-4 py-2">
+                  {item.category?.name || item.category}
+                </td>
+                <td className="px-4 py-2">
+                  {item.location?.name || item.location}
+                </td>
                 <td className="px-4 py-2">{item.currentStock}</td>
                 <td className="px-4 py-2">{item.minStock}</td>
                 <td className="px-4 py-2">
-                  <span className={`inline-block px-2 py-1 text-xs rounded font-medium text-white ${
-                    item.stockLevel === "high" ? "bg-green-600" :
-                    item.stockLevel === "medium" ? "bg-yellow-500" : "bg-red-600"
-                  }`}>
-                    {item.stockLevel === "high" ? "In Stock" :
-                     item.stockLevel === "medium" ? "Low Stock" : "Critical"}
+                  <span
+                    className={`inline-block px-2 py-1 text-xs rounded font-medium text-white ${
+                      item.stockLevel === "high"
+                        ? "bg-green-600"
+                        : item.stockLevel === "medium"
+                        ? "bg-yellow-500"
+                        : "bg-red-600"
+                    }`}
+                  >
+                    {item.stockLevel === "high"
+                      ? "In Stock"
+                      : item.stockLevel === "medium"
+                      ? "Low Stock"
+                      : "Critical"}
                   </span>
                 </td>
                 <td className="px-4 py-2">{item.status}</td>
@@ -75,7 +97,6 @@ const InventoryTable = ({ loading, error, data, refetch, categories }) => {
                   <button
                     className="p-1 text-gray-600 hover:text-red-600"
                     onClick={() => handleStatusToggle(item._id)}
-                  
                   >
                     <ArrowsRightLeftIcon className="h-4 w-4" />
                   </button>

@@ -7,10 +7,13 @@ import { useEffect, useState } from "react";
 import SupplierCreateModal from "../../../components/modals/supplyChain/SupplierCreateModal";
 import { useGet } from "../../../hooks/useGet";
 import { baseUrl } from "../../../utilis";
+import CustomTable from "../../../components/droneR&D/table/CustomTable";
+
 
 const Supplier = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [queryParams, setQueryParams] = useState("page=1&limit=6");
+  const [queryParams, setQueryParams] = useState("page=1&limit=3");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data, loading, error, refetch } = useGet(
     `${baseUrl}/supplier?${queryParams}`
@@ -19,11 +22,20 @@ const Supplier = () => {
   const suppliers = data?.suppliers || [];
   const page = Number(new URLSearchParams(queryParams).get("page")) || 1;
   const totalPages = data?.totalPages || 1;
-
   const handleSearchChange = (e) => {
-    const search = e.target.value;
-    setQueryParams(`page=1&limit=6&search=${search}`);
+    setSearchTerm(e.target.value);
   };
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm.trim() !== "") {
+        setQueryParams(`page=1&limit=3&search=${searchTerm}`);
+      } else {
+        setQueryParams(`page=1&limit=3`);
+      }
+    }, 800);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchTerm]);
 
   const handleTypeFilterChange = (e) => {
     const type = e.target.value;
@@ -52,6 +64,28 @@ const Supplier = () => {
       return searchParams.toString();
     });
   };
+
+  const columns = [
+    { Header: "Name", accessor: "supplierName" },
+    { Header: "Email", accessor: "supplierEmail" },
+    { Header: "Phone", accessor: "supplierPhone" },
+    { Header: "Type", accessor: "supplierType" },
+    { Header: "Location", accessor: "supplierLocation" },
+    { Header: "Status", accessor: "supplierApprovalStatus" },
+  ];
+const formattedSuppliers = suppliers.map((supplier) => ({
+  ...supplier,
+  bankName: supplier.supplierBankDetails?.bankName || "N/A",
+}));
+
+  const handleEdit = (supplier) => {
+    console.log("Edit", supplier);
+  };
+
+  const handleDelete = (supplier) => {
+    console.log("Delete", supplier);
+  };
+
 
   return (
     <div className="bg-white rounded-xl shadow-sm">
@@ -92,55 +126,19 @@ const Supplier = () => {
           </select>
         </div>
 
-        {/* Supplier Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading
-            ? Array(6)
-                .fill(0)
-                .map((_, idx) => (
-                  <div
-                    key={idx}
-                    className="animate-pulse border rounded-lg p-6 space-y-4"
-                  >
-                    <div className="h-4 bg-gray-300 rounded w-2/3"></div>
-                    <div className="space-y-2">
-                      <div className="h-3 bg-gray-300 rounded w-full"></div>
-                      <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                ))
-            : suppliers.map((supplier) => (
-                <div
-                  key={supplier._id}
-                  className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-semibold text-gray-800">
-                      {supplier.supplierName}
-                    </h4>
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                      {supplier.supplierApprovalStatus || "Active"}
-                    </span>
-                  </div>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <MapPinIcon className="w-4 h-4 mr-2" />
-                      {supplier.supplierLocation || "N/A"}
-                    </div>
-                    <div className="flex items-center">
-                      <PhoneIcon className="w-4 h-4 mr-2" />
-                      {supplier.supplierPhone || "N/A"}
-                    </div>
-                    <div className="flex items-center">
-                      <EnvelopeIcon className="w-4 h-4 mr-2" />
-                      {supplier.supplierEmail || "N/A"}
-                    </div>
-                  </div>
-                </div>
-              ))}
+        <div className="mt-4">
+          {loading ? (
+            <div className="text-center text-gray-500">Loading...</div>
+          ) : (
+            <CustomTable
+              columns={columns}
+              data={formattedSuppliers}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
 
-        {/* Pagination */}
         <div className="flex justify-center items-center gap-4 mt-6">
           <button
             onClick={handlePrevPage}
