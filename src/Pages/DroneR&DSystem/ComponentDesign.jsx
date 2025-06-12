@@ -6,8 +6,8 @@ const ComponentDesign = () => {
   return (
     <div className="p-4">
       <Header />
-      <ComponentView />
       <ComponentLibrary />
+      <ComponentView />
     </div>
   );
 };
