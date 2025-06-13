@@ -66,14 +66,135 @@ const GrnInputForm = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-2">
               Item Details
             </label>
-            <textarea
-              className="w-full border border-gray-300 rounded-lg p-2"
-              placeholder="Item code, description, quantity, price..."
-              rows={3}
-            ></textarea>
+
+            {/* For large screens: Table view */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="min-w-full border border-gray-300 rounded-lg">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="text-left p-2 border">Item Code</th>
+                    <th className="text-left p-2 border">Description</th>
+                    <th className="text-left p-2 border">Qty Ordered</th>
+                    <th className="text-left p-2 border">Qty Received</th>
+                    <th className="text-left p-2 border">Unit Price</th>
+                    <th className="text-left p-2 border">Total Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="p-2 border">
+                      <input
+                        type="text"
+                        className="w-full border border-gray-300 rounded p-1"
+                      />
+                    </td>
+                    <td className="p-2 border">
+                      <input
+                        type="text"
+                        className="w-full border border-gray-300 rounded p-1"
+                      />
+                    </td>
+                    <td className="p-2 border">
+                      <input
+                        type="number"
+                        className="w-full border border-gray-300 rounded p-1"
+                      />
+                    </td>
+                    <td className="p-2 border">
+                      <input
+                        type="number"
+                        className="w-full border border-gray-300 rounded p-1"
+                      />
+                    </td>
+                    <td className="p-2 border">
+                      <input
+                        type="number"
+                        step="0.01"
+                        className="w-full border border-gray-300 rounded p-1"
+                      />
+                    </td>
+                    <td className="p-2 border">
+                      <input
+                        type="number"
+                        step="0.01"
+                        className="w-full border border-gray-300 rounded p-1"
+                        readOnly
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* For small screens: Stacked input rows */}
+            <div className="md:hidden space-y-4">
+              <div className="border rounded-lg p-4 space-y-2">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Item Code
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Description
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border border-gray-300 rounded p-2"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Qty Ordered
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full border border-gray-300 rounded p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Qty Received
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full border border-gray-300 rounded p-2"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Unit Price
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      className="w-full border border-gray-300 rounded p-2"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Total Amount
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      readOnly
+                      className="w-full border border-gray-300 rounded p-2 bg-gray-100"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div>
