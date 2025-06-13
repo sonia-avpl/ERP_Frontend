@@ -1,5 +1,5 @@
-import { option } from "framer-motion/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { baseUrl } from "../../utilis";
 
 const NewComponentInputForm = ({ onClose }) => {
   const [name, setName] = useState("");
@@ -8,8 +8,26 @@ const NewComponentInputForm = ({ onClose }) => {
   const [capacity, setCapacity] = useState("");
   const [range, setRange] = useState("");
   const [speed, setSpeed] = useState("");
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [useCase, setUseCase] = useState("");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/categories`); // replace with your actual endpoint
+        const result = await response.json();
+        console.log(result);
+        if (result.success) {
+          setCategories(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const componentType = [
     "Flight Controll",
@@ -65,6 +83,7 @@ const NewComponentInputForm = ({ onClose }) => {
               name="componentType"
               className="w-full border border-gray-300 rounded-lg p-2"
             >
+              <option value="componentType">Select Component</option>
               {componentType.map((component, id) => (
                 <option key={id} value={component}>
                   {component}
@@ -120,13 +139,27 @@ const NewComponentInputForm = ({ onClose }) => {
           {/* Category */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Category</label>
-            <input
+            <select
+              value={selectedCategoryId}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-lg p-2"
+            >
+              <option value="category">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name} {/* ✅ This will work if `cat.name` exists */}
+                </option>
+              ))}
+            </select>
+
+            {/* <input
               type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder="e.g., Tactical Drones,"
               className="w-full border border-gray-300 rounded-lg p-2"
-            />
+            /> */}
           </div>
 
           {/* Use Case */}
