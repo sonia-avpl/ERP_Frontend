@@ -9,7 +9,7 @@ const ErnInputForm = ({ onClose }) => {
           &times;
         </button>
 
-        <h2 className="text-3xl font-semibold mb-8 text-center text-yellow-600">Add ERN</h2>
+        <h2 className="text-3xl font-semibold mb-8 text-center text-yellow-600">Expiry Requisition Note (ERN)</h2>
 
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* ERN Number */}
