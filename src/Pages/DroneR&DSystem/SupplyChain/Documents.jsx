@@ -8,9 +8,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import GrnInputForm from "../../../components/form/GrnInputForm";
+import DrnInputForm from "../../../components/form/DrnInputForm";
 
 const Documents = () => {
   const [showGrnForm, setShowGrnForm] = useState();
+  const [showDrnForm, setShowDrnForm] = useState();
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -85,9 +87,15 @@ const Documents = () => {
             <p className="text-sm text-gray-600 mb-4">
               Report damaged goods and returns
             </p>
-            <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+            <button
+              onClick={() => setShowDrnForm(true)}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
               Create DRN
             </button>
+            {showDrnForm && (
+              <DrnInputForm onClose={() => setShowDrnForm(false)} />
+            )}
           </div>
           <div className="border-2 border-dashed border-yellow-300 rounded-lg p-6 text-center hover:border-yellow-500 hover:bg-yellow-50 transition-colors cursor-pointer">
             <ClockIcon className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
