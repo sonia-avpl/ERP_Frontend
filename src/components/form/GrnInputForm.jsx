@@ -9,7 +9,7 @@ const GrnInputForm = ({ onClose }) => {
           &times;
         </button>
 
-        <h2 className="text-3xl font-semibold mb-8 text-center">Add GRN</h2>
+        <h2 className="text-3xl font-semibold mb-8 text-center text-green-600">Add GRN</h2>
 
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -197,22 +197,50 @@ const GrnInputForm = ({ onClose }) => {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">
+          {/* Received By Section */}
+          <div className="md:col-span-2 border rounded-lg p-4 mb-4">
+            <label className="block text-base font-semibold mb-3">
               Received By
             </label>
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-lg p-2"
-            />
+            <div className="mb-3">
+              <label className="block text-sm mb-1">Name</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded p-2"
+                placeholder="Receiver's Name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Signature</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded p-2"
+                placeholder="Signature / Initials"
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Checked By</label>
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-lg p-2"
-            />
+          {/* Checked By Section */}
+          <div className="md:col-span-2 border rounded-lg p-4 mb-4">
+            <label className="block text-base font-semibold mb-3">
+              Checked By
+            </label>
+            <div className="mb-3">
+              <label className="block text-sm mb-1">Name</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded p-2"
+                placeholder="Checker's Name"
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Signature</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded p-2"
+                placeholder="Signature / Initials"
+              />
+            </div>
           </div>
 
           <div className="md:col-span-2">
