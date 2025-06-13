@@ -10,7 +10,7 @@ const DrnInputForm = ({ onClose }) => {
         </button>
 
         <h2 className="text-3xl font-semibold mb-8 text-center text-red-600">
-          Add DRN
+          Damages Received Note (DRN)
         </h2>
 
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
