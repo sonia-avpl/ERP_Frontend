@@ -15,7 +15,7 @@ const NewComponentInputForm = ({ onClose }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${baseUrl}/categories`); // replace with your actual endpoint
+        const response = await fetch(`${baseUrl}/categories`); 
         const result = await response.json();
         console.log(result);
         if (result.success) {
