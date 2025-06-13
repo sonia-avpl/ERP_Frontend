@@ -1,4 +1,12 @@
+import { useEffect, useState } from "react";
+
 const ComponentTableView = () => {
+
+    // const [tabledata, setTableData] = useState([]);
+
+    useEffect(() => {}, [])
+
+
   return (
     <section className="w-full px-4 sm:px-6 lg:px-8 py-6 bg-white rounded shadow my-10">
       <div className="text-xl font-semibold mb-4 text-gray-700">
