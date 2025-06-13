@@ -9,10 +9,12 @@ import {
 import { useState } from "react";
 import GrnInputForm from "../../../components/form/GrnInputForm";
 import DrnInputForm from "../../../components/form/DrnInputForm";
+import ErnInputForm from "../../../components/form/ErnInputForm";
 
 const Documents = () => {
   const [showGrnForm, setShowGrnForm] = useState();
   const [showDrnForm, setShowDrnForm] = useState();
+  const [showErnForm, setShowErnForm] = useState();
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -105,9 +107,12 @@ const Documents = () => {
             <p className="text-sm text-gray-600 mb-4">
               Manage expired inventory removal
             </p>
-            <button className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
+            <button onClick={() => setShowErnForm(true)} className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
               Create ERN
             </button>
+             {showErnForm && (
+              <ErnInputForm onClose={() => setShowErnForm(false)} />
+            )}
           </div>
         </div>
       </div>
