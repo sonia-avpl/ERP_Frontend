@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import ApiService from "../services/axiosInstance";
 
 export function usePatchFile(token) {
   const [loading, setLoading] = useState(false);
@@ -10,7 +11,7 @@ export function usePatchFile(token) {
   const patchData = async (url, body) => {
     setLoading(true);
     try {
-      const res = await axios.patch(url, body, {
+      const res = await ApiService.patch(url, body, {
         headers: {
         //   Authorization: `Bearer ${token}`,
            "Content-Type": "multipart/form-data",

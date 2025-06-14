@@ -17,7 +17,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await postData(`${baseUrl}/auth/login`, form);
+    const data = await postData('auth/login', form);
     if (data) {
       localStorage.setItem("token", JSON.stringify(data.token));
       localStorage.setItem("user", JSON.stringify(data.user));

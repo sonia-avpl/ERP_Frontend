@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import ApiService from "../services/axiosInstance";
 
 export function usePostFile(token) {
   const [loading, setLoading] = useState(false);
@@ -10,12 +11,7 @@ export function usePostFile(token) {
   const postData = async (url, body) => {
     setLoading(true);
     try {
-      const res = await axios.post(url, body, {
-        headers: {
-          // Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await ApiService.post(url, body);
       setResponse(res.data);
       setError(null);
       toast.success(res.data.message);
