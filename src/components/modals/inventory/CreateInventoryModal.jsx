@@ -7,6 +7,8 @@ import XlsxPopulate from "xlsx-populate/browser/xlsx-populate";
 import toast from "react-hot-toast";
 import { usePatchFile } from "../../../hooks/usePatchFile";
 import SelectCategory from "../../form/SelectCategory";
+import { usePost } from "../../../hooks/usePost";
+import { FileModules } from "../../../utills/enum";
 
 const CreateInventoryModal = ({
   isOpen,
@@ -35,10 +37,11 @@ const CreateInventoryModal = ({
     notes: "",
     images: [],
   });
-  const { postData } = usePostFile();
+  const { postData, } = usePostFile();
   const { patchData } = usePatchFile();
+  const {uploadImageOnSWithModule}= usePost()
   const [imagePreviews, setImagePreviews] = useState([]);
-  console.log("categories", categories);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -64,6 +67,7 @@ const CreateInventoryModal = ({
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
+    console.log("newFiles", newFiles);
     setFormData((prev) => {
       // Combine existing images with new selected files
       const updatedImages = [...prev.images, ...newFiles];
@@ -138,7 +142,6 @@ const CreateInventoryModal = ({
     }
   }, [initialData]);
 
-
   const handleDownloadTemplate = async () => {
     const categoryNames = categories?.map((cat) => cat.name) || [];
     const locations = ["Gurgaon", "Bihar", "Others"];
@@ -170,7 +173,7 @@ const CreateInventoryModal = ({
 
     // Create hidden sheet for validation lists
     const hidden = workbook.addSheet("DataValidation");
-    categoryNames .forEach((val, i) => hidden.cell(i + 1, 1).value(val));
+    categoryNames.forEach((val, i) => hidden.cell(i + 1, 1).value(val));
     locations.forEach((val, i) => hidden.cell(i + 1, 2).value(val));
     hidden.hidden(true); // Hide the sheet
 
@@ -263,9 +266,10 @@ const CreateInventoryModal = ({
     reader.readAsBinaryString(file);
   };
 
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const uploads = formData.images;
+    delete formData.images;
     const user = JSON.parse(localStorage.getItem("user"));
     const form = new FormData();
 
@@ -287,15 +291,15 @@ const CreateInventoryModal = ({
 
     form.append("createdBy", user._id);
 
-   const url = initialData
-  ? `${baseUrl}/inventory/${initialData._id}`
-  : `${baseUrl}/inventory/create`;
+    const url = initialData
+      ? `inventory/${initialData._id}`
+      : `inventory/create`;
 
     const result = initialData
       ? await patchData(url, form)
       : await postData(url, form);
-
     if (result?.success) {
+      await uploadImageOnSWithModule(uploads,result.data._id,FileModules.Inventory)
       onClose();
       refetch();
       setFormData({
