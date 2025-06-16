@@ -3,7 +3,6 @@ import { baseUrl } from "../../utilis";
 
 const NewComponentInputForm = ({ onClose }) => {
   const [name, setName] = useState("");
-  const [weight, setWeight] = useState("");
   const [voltage, setVoltage] = useState("");
   const [capacity, setCapacity] = useState("");
   const [range, setRange] = useState("");
@@ -11,6 +10,16 @@ const NewComponentInputForm = ({ onClose }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [useCase, setUseCase] = useState("");
+
+  // physical properties
+  const [dimension, setDimenssion] = useState();
+  const [weight, setWeight] = useState();
+  const [material, setMaterial] = useState();
+  const [mounting, setMounting] = useState();
+  const [color, setColor] = useState();
+
+  // electrical Properties
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -95,9 +104,16 @@ const NewComponentInputForm = ({ onClose }) => {
           {/* Specs Section */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-2">
-              Specifications
+              Physical Properties
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                value={dimension}
+                onChange={(e) => setDimenssion(e.target.value)}
+                placeholder="Dimension"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
               <input
                 type="text"
                 value={weight}
@@ -107,34 +123,29 @@ const NewComponentInputForm = ({ onClose }) => {
               />
               <input
                 type="text"
-                value={voltage}
-                onChange={(e) => setVoltage(e.target.value)}
-                placeholder="Voltage"
+                value={material}
+                onChange={(e) => setMaterial(e.target.value)}
+                placeholder="Mateiral"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={capacity}
-                onChange={(e) => setCapacity(e.target.value)}
-                placeholder="Capacity"
+                value={mounting}
+                onChange={(e) => setMounting(e.target.value)}
+                placeholder="Mounting"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={range}
-                onChange={(e) => setRange(e.target.value)}
-                placeholder="Range"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                value={speed}
-                onChange={(e) => setSpeed(e.target.value)}
-                placeholder="Speed"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                placeholder="Color"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
           </div>
+
+          
 
           {/* Category */}
           <div className="md:col-span-2">
