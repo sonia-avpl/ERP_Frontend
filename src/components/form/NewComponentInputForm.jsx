@@ -22,6 +22,7 @@ const NewComponentInputForm = ({ onClose }) => {
   const [currentDraw, setCurrentDraw] = useState();
   const [processor, setProcessor] = useState();
   const [imu, setImu] = useState();
+  const [barometer, setBarometer] = useState()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -179,6 +180,13 @@ const NewComponentInputForm = ({ onClose }) => {
                 value={imu}
                 onChange={(e) => setImu(e.target.value)}
                 placeholder="Mounting"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={barometer}
+                onChange={(e) => setBarometer(e.target.value)}
+                placeholder="Barometer"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
