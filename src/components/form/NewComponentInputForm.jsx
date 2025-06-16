@@ -2,36 +2,60 @@ import { useEffect, useState } from "react";
 import { baseUrl } from "../../utilis";
 
 const NewComponentInputForm = ({ onClose }) => {
-  const [name, setName] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [useCase, setUseCase] = useState("");
+  const [formData, setFormData] = useState({
+    image: "",
+    name: "",
+    useCase: "",
+    dimension: "",
+    weight: "",
+    material: "",
+    mounting: "",
+    color: "",
+    voltageRange: "",
+    currentDraw: "",
+    processor: "",
+    imu: "",
+    barometer: "",
+    uartPorts: "",
+    i2cPorts: "",
+    usb: "",
+    bluetooth: "",
+    osd: "",
+  });
+  const [categories, setCategories] = useState();
+  const [selectedCategoryId, setSelectedCategoryId] = useState();
 
-  // physical properties
-  const [dimension, setDimenssion] = useState();
-  const [weight, setWeight] = useState();
-  const [material, setMaterial] = useState();
-  const [mounting, setMounting] = useState();
-  const [color, setColor] = useState();
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
-  // electrical Properties
-  const [voltageRange, setVoltageRange] = useState();
-  const [currentDraw, setCurrentDraw] = useState();
-  const [processor, setProcessor] = useState();
-  const [imu, setImu] = useState();
-  const [barometer, setBarometer] = useState();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  // connectivity
-  const [uartPorts, setUartPorts] = useState();
-  const [i2cPorts, setI2cPorts] = useState();
-  const [usb, setUsb] = useState();
-  const [bluetooth, setBluetooth] = useState();
-  const [osd, setOsd] = useState();
+    try {
+      const res = await fetch(`${}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  // version
-  const [versionNumber, setVersionNumber] = useState();
-  const [releaseDate, setReleaseDate] = useState();
-  const [changes, setChanges] = useState();
+      if (!res.ok) {
+        throw new Error("Failed to submit");
+      }
+
+      const data = await res.json();
+      console.log("Success:", data);
+      alert("Form submitted successfully!");
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Error submitting form.");
+    }
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -81,14 +105,30 @@ const NewComponentInputForm = ({ onClose }) => {
           New Component
         </h2>
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Upload Image */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Picture</label>
+            <input
+              type="file"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg p-2 cursor-pointer"
+            />
+          </div>
+
           {/* Name */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="e.g., CUAV V5+ Autopilot"
               required
               className="w-full border border-gray-300 rounded-lg p-2"
@@ -121,36 +161,41 @@ const NewComponentInputForm = ({ onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
-                value={dimension}
-                onChange={(e) => setDimenssion(e.target.value)}
+                name="dimension"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Dimension"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
+                name="weight"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Weight"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={material}
-                onChange={(e) => setMaterial(e.target.value)}
+                name="material"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Mateiral"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={mounting}
-                onChange={(e) => setMounting(e.target.value)}
+                name="mounting"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Mounting"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
+                name="color"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Color"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
@@ -165,36 +210,41 @@ const NewComponentInputForm = ({ onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
-                value={voltageRange}
-                onChange={(e) => setVoltageRange(e.target.value)}
+                name="voltageRange"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Voltage Range"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={currentDraw}
-                onChange={(e) => setCurrentDraw(e.target.value)}
+                name="currentDraw"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Current Drawan"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={processor}
-                onChange={(e) => setProcessor(e.target.value)}
+                name="processor"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Processor"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={imu}
-                onChange={(e) => setImu(e.target.value)}
+                name="imu"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Mounting"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={barometer}
-                onChange={(e) => setBarometer(e.target.value)}
+                name="barometer"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Barometer"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
@@ -210,36 +260,41 @@ const NewComponentInputForm = ({ onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
-                value={uartPorts}
-                onChange={(e) => setUartPorts(e.target.value)}
+                name="uartPorts"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Uart Ports"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={i2cPorts}
-                onChange={(e) => setI2cPorts(e.target.value)}
+                name="i2cPorts"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="i2cPorts"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={usb}
-                onChange={(e) => setUsb(e.target.value)}
+                name="usb"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="usb"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={bluetooth}
-                onChange={(e) => setBluetooth(e.target.value)}
+                name="bluetooth"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="bluetooth"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={osd}
-                onChange={(e) => setOsd(e.target.value)}
+                name="osd"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="osd"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
@@ -253,22 +308,25 @@ const NewComponentInputForm = ({ onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
-                value={versionNumber}
-                onChange={(e) => setVersionNumber(e.target.value)}
+                name="versionNumber"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Version Number"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={releaseDate}
-                onChange={(e) => setReleaseDate(e.target.value)}
+                name="releaseDate"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Release Date"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
                 type="text"
-                value={changes}
-                onChange={(e) => setChanges(e.target.value)}
+                name="changes"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="changes"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
@@ -285,20 +343,12 @@ const NewComponentInputForm = ({ onClose }) => {
               className="w-full border border-gray-300 rounded-lg p-2"
             >
               <option value="category">Select Category</option>
-              {categories.map((cat) => (
+              {categories?.map((cat) => (
                 <option key={cat._id} value={cat._id}>
                   {cat.name} {/* ✅ This will work if `cat.name` exists */}
                 </option>
               ))}
             </select>
-
-            {/* <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="e.g., Tactical Drones,"
-              className="w-full border border-gray-300 rounded-lg p-2"
-            /> */}
           </div>
 
           {/* Use Case */}
@@ -306,8 +356,9 @@ const NewComponentInputForm = ({ onClose }) => {
             <label className="block text-sm font-medium mb-1">Use Case</label>
             <input
               type="text"
-              value={useCase}
-              onChange={(e) => setUseCase(e.target.value)}
+              name="useCase"
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Use Case"
               className="w-full border border-gray-300 rounded-lg p-2"
             />
