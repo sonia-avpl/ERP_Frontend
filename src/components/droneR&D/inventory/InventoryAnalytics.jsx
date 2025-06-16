@@ -11,12 +11,12 @@ const InventoryAnalytics = () => {
       {
         label: 'Stock Level',
         data: [120, 90, 40, 75, 60],
-        backgroundColor: '#3b82f6', // Tailwind blue-500
+        backgroundColor: '#3b82f6', 
       },
         {
       label: 'Minimum Required',
       data: [100, 80, 60, 60, 50],
-      backgroundColor: '#f59e0b', // Tailwind amber-500
+      backgroundColor: '#f59e0b', 
     },
     ],
   };
