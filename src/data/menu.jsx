@@ -79,7 +79,7 @@ export const menuConfig = {
         },
         {
           name: "Reporting",
-          to: "#",
+          to: "/reporting",
           icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],
@@ -99,12 +99,12 @@ export const menuConfig = {
         },
         {
           name: "Quality Control",
-          to: "#",
+          to: "quality-control",
           icon: <ShieldCheckIcon className="h-5 w-5" />,
         },
         {
           name: "Reporting",
-          to: "#",
+          to: "reporting",
           icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],
