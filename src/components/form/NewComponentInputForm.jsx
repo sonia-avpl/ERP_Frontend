@@ -21,40 +21,18 @@ const NewComponentInputForm = ({ onClose }) => {
     usb: "",
     bluetooth: "",
     osd: "",
+    versionNumber: "",
+    releaseDate: "",
+    changes: "",
+    componentType: "",
+    categoryId: "",
   });
-  const [categories, setCategories] = useState();
-  const [selectedCategoryId, setSelectedCategoryId] = useState();
+
+  const [categories, setCategories] = useState([]);
 
   const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch(`${}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to submit");
-      }
-
-      const data = await res.json();
-      console.log("Success:", data);
-      alert("Form submitted successfully!");
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Error submitting form.");
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
@@ -62,7 +40,6 @@ const NewComponentInputForm = ({ onClose }) => {
       try {
         const response = await fetch(`${baseUrl}/categories`);
         const result = await response.json();
-        console.log(result);
         if (result.success) {
           setCategories(result.data);
         }
@@ -75,7 +52,7 @@ const NewComponentInputForm = ({ onClose }) => {
   }, []);
 
   const componentType = [
-    "Flight Controll",
+    "Flight Controller",
     "Motor",
     "ESC",
     "Propeller",
@@ -89,7 +66,7 @@ const NewComponentInputForm = ({ onClose }) => {
     "Power Distribution Board",
     "Antenna",
     "Sensor",
-    "Telementry Module",
+    "Telemetry Module",
   ];
 
   return (
@@ -105,27 +82,11 @@ const NewComponentInputForm = ({ onClose }) => {
           New Component
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
-          {/* Upload Image */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">Picture</label>
-            <input
-              type="file"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2 cursor-pointer"
-            />
-          </div>
-
-          {/* Name */}
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/** Name */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
-              type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -135,236 +96,115 @@ const NewComponentInputForm = ({ onClose }) => {
             />
           </div>
 
-          {/* Component Type */}
+          {/** Component Type */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">
               Component Type
             </label>
             <select
               name="componentType"
-              className="w-full border border-gray-300 rounded-lg p-2"
-            >
-              <option value="componentType">Select Component</option>
-              {componentType.map((component, id) => (
-                <option key={id} value={component}>
-                  {component}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Physical properties */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
-              Physical Properties
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <input
-                type="text"
-                name="dimension"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Dimension"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="weight"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Weight"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="material"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Mateiral"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="mounting"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Mounting"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="color"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Color"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-            </div>
-          </div>
-
-          {/* electricalProperties */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
-              Electrical Properties
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <input
-                type="text"
-                name="voltageRange"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Voltage Range"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="currentDraw"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Current Drawan"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="processor"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Processor"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="imu"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Mounting"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="barometer"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Barometer"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-            </div>
-          </div>
-
-          {/* connectivity */}
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
-              Connectivity
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <input
-                type="text"
-                name="uartPorts"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Uart Ports"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="i2cPorts"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="i2cPorts"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="usb"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="usb"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="bluetooth"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="bluetooth"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="osd"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="osd"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-            </div>
-          </div>
-
-          {/* versions */}
-
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">Versions</label>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <input
-                type="text"
-                name="versionNumber"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Version Number"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="releaseDate"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Release Date"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                name="changes"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="changes"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
-            </div>
-          </div>
-
-          {/* Category */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">Category</label>
-            <select
-              value={selectedCategoryId}
-              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              value={formData.componentType}
+              onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded-lg p-2"
             >
-              <option value="category">Select Category</option>
-              {categories?.map((cat) => (
-                <option key={cat._id} value={cat._id}>
-                  {cat.name} {/* ✅ This will work if `cat.name` exists */}
+              <option value="">Select Component</option>
+              {componentType.map((type, idx) => (
+                <option key={idx} value={type}>
+                  {type}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Use Case */}
+          {/** Physical Properties */}
+          {["dimension", "weight", "material", "mounting", "color"].map(
+            (field) => (
+              <input
+                key={field}
+                type="text"
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            )
+          )}
+
+          {/** Electrical Properties */}
+          {["voltageRange", "currentDraw", "processor", "imu", "barometer"].map(
+            (field) => (
+              <input
+                key={field}
+                type="text"
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            )
+          )}
+
+          {/** Connectivity */}
+          {["uartPorts", "i2cPorts", "usb", "bluetooth", "osd"].map((field) => (
+            <input
+              key={field}
+              type="text"
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              placeholder={field.toUpperCase()}
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          ))}
+
+          {/** Versions */}
+          {["versionNumber", "releaseDate", "changes"].map((field) => (
+            <input
+              key={field}
+              type="text"
+              name={field}
+              value={formData[field]}
+              onChange={handleChange}
+              placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          ))}
+
+          {/** Category Dropdown */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Category</label>
+            <select
+              name="categoryId"
+              value={formData.categoryId}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-lg p-2"
+            >
+              <option value="">Select Category</option>
+              {categories?.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/** Use Case */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Use Case</label>
             <input
               type="text"
               name="useCase"
-              value={formData.name}
+              value={formData.useCase}
               onChange={handleChange}
-              placeholder="Use Case"
+              placeholder="e.g., Long-range drone mapping"
               className="w-full border border-gray-300 rounded-lg p-2"
             />
           </div>
 
-          {/* Submit Button */}
           <div className="md:col-span-2 mt-4">
             <button
               type="submit"
