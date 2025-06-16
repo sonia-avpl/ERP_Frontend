@@ -82,6 +82,11 @@ export const menuConfig = {
           to: "/compliance-docs",
           icon: <PuzzlePieceIcon className="h-5 w-5" />,
         },
+        {
+          name: "Reporting",
+          to: "#",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
       ],
     },
     {
@@ -101,6 +106,11 @@ export const menuConfig = {
           name: "Quality Control",
           to: "#",
           icon: <ShieldCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Reporting",
+          to: "#",
+          icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],
     },
