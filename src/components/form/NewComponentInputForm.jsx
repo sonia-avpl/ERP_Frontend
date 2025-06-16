@@ -3,9 +3,6 @@ import { baseUrl } from "../../utilis";
 
 const NewComponentInputForm = ({ onClose }) => {
   const [name, setName] = useState("");
-  const [capacity, setCapacity] = useState("");
-  const [range, setRange] = useState("");
-  const [speed, setSpeed] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [useCase, setUseCase] = useState("");
@@ -31,6 +28,10 @@ const NewComponentInputForm = ({ onClose }) => {
   const [bluetooth, setBluetooth] = useState();
   const [osd, setOsd] = useState();
 
+  // version
+  const [versionNumber, setVersionNumber] = useState();
+  const [releaseDate, setReleaseDate] = useState();
+  const [changes, setChanges] = useState();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -240,6 +241,35 @@ const NewComponentInputForm = ({ onClose }) => {
                 value={osd}
                 onChange={(e) => setOsd(e.target.value)}
                 placeholder="osd"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+          </div>
+
+          {/* versions */}
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Versions</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                value={versionNumber}
+                onChange={(e) => setVersionNumber(e.target.value)}
+                placeholder="Version Number"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={releaseDate}
+                onChange={(e) => setReleaseDate(e.target.value)}
+                placeholder="Release Date"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={changes}
+                onChange={(e) => setChanges(e.target.value)}
+                placeholder="changes"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
