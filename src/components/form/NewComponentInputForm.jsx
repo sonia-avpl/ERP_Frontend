@@ -22,7 +22,15 @@ const NewComponentInputForm = ({ onClose }) => {
   const [currentDraw, setCurrentDraw] = useState();
   const [processor, setProcessor] = useState();
   const [imu, setImu] = useState();
-  const [barometer, setBarometer] = useState()
+  const [barometer, setBarometer] = useState();
+
+  // connectivity
+  const [uartPorts, setUartPorts] = useState();
+  const [i2cPorts, setI2cPorts] = useState();
+  const [usb, setUsb] = useState();
+  const [bluetooth, setBluetooth] = useState();
+  const [osd, setOsd] = useState();
+
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -187,6 +195,51 @@ const NewComponentInputForm = ({ onClose }) => {
                 value={barometer}
                 onChange={(e) => setBarometer(e.target.value)}
                 placeholder="Barometer"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+          </div>
+
+          {/* connectivity */}
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">
+              Connectivity
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                value={uartPorts}
+                onChange={(e) => setUartPorts(e.target.value)}
+                placeholder="Uart Ports"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={i2cPorts}
+                onChange={(e) => setI2cPorts(e.target.value)}
+                placeholder="i2cPorts"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={usb}
+                onChange={(e) => setUsb(e.target.value)}
+                placeholder="usb"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={bluetooth}
+                onChange={(e) => setBluetooth(e.target.value)}
+                placeholder="bluetooth"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={osd}
+                onChange={(e) => setOsd(e.target.value)}
+                placeholder="osd"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
