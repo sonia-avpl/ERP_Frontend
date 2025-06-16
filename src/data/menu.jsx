@@ -33,11 +33,6 @@ export const bottomCommonMenus = [
     section: "Administration",
     items: [
       {
-        name: "Reporting",
-        to: "#",
-        icon: <ChartBarIcon className="h-5 w-5" />,
-      },
-      {
         name: "User Management",
         to: "#",
         icon: <UserGroupIcon className="h-5 w-5" />,
