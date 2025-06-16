@@ -9,8 +9,6 @@ import {
   GlobeAltIcon,
   WifiIcon,
 } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import NewComponentInputForm from "../../form/NewComponentInputForm";
 
 const components = [
   {
@@ -56,7 +54,7 @@ const components = [
 ];
 
 const ComponentLibrary = () => {
-  const [newComponent, setNewComponent] = useState();
+ 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-6 bg-white rounded shadow my-10">
       <div className="max-w-7xl mx-auto">
@@ -65,10 +63,7 @@ const ComponentLibrary = () => {
           <h3 className="text-2xl font-semibold text-gray-800">
             Component Library
           </h3>
-          <button onClick={() =>setNewComponent(true) } className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
-            <PlusIcon className="w-5 h-5" /> New Component
-          </button>
-          {newComponent  && <NewComponentInputForm onClose={() => setNewComponent(false)} />}
+         
         </div>
 
         {/* Grid */}
