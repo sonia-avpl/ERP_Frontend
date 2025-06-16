@@ -3,7 +3,6 @@ import { baseUrl } from "../../utilis";
 
 const NewComponentInputForm = ({ onClose }) => {
   const [name, setName] = useState("");
-  const [voltage, setVoltage] = useState("");
   const [capacity, setCapacity] = useState("");
   const [range, setRange] = useState("");
   const [speed, setSpeed] = useState("");
@@ -19,12 +18,15 @@ const NewComponentInputForm = ({ onClose }) => {
   const [color, setColor] = useState();
 
   // electrical Properties
-
+  const [voltageRange, setVoltageRange] = useState();
+  const [currentDraw, setCurrentDraw] = useState();
+  const [processor, setProcessor] = useState();
+  const [imu, setImu] = useState();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${baseUrl}/categories`); 
+        const response = await fetch(`${baseUrl}/categories`);
         const result = await response.json();
         console.log(result);
         if (result.success) {
@@ -101,7 +103,7 @@ const NewComponentInputForm = ({ onClose }) => {
             </select>
           </div>
 
-          {/* Specs Section */}
+          {/* Physical properties */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-2">
               Physical Properties
@@ -145,7 +147,42 @@ const NewComponentInputForm = ({ onClose }) => {
             </div>
           </div>
 
-          
+          {/* electricalProperties */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">
+              Electrical Properties
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <input
+                type="text"
+                value={voltageRange}
+                onChange={(e) => setVoltageRange(e.target.value)}
+                placeholder="Voltage Range"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={currentDraw}
+                onChange={(e) => setCurrentDraw(e.target.value)}
+                placeholder="Current Drawan"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={processor}
+                onChange={(e) => setProcessor(e.target.value)}
+                placeholder="Processor"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+              <input
+                type="text"
+                value={imu}
+                onChange={(e) => setImu(e.target.value)}
+                placeholder="Mounting"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+          </div>
 
           {/* Category */}
           <div className="md:col-span-2">
