@@ -22,6 +22,8 @@ import ProjectManagement from "../Pages/ProjectManagmentSystem/ProjectManagement
 import Documents from "../Pages/DroneR&DSystem/SupplyChain/Documents";
 import Overview from "../Pages/DroneR&DSystem/SupplyChain/Overview";
 import Supllier from "../Pages/DroneR&DSystem/SupplyChain/Supllier";
+import UserManagement from "../Pages/UserManagement/UserManagement";
+import Setting from "../Pages/Settings/Setting";
 
 
 const AllRoutes = () => {
@@ -39,6 +41,8 @@ const AllRoutes = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/project-managment" element={<ProjectManagement />} />
+          <Route path="/user-managment" element={<UserManagement />} />
+          <Route path="/settings" element={<Setting />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/supply-chain-dashboard" element={<SupplyChain />} >
            <Route index element={<Navigate to="overview" replace />} />

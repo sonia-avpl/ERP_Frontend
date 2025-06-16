@@ -34,7 +34,7 @@ export const bottomCommonMenus = [
     items: [
       {
         name: "User Management",
-        to: "#",
+        to: "/user-managment",
         icon: <UserGroupIcon className="h-5 w-5" />,
       },
       {
@@ -44,7 +44,7 @@ export const bottomCommonMenus = [
       },
       {
         name: "Settings",
-        to: "#",
+        to: "/settings",
         icon: <Cog6ToothIcon className="h-5 w-5" />,
       },
     ],
