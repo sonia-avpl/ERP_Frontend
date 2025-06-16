@@ -12,7 +12,7 @@ const UserProfileCard = () => {
           </button>
         </div>
         <div>
-          <button className="w-full text-left px-4 py-2 rounded hover:bg-purple-500 hover:text-white transition">
+          <button onClick={() => navigate("/user-management")} className="w-full text-left px-4 py-2 rounded hover:bg-purple-500 hover:text-white transition">
             User Management
           </button>
         </div>
@@ -25,7 +25,7 @@ const UserProfileCard = () => {
           </button>
         </div>
         <div>
-          <button className="w-full text-left px-4 py-2 rounded hover:bg-purple-500 hover:text-white transition">
+          <button onClick={() => navigate("/settings")} className="w-full text-left px-4 py-2 rounded hover:bg-purple-500 hover:text-white transition">
             Settings
           </button>
         </div>

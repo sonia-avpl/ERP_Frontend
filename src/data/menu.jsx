@@ -34,7 +34,7 @@ export const bottomCommonMenus = [
     items: [
       {
         name: "User Management",
-        to: "/user-managment",
+        to: "/user-management",
         icon: <UserGroupIcon className="h-5 w-5" />,
       },
       {

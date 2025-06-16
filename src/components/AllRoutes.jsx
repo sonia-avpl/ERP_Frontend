@@ -41,7 +41,7 @@ const AllRoutes = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/project-managment" element={<ProjectManagement />} />
-          <Route path="/user-managment" element={<UserManagement />} />
+          <Route path="/user-management" element={<UserManagement />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/supply-chain-dashboard" element={<SupplyChain />} >
