@@ -62,11 +62,11 @@ const Layout = () => {
                     className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 transition"
                   >
                     <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">
-                      JD
+                      AD
                     </div>
                   </button>
 
-                  {open && <UserProfileCard />}
+                  {open && <UserProfileCard setOpen={setOpen}/>}
                 </div>
               </div>
             </div>
