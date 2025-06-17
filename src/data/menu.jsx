@@ -33,13 +33,8 @@ export const bottomCommonMenus = [
     section: "Administration",
     items: [
       {
-        name: "Reporting",
-        to: "#",
-        icon: <ChartBarIcon className="h-5 w-5" />,
-      },
-      {
         name: "User Management",
-        to: "#",
+        to: "/user-management",
         icon: <UserGroupIcon className="h-5 w-5" />,
       },
       {
@@ -49,7 +44,7 @@ export const bottomCommonMenus = [
       },
       {
         name: "Settings",
-        to: "#",
+        to: "/settings",
         icon: <Cog6ToothIcon className="h-5 w-5" />,
       },
     ],
@@ -82,6 +77,11 @@ export const menuConfig = {
           to: "/compliance-docs",
           icon: <PuzzlePieceIcon className="h-5 w-5" />,
         },
+        {
+          name: "Reporting",
+          to: "/reporting",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
       ],
     },
     {
@@ -99,8 +99,13 @@ export const menuConfig = {
         },
         {
           name: "Quality Control",
-          to: "#",
+          to: "quality-control",
           icon: <ShieldCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Reporting",
+          to: "reporting",
+          icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],
     },
