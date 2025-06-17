@@ -26,7 +26,17 @@ const NewProtoInputForm = ({ onClose }) => {
     flightDuration: "",
     maxFlightDistance: "",
     observation: "",
+    status: "Design",
   });
+
+  const statusOptions = [
+    "Design",
+    "Assembled",
+    "Testing",
+    "Completed",
+    "Failed",
+    "Active",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +94,23 @@ const NewProtoInputForm = ({ onClose }) => {
                 placeholder="type"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
+            </div>
+
+            {/* status */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Status</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2"
+              >
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* designed by */}
