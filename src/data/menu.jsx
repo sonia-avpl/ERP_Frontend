@@ -32,16 +32,16 @@ export const bottomCommonMenus = [
   {
     section: "Administration",
     items: [
-      {
-        name: "User Management",
-        to: "/user-management",
-        icon: <UserGroupIcon className="h-5 w-5" />,
-      },
-      {
-        name: "Project Management",
-        to: "/project-managment",
-        icon: <UserPlusIcon className="h-5 w-5" />,
-      },
+      // {
+      //   name: "User Management",
+      //   to: "/user-management",
+      //   icon: <UserGroupIcon className="h-5 w-5" />,
+      // },
+      // {
+      //   name: "Project Management",
+      //   to: "/project-managment",
+      //   icon: <UserPlusIcon className="h-5 w-5" />,
+      // },
       {
         name: "Settings",
         to: "/settings",

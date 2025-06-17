@@ -31,7 +31,6 @@ import QualityControl from "../Pages/QualityControl/QualityControl";
 const AllRoutes = () => {
   return (
     <Routes>
-      {/* Public Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
