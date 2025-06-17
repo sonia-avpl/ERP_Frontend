@@ -17,7 +17,11 @@ const NewProtoInputForm = ({ onClose }) => {
     processor: "",
     imu: "",
     barometer: "",
-    connectivity: "",
+    uartPorts: "",
+    i2cPorts: "",
+    usb: "",
+    bluetooth: "",
+    osd: "",
     components: "",
   });
 
@@ -199,13 +203,43 @@ const NewProtoInputForm = ({ onClose }) => {
               <label className="block text-sm font-medium mb-1">
                 Connectivity
               </label>
-              <input
-                name="connectivity"
-                value={formData.connectivity}
-                onChange={handleChange}
-                placeholder="connectivity"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  name="uartPorts"
+                  value={formData.uartPorts}
+                  onChange={handleChange}
+                  placeholder="UART Ports"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="i2cPorts"
+                  value={formData.i2cPorts}
+                  onChange={handleChange}
+                  placeholder="I2C Ports"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="usb"
+                  value={formData.usb}
+                  onChange={handleChange}
+                  placeholder="USB"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="bluetooth"
+                  value={formData.bluetooth}
+                  onChange={handleChange}
+                  placeholder="Bluetooth"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="osd"
+                  value={formData.osd}
+                  onChange={handleChange}
+                  placeholder="OSD"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
             </div>
 
             {/* components */}
