@@ -12,7 +12,11 @@ const NewProtoInputForm = ({ onClose }) => {
     material: "",
     mounting: "",
     color: "",
-    electricalProp: "",
+    voltageRange: "",
+    currentDraw: "",
+    processor: "",
+    imu: "",
+    barometer: "",
     connectivity: "",
     components: "",
   });
@@ -151,13 +155,43 @@ const NewProtoInputForm = ({ onClose }) => {
               <label className="block text-sm font-medium mb-1">
                 Electrical Properties
               </label>
-              <input
-                name="electricalProp"
-                value={formData.electricalProp}
-                onChange={handleChange}
-                placeholder="electrical properties"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  name="voltageRange"
+                  value={formData.voltageRange}
+                  onChange={handleChange}
+                  placeholder="voltageRange"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="currentDraw"
+                  value={formData.currentDraw}
+                  onChange={handleChange}
+                  placeholder="currentDraw"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="processor"
+                  value={formData.processor}
+                  onChange={handleChange}
+                  placeholder="processor"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="imu"
+                  value={formData.imu}
+                  onChange={handleChange}
+                  placeholder="imu"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="barometer"
+                  value={formData.barometer}
+                  onChange={handleChange}
+                  placeholder="barometer"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
             </div>
 
             {/* connectivity */}
