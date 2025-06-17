@@ -7,7 +7,11 @@ const NewProtoInputForm = ({ onClose }) => {
     type: "",
     designedBy: "",
     lastUpdate: "",
-    pysicalProp: "",
+    dimension: "",
+    weight: "",
+    material: "",
+    mounting: "",
+    color: "",
     electricalProp: "",
     connectivity: "",
     components: "",
@@ -103,13 +107,43 @@ const NewProtoInputForm = ({ onClose }) => {
               <label className="block text-sm font-medium mb-1">
                 Physical Properties
               </label>
-              <input
-                name="pysicalProp"
-                value={formData.pysicalProp}
-                onChange={handleChange}
-                placeholder="physical properties"
-                className="w-full border border-gray-300 rounded-lg p-2"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  name="dimension"
+                  value={formData.dimension}
+                  onChange={handleChange}
+                  placeholder="dimension"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="weight"
+                  value={formData.weight}
+                  onChange={handleChange}
+                  placeholder="weight"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="material"
+                  value={formData.material}
+                  onChange={handleChange}
+                  placeholder="material"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="mounting"
+                  value={formData.mounting}
+                  onChange={handleChange}
+                  placeholder="mounting"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="color"
+                  value={formData.color}
+                  onChange={handleChange}
+                  placeholder="color"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
             </div>
 
             {/* electrical properties */}
