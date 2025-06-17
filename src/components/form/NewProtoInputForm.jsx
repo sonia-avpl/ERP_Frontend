@@ -23,6 +23,9 @@ const NewProtoInputForm = ({ onClose }) => {
     bluetooth: "",
     osd: "",
     components: "",
+    flightDuration: "",
+    maxFlightDistance: "",
+    observation: "",
   });
 
   const handleChange = (e) => {
@@ -254,6 +257,36 @@ const NewProtoInputForm = ({ onClose }) => {
                 placeholder="components"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
+            </div>
+
+            {/* test result */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Test Result
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  name="flightDuration"
+                  value={formData.flightDuration}
+                  onChange={handleChange}
+                  placeholder="flightDuration"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="maxFlightDistance"
+                  value={formData.maxFlightDistance}
+                  onChange={handleChange}
+                  placeholder="maxFlightDistance"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+                <input
+                  name="observation"
+                  value={formData.observation}
+                  onChange={handleChange}
+                  placeholder="observation"
+                  className="w-full border border-gray-300 rounded-lg p-2"
+                />
+              </div>
             </div>
 
             {/* Submit Button */}
