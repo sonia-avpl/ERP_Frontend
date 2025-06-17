@@ -4,8 +4,11 @@ import {
   BeakerIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import NewProtoInputForm from "../../form/NewProtoInputForm";
 
 const Heading = () => {
+  const [newProtoForm, setNewProtoForm] = useState(false);
   return (
     <div className="module-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div>
@@ -14,9 +17,12 @@ const Heading = () => {
       </div>
 
       <div className="module-actions flex flex-wrap gap-2">
-        <button className="bg-blue-600 text-white flex items-center gap-1.5 text-sm px-3 py-1.5 rounded hover:bg-blue-700">
+        <button onClick={() => setNewProtoForm(true)} className="bg-blue-600 text-white flex items-center gap-1.5 text-sm px-3 py-1.5 rounded hover:bg-blue-700">
           <PlusIcon className="w-4 h-4" /> New Prototype
         </button>
+        {newProtoForm && (
+          <NewProtoInputForm onClose={() => setNewProtoForm(false)} />
+        )}
 
         <button className="bg-green-600 text-white flex items-center gap-1.5 text-sm px-3 py-1.5 rounded hover:bg-green-700">
           <CodeBracketSquareIcon className="w-4 h-4" /> New Version
