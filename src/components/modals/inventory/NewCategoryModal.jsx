@@ -26,7 +26,7 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
         isActive: editingCategory.isActive ?? true,
       });
       setPreviewUrl(
-        editingCategory.icon ? `${baseUrl}${editingCategory.icon}` : null
+        editingCategory.icon ? editingCategory.imageUrl : null
       );
     }
   }, [editingCategory]);
@@ -58,6 +58,7 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
       }));
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,6 +127,7 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
               onChange={handleFileChange}
               className="border rounded p-2"
             />
+              
             {previewUrl && (
               <img
                 src={previewUrl}

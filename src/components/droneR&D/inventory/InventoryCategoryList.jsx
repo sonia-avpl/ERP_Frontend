@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { baseUrl } from "../../../utilis";
+
 
 
 const InventoryCategoryList = ({ data, onEdit }) => {
@@ -28,7 +28,7 @@ const InventoryCategoryList = ({ data, onEdit }) => {
             <div className="flex items-center gap-3">
               <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
                 <img
-                  src={`http://localhost:5000${cat.icon}`}
+                  src={cat.imageUrl}
                   alt={cat.name}
                   className="h-5 w-5"
                 />
