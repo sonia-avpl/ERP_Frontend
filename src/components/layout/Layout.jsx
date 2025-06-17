@@ -1,12 +1,29 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import { useRef } from "react";
+import UserProfileCard from "../card/UserProfileCard";
 
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const path = location.pathname;
+
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef();
+
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const getTitle = (path) => {
     if (path === "/") return "Dashboard";
@@ -39,7 +56,18 @@ const Layout = () => {
                 <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
               </button>
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                JD
+                <div className="relative" ref={wrapperRef}>
+                  <button
+                    onClick={() => setOpen(!open)}
+                    className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 transition"
+                  >
+                    <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">
+                      JD
+                    </div>
+                  </button>
+
+                  {open && <UserProfileCard />}
+                </div>
               </div>
             </div>
           </div>

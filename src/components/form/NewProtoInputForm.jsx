@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { baseUrl } from "../../utilis";
+import { useState } from "react";
 
-const NewComponentInputForm = ({ onClose }) => {
+const NewProtoInputForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
-    file: "",
     name: "",
-    useCase: "",
+    version: "",
+    type: "",
+    designedBy: "",
+    lastUpdate: "",
     dimension: "",
     weight: "",
     material: "",
@@ -21,56 +22,29 @@ const NewComponentInputForm = ({ onClose }) => {
     usb: "",
     bluetooth: "",
     osd: "",
-    componentType: "",
-    versionNumber: "",
-    releaseDate: "",
-    changes: "",
+    components: "",
+    flightDuration: "",
+    maxFlightDistance: "",
+    observation: "",
+    status: "Design",
   });
 
-  const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const statusOptions = [
+    "Design",
+    "Assembled",
+    "Testing",
+    "Completed",
+    "Failed",
+    "Active",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`${baseUrl}/categories`);
-        const result = await response.json();
-        if (result.success) {
-          setCategories(result.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  const componentType = [
-    "Flight Controller",
-    "Motor",
-    "ESC",
-    "Propeller",
-    "Battery",
-    "Camera",
-    "Frame",
-    "GPS Module",
-    "Receiver",
-    "Transmitter",
-    "Gimbal",
-    "Power Distribution Board",
-    "Antenna",
-    "Sensor",
-    "Telemetry Module",
-  ];
 
   return (
     <section className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
@@ -82,181 +56,182 @@ const NewComponentInputForm = ({ onClose }) => {
           &times;
         </button>
         <h2 className="text-2xl font-semibold mb-6 text-center text-blue-600">
-          New Component
+          New Prototype
         </h2>
-
         <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* file */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">
-              Upload File
-            </label>
-            <input
-              type="file"
-              name="file"
-              value={formData.file}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2"
-            />
-          </div>
-
-          {/* Name */}
+          {/* name */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="e.g., CUAV V5+ Autopilot"
+              placeholder="name"
               required
               className="w-full border border-gray-300 rounded-lg p-2"
             />
           </div>
-
-          {/* Component Type & Select Component*/}
-          <div className="flex w-full justify-between">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">
-                Component Type
-              </label>
-              <select
-                name="componentType"
-                value={formData.componentType}
-                onChange={handleChange}
-                className=" border border-gray-300 rounded-lg p-2"
-              >
-                <option value="">Select Component</option>
-                {componentType.map((component, id) => (
-                  <option key={id} value={component}>
-                    {component}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">Category</label>
-              <select
-                value={selectedCategoryId}
-                onChange={(e) => setSelectedCategoryId(e.target.value)}
-                required
-                className=" border border-gray-300 rounded-lg p-2"
-              >
-                <option value="">Select Category</option>
-                {categories?.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {/* version */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Version</label>
+            <input
+              name="version"
+              value={formData.version}
+              onChange={handleChange}
+              placeholder="version"
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
           </div>
 
-          {/* Physical Properties */}
+          {/* type */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm font-medium mb-1">Type</label>
+            <input
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              placeholder="type"
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          </div>
+
+          {/* status */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Status</label>
+            <select
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg p-2"
+            >
+              {statusOptions.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* designed by */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">Desined By</label>
+            <input
+              name="designedBy"
+              value={formData.designedBy}
+              onChange={handleChange}
+              placeholder="designed by"
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          </div>
+          {/* last update */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">
+              Last Update
+            </label>
+            <input
+              name="lastUpdate"
+              value={formData.lastUpdate}
+              onChange={handleChange}
+              placeholder="last update"
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          </div>
+
+          {/* physical properties */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">
               Physical Properties
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
-                type="text"
                 name="dimension"
                 value={formData.dimension}
                 onChange={handleChange}
-                placeholder="Dimension"
+                placeholder="dimension"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="weight"
                 value={formData.weight}
                 onChange={handleChange}
-                placeholder="Weight"
+                placeholder="weight"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="material"
                 value={formData.material}
                 onChange={handleChange}
-                placeholder="Material"
+                placeholder="material"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="mounting"
                 value={formData.mounting}
                 onChange={handleChange}
-                placeholder="Mounting"
+                placeholder="mounting"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="color"
                 value={formData.color}
                 onChange={handleChange}
-                placeholder="Color"
+                placeholder="color"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
           </div>
 
-          {/* Electrical Properties */}
+          {/* electrical properties */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm font-medium mb-1">
               Electrical Properties
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
-                type="text"
                 name="voltageRange"
                 value={formData.voltageRange}
                 onChange={handleChange}
-                placeholder="Voltage Range"
+                placeholder="voltageRange"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="currentDraw"
                 value={formData.currentDraw}
                 onChange={handleChange}
-                placeholder="Current Draw"
+                placeholder="currentDraw"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="processor"
                 value={formData.processor}
                 onChange={handleChange}
-                placeholder="Processor"
+                placeholder="processor"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="imu"
                 value={formData.imu}
                 onChange={handleChange}
-                placeholder="IMU"
+                placeholder="imu"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="barometer"
                 value={formData.barometer}
                 onChange={handleChange}
-                placeholder="Barometer"
+                placeholder="barometer"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
           </div>
 
-          {/* Connectivity */}
+          {/* connectivity */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm font-medium mb-1">
               Connectivity
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
-                type="text"
                 name="uartPorts"
                 value={formData.uartPorts}
                 onChange={handleChange}
@@ -264,7 +239,6 @@ const NewComponentInputForm = ({ onClose }) => {
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="i2cPorts"
                 value={formData.i2cPorts}
                 onChange={handleChange}
@@ -272,7 +246,6 @@ const NewComponentInputForm = ({ onClose }) => {
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="usb"
                 value={formData.usb}
                 onChange={handleChange}
@@ -280,7 +253,6 @@ const NewComponentInputForm = ({ onClose }) => {
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="bluetooth"
                 value={formData.bluetooth}
                 onChange={handleChange}
@@ -288,7 +260,6 @@ const NewComponentInputForm = ({ onClose }) => {
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
                 name="osd"
                 value={formData.osd}
                 onChange={handleChange}
@@ -298,51 +269,46 @@ const NewComponentInputForm = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Versions */}
+          {/* components */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">Versions</label>
+            <label className="block text-sm font-medium mb-1">Components</label>
+            <input
+              name="components"
+              value={formData.components}
+              onChange={handleChange}
+              placeholder="components"
+              className="w-full border border-gray-300 rounded-lg p-2"
+            />
+          </div>
+
+          {/* test result */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-1">
+              Test Result
+            </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
-                type="text"
-                name="versionNumber"
-                value={formData.versionNumber}
+                name="flightDuration"
+                value={formData.flightDuration}
                 onChange={handleChange}
-                placeholder="Version Number"
+                placeholder="flightDuration"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
-                name="releaseDate"
-                value={formData.releaseDate}
+                name="maxFlightDistance"
+                value={formData.maxFlightDistance}
                 onChange={handleChange}
-                placeholder="Release Date"
+                placeholder="maxFlightDistance"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
               <input
-                type="text"
-                name="changes"
-                value={formData.changes}
+                name="observation"
+                value={formData.observation}
                 onChange={handleChange}
-                placeholder="Changes"
+                placeholder="observation"
                 className="w-full border border-gray-300 rounded-lg p-2"
               />
             </div>
-          </div>
-
-          {/* Category */}
-
-          {/* Use Case */}
-          <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1">Use Case</label>
-            <textarea
-              type="text"
-              name="useCase"
-              value={formData.useCase}
-              onChange={handleChange}
-              rows={3}
-              placeholder="Use Case"
-              className="w-full border border-gray-300 rounded-lg p-2"
-            />
           </div>
 
           {/* Submit Button */}
@@ -351,7 +317,7 @@ const NewComponentInputForm = ({ onClose }) => {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors"
             >
-              Submit Component
+              Submit Prototype
             </button>
           </div>
         </form>
@@ -360,4 +326,4 @@ const NewComponentInputForm = ({ onClose }) => {
   );
 };
 
-export default NewComponentInputForm;
+export default NewProtoInputForm;
