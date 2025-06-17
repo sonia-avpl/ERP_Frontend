@@ -45,7 +45,7 @@ export function usePost(token) {
       return res.data;
     } catch (err) {
       const message = err.response?.data?.message || err.message;
-      setError(message); // ✅ Only store the message
+      setError(message); 
       setResponse(null);
       toast.error(`Error: ${message}`);
     } finally {
