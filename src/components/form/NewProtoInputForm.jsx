@@ -1,8 +1,29 @@
-const NewProtoInputForm = ({onClose}) => {
+import { useState } from "react";
+
+const NewProtoInputForm = ({ onClose }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    version: "",
+    type: "",
+    designedBy: "",
+    lastUpdate: "",
+    pysicalProp: "",
+    electricalProp: "",
+    connectivity: "",
+    components: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <section>
       <section className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center px-4">
-        NewProtoInputForm
         <div className="bg-white w-full max-w-4xl max-h-[95vh] overflow-y-auto p-8 rounded-2xl shadow-2xl relative">
           <button
             onClick={onClose}
@@ -11,8 +32,138 @@ const NewProtoInputForm = ({onClose}) => {
             &times;
           </button>
           <h2 className="text-2xl font-semibold mb-6 text-center text-blue-600">
-            New Component
+            New Prototype
           </h2>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* name */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Name</label>
+              <input
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="name"
+                required
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+            {/* version */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Version</label>
+              <input
+                name="version"
+                value={formData.version}
+                onChange={handleChange}
+                placeholder="version"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* type */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">Type</label>
+              <input
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+                placeholder="type"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* designed by */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Desined By
+              </label>
+              <input
+                name="designedBy"
+                value={formData.designedBy}
+                onChange={handleChange}
+                placeholder="designed by"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+            {/* last update */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Last Update
+              </label>
+              <input
+                name="lastUpdate"
+                value={formData.lastUpdate}
+                onChange={handleChange}
+                placeholder="last update"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* physical properties */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Physical Properties
+              </label>
+              <input
+                name="pysicalProp"
+                value={formData.pysicalProp}
+                onChange={handleChange}
+                placeholder="physical properties"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* electrical properties */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Electrical Properties
+              </label>
+              <input
+                name="electricalProp"
+                value={formData.electricalProp}
+                onChange={handleChange}
+                placeholder="electrical properties"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* connectivity */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Connectivity
+              </label>
+              <input
+                name="connectivity"
+                value={formData.connectivity}
+                onChange={handleChange}
+                placeholder="connectivity"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* components */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium mb-1">
+                Components
+              </label>
+              <input
+                name="components"
+                value={formData.components}
+                onChange={handleChange}
+                placeholder="components"
+                className="w-full border border-gray-300 rounded-lg p-2"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="md:col-span-2 mt-4">
+              <button
+                type="submit"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors"
+              >
+                Submit Prototype
+              </button>
+            </div>
+          </form>
         </div>
       </section>
     </section>
