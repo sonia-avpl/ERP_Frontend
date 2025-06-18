@@ -26,6 +26,7 @@ import UserManagement from "../Pages/UserManagement/UserManagement";
 import Setting from "../Pages/Settings/Setting";
 import Reporting from "../Pages/Reporting/Reporting";
 import QualityControl from "../Pages/QualityControl/QualityControl";
+import ReportingSupplyChain from "../Pages/Reporting/ReportingSupplyChain";
 
 
 const AllRoutes = () => {
@@ -48,6 +49,8 @@ const AllRoutes = () => {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/quality-control" element={<QualityControl />} />
           <Route path="/reporting" element={<Reporting />} />
+          <Route path="/reporting-supply-chain" element={<ReportingSupplyChain />} />
+          
           <Route path="/supply-chain-dashboard" element={<SupplyChain />} >
            <Route index element={<Navigate to="overview" replace />} />
             <Route path="overview" element={<Overview />} />
