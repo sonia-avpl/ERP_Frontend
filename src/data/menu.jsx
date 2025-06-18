@@ -104,7 +104,7 @@ export const menuConfig = {
         },
         {
           name: "Reporting",
-          to: "reporting",
+          to: "reporting-supply-chain",
           icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],
