@@ -19,7 +19,6 @@ const NewTest = ({ onClose }) => {
     setTestFields(updated);
   };
 
-
   return (
     <section className="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center px-4 py-6">
       <div className="bg-white w-full max-w-3xl max-h-[95vh] overflow-y-auto p-6 sm:p-8 rounded-2xl shadow-2xl relative">
@@ -38,17 +37,17 @@ const NewTest = ({ onClose }) => {
         </h2>
 
         <form className="space-y-10">
-          {/* Test Title */}
+          {/* Title */}
           <div>
             <label className="block text-base font-semibold text-gray-800 mb-1">
-              Test Title
+              Test Product
             </label>
             <input
               type="text"
               value={testTitle}
               onChange={(e) => setTestTitle(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-              placeholder="Enter test title"
+              placeholder="Enter product to test"
             />
           </div>
 
@@ -56,7 +55,7 @@ const NewTest = ({ onClose }) => {
           <div>
             <div className="flex items-center justify-between mb-3">
               <label className="text-base font-semibold text-gray-800">
-                Test Details
+                Product Details
               </label>
               <button
                 type="button"
@@ -77,15 +76,17 @@ const NewTest = ({ onClose }) => {
                     <input
                       type="text"
                       value={field.name}
-                      onChange={(e) => updateField(index, "name", e.target.value)}
+                      onChange={(e) =>
+                        updateField(index, "name", e.target.value)
+                      }
                       className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      placeholder={`Test Name ${index + 1}`}
+                      placeholder={`Test No. ${index + 1}`}
                     />
                     {testFields.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeTestField(index)}
-                        className="text-gray-500 hover:text-gray-600 text-xl font-bold px-2 transition-transform transform hover:scale-110"
+                        className=" text-gray-500 hover:text-gray-600 text-xl font-bold px-2 transition-transform transform hover:scale-110"
                         title="Remove"
                       >
                         &minus;
@@ -98,7 +99,7 @@ const NewTest = ({ onClose }) => {
                       updateField(index, "measurement", e.target.value)
                     }
                     className="w-full border border-gray-300 rounded-md px-4 py-2 min-h-[80px] resize-y focus:outline-none focus:ring-2 focus:ring-gray-500"
-                    placeholder="Test measurement"
+                    placeholder="Test Details"
                   />
                 </div>
               ))}
