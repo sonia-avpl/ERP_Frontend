@@ -20,7 +20,7 @@ const GetCertificates = ({ onClose }) => {
 
         {/* Heading */}
         <h2 className="text-3xl font-bold mb-8 text-center text-blue-700">
-          Document Process
+          Get Your Certificates
         </h2>
 
         {/* Form */}
