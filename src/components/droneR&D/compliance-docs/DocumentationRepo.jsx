@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import DocumentProcess from "../../form/DocumentProcess";
+import GetCertificates from "../../form/GetCertificates";
 
 const categories = [
   "All Documents",
@@ -74,7 +74,7 @@ const documents = [
 
 const DocumentationRepo = () => {
   const [activeCategory, setActiveCategory] = useState("All Documents");
-  const [document, setDocument] = useState(false);
+  const [getCertificate, setGetCertificate] = useState(false);
 
   return (
     <div className="documentation-repo space-y-6">
@@ -86,13 +86,13 @@ const DocumentationRepo = () => {
         <motion.button
           whileTap={{ scale: 0.95 }}
           whileHover={{ scale: 1.05 }}
-          onClick={() => setDocument(true)}
+          onClick={() => setGetCertificate(true)}
           className="btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
         >
           <PlusIcon className="w-5 h-5" />
           New Document
         </motion.button>
-        {document && <DocumentProcess onClose={() => setDocument(false)} />}
+        {getCertificate && <GetCertificates onClose={() => setGetCertificate(false)} />}
       </div>
 
       {/* Categories */}
