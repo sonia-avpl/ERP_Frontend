@@ -34,7 +34,7 @@ const Layout = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {user && <Sidebar userRole="R&D" />}
+      {user && <Sidebar userRole="SupplyChain" />}
 
       <main className="flex-1 overflow-y-auto h-full">
         <header className="bg-white shadow-sm border-b">

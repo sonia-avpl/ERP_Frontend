@@ -110,6 +110,33 @@ export const menuConfig = {
       ],
     },
   ],
+   SupplyChain: [
+    {
+      section: "Supply Chain",
+      items: [
+        {
+          name: "Supply Chain",
+          to: "/supply-chain-dashboard",
+          icon: <TruckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Inventory & SCM",
+          to: "/inventory",
+          icon: <ArchiveBoxIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Quality Control",
+          to: "quality-control",
+          icon: <ShieldCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Reporting",
+          to: "reporting-supply-chain",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+  ],
   HR: [
     {
       section: "HR Tools",
