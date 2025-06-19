@@ -3,6 +3,7 @@ import { useState } from "react";
 const NewTest = ({ onClose }) => {
   const [testFields, setTestFields] = useState([{ name: "", measurement: "" }]);
   const [testTitle, setTestTitle] = useState("");
+  const [productId, setProductId] = useState("");
 
   const addTestField = () => {
     setTestFields([...testFields, { name: "", measurement: "" }]);
@@ -37,10 +38,23 @@ const NewTest = ({ onClose }) => {
         </h2>
 
         <form className="space-y-10">
+          {/* Product ID */}
+          <div>
+            <label className="block text-base font-semibold text-gray-800 mb-1">
+              Product ID
+            </label>
+            <input
+              type="text"
+              value={productId}
+              onChange={(e) => setProductId(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              placeholder="Enter Product ID"
+            />
+          </div>
           {/* Title */}
           <div>
             <label className="block text-base font-semibold text-gray-800 mb-1">
-              Test Product
+              New Product
             </label>
             <input
               type="text"
