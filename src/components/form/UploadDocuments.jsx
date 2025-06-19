@@ -19,7 +19,38 @@ const UploadDocuments = ({ onClose }) => {
         {/* Form */}
         <form className="grid grid-cols-1 gap-8">
           <div className="space-y-6">
-            <input type="file" name="documents" />
+            {/* Document 1 */}
+            <div className="flex flex-col space-y-1">
+              <label
+                htmlFor="documents1"
+                className="text-sm font-medium text-gray-700"
+              >
+                Document 1
+              </label>
+              <input type="file" id="documents1" name="documents1" />
+            </div>
+
+            {/* Document 2 */}
+            <div className="flex flex-col space-y-1">
+              <label
+                htmlFor="documents2"
+                className="text-sm font-medium text-gray-700"
+              >
+                Document 2
+              </label>
+              <input type="file" id="documents2" name="documents2" />
+            </div>
+
+            {/* Document 3 */}
+            <div className="flex flex-col space-y-1">
+              <label
+                htmlFor="documents3"
+                className="text-sm font-medium text-gray-700"
+              >
+                Document 3
+              </label>
+              <input type="file" id="documents3" name="documents3" />
+            </div>
 
             {/* Submit Button */}
             <button
