@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaHandshake } from "react-icons/fa6";
 
 const VendorAssociations = () => {
   const [vendorForm, setVendorForm] = useState({
@@ -39,7 +40,7 @@ const VendorAssociations = () => {
   return (
     <div className="text-sm p-4 max-w-7xl mx-auto bg-white rounded-xl shadow mt-8">
       <h2 className="text-lg font-semibold flex items-center mb-1">
-        <span className="text-xl mr-2">📢</span> Vendor Associations
+        <span className="text-xl mr-2"><FaHandshake /></span> Vendor Associations
       </h2>
       <p className="mb-6 text-gray-600">
         Manage vendor relationships for each SKU
