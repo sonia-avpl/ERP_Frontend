@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const CreateSku = () => {
   const [form, setForm] = useState({
@@ -39,7 +39,7 @@ const CreateSku = () => {
       <form className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            SKU Code *
+            SKU Code <span className="text-red-700">*</span>
           </label>
           <input
             type="text"
@@ -54,7 +54,7 @@ const CreateSku = () => {
 
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            SKU Name *
+            SKU Name <span className="text-red-700">*</span>
           </label>
           <input
             type="text"
@@ -69,7 +69,7 @@ const CreateSku = () => {
 
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            Category *
+            Category <span className="text-red-700">*</span>
           </label>
           <select
             name="category"
@@ -100,7 +100,7 @@ const CreateSku = () => {
 
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            Unit of Measure *
+            Unit of Measure <span className="text-red-700">*</span>
           </label>
           <select
             name="uom"
@@ -158,7 +158,7 @@ const CreateSku = () => {
 
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            Reorder Level *
+            Reorder Level <span className="text-red-700">*</span>
           </label>
           <input
             type="number"
