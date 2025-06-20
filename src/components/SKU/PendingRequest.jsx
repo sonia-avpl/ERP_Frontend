@@ -1,3 +1,5 @@
+import React from "react";
+
 const pendingSKUs = [
   {
     code: "SKU-EL-1001",
@@ -12,89 +14,113 @@ const pendingSKUs = [
     lastAudit: "2023-10-15",
     status: "Active",
   },
-  // Add more items as needed
+  {
+    code: "SKU-OF-2056",
+    name: "Ergonomic Chair",
+    category: "Office Furniture",
+    subCategory: "Chairs",
+    uom: "Unit",
+    hsn: "94033090",
+    reorderLevel: "20 units",
+    safetyStock: "10 units",
+    currentStock: "18 units",
+    lastAudit: "2023-10-20",
+    status: "Low Stock",
+  },
+  {
+    code: "SKU-CS-5112",
+    name: "Hand Sanitizer (500ml)",
+    category: "Consumables",
+    subCategory: "Hygiene",
+    uom: "Unit",
+    hsn: "38089400",
+    reorderLevel: "15 units",
+    safetyStock: "5 units",
+    currentStock: "12 units",
+    lastAudit: "2023-11-01",
+    status: "Expiring in 45 days",
+  },
+  {
+    code: "SKU-ST-4098",
+    name: "A4 Paper Pack (500 sheets)",
+    category: "Stationery",
+    subCategory: "Paper Products",
+    uom: "Unit",
+    hsn: "48025690",
+    reorderLevel: "30 units",
+    safetyStock: "10 units",
+    currentStock: "56 units",
+    lastAudit: "2023-11-10",
+    status: "Active",
+  },
 ];
 
-const pendingRequest = () => {
+const getStatusBadge = (status) => {
+  let color = "bg-green-100 text-green-700";
+  if (status.toLowerCase().includes("low")) color = "bg-red-100 text-red-700";
+  else if (status.toLowerCase().includes("expiring")) color = "bg-yellow-100 text-yellow-800";
+
   return (
-    <div className="max-w-5xl mx-auto p-6 text-sm">
+    <span className={`text-xs px-3 py-1 rounded-full font-medium ${color}`}>
+      {status}
+    </span>
+  );
+};
+
+const PendingRequests = () => {
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
       <h2 className="text-xl font-semibold mb-6">🕒 Pending SKU Requests</h2>
 
-      {pendingSKUs.map((sku, idx) => (
-        <div
-          key={idx}
-          className="bg-white rounded-xl shadow flex flex-col md:flex-row overflow-hidden mb-6"
-        >
-          {/* Left: Image Placeholder */}
-          <div className="bg-gray-100 p-6 flex justify-center items-center w-full md:w-1/3">
-            <div className="w-40 h-40 border rounded bg-gray-200 flex items-center justify-center">
-              <span className="text-4xl text-gray-400">📦</span>
-            </div>
-          </div>
-
-          {/* Right: Info */}
-          <div className="flex-1 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-bold">{sku.code}</h3>
-              <span className="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-                {sku.status}
-              </span>
-            </div>
-
-            <p className="text-gray-700 font-medium mb-4">{sku.name}</p>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <p className="text-xs text-gray-500">Category</p>
-                <p className="font-semibold">{sku.category}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Sub-Category</p>
-                <p className="font-semibold">{sku.subCategory}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Unit of Measure</p>
-                <p className="font-semibold">{sku.uom}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">HSN Code</p>
-                <p className="font-semibold">{sku.hsn}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Reorder Level</p>
-                <p className="font-semibold">{sku.reorderLevel}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Safety Stock</p>
-                <p className="font-semibold">{sku.safetyStock}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Current Stock</p>
-                <p className="font-semibold">{sku.currentStock}</p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Last Audit</p>
-                <p className="font-semibold">{sku.lastAudit}</p>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-3 mt-4">
-              <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
-                ✏️ Edit Details
-              </button>
+      <div className="overflow-x-auto bg-white rounded-xl shadow">
+        <table className="min-w-full text-sm text-left">
+          <thead className="bg-gray-50 border-b text-gray-600 font-semibold">
+            <tr>
+              <th className="px-4 py-3">SKU Code</th>
+              <th className="px-4 py-3">Name</th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Sub-Category</th>
+              <th className="px-4 py-3">Current Stock</th>
+              <th className="px-4 py-3">Reorder Level</th>
+              <th className="px-4 py-3">HSN Code</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pendingSKUs.map((sku, idx) => (
+              <tr
+                key={idx}
+                className="border-t hover:bg-gray-50 transition-colors"
+              >
+                <td className="px-4 py-3 font-medium">{sku.code}</td>
+                <td className="px-4 py-3">{sku.name}</td>
+                <td className="px-4 py-3">{sku.category}</td>
+                <td className="px-4 py-3">{sku.subCategory}</td>
+                <td className="px-4 py-3">{sku.currentStock}</td>
+                <td className="px-4 py-3">{sku.reorderLevel}</td>
+                <td className="px-4 py-3">{sku.hsn}</td>
+                <td className="px-4 py-3">{getStatusBadge(sku.status)}</td>
+                <td className="px-4 py-3 text-center">
+                  <div className="flex gap-2 justify-center">
+                    <button className="text-blue-600 hover:underline text-xs">
+                      ✏️ Edit
+                    </button>
               <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
                 🔁 View History
-              </button>
-              <button className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
-                🖨️ Print Label
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
+                    </button>
+                    <button className="text-indigo-600 hover:underline text-xs">
+                      🖨️ Print
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
-export default pendingRequest;
+export default PendingRequests;
