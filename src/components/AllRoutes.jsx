@@ -27,7 +27,8 @@ import Setting from "../Pages/Settings/Setting";
 import Reporting from "../Pages/Reporting/Reporting";
 import QualityControl from "../Pages/QualityControl/QualityControl";
 import ReportingSupplyChain from "../Pages/Reporting/ReportingSupplyChain";
-
+import SkuManagement from "../Pages/SupplyChain/SkuManagement";
+import Procurement from "../Pages/SupplyChain/Procurement";
 
 const AllRoutes = () => {
   return (
@@ -45,28 +46,36 @@ const AllRoutes = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="/project-managment" element={<ProjectManagement />} />
           <Route path="/user-management" element={<UserManagement />} />
+          <Route path="sku-management" element={<SkuManagement />} />
+          <Route path="procurement" element={<Procurement />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/quality-control" element={<QualityControl />} />
           <Route path="/reporting" element={<Reporting />} />
-          <Route path="/reporting-supply-chain" element={<ReportingSupplyChain />} />
-          
-          <Route path="/supply-chain-dashboard" element={<SupplyChain />} >
-           <Route index element={<Navigate to="overview" replace />} />
+          <Route
+            path="/reporting-supply-chain"
+            element={<ReportingSupplyChain />}
+          />
+
+          <Route path="/supply-chain-dashboard" element={<SupplyChain />}>
+            <Route index element={<Navigate to="overview" replace />} />
             <Route path="overview" element={<Overview />} />
             <Route path="documents" element={<Documents />} />
             <Route path="supplier" element={<Supllier />} />
           </Route>
           <Route path="/testing-validation" element={<TestingValidation />} />
           <Route path="/compliance-docs" element={<ComplianceDocs />} />
-          <Route path="/prototype-management" element={<PrototypeManagement />} />
+          <Route
+            path="/prototype-management"
+            element={<PrototypeManagement />}
+          />
           <Route path="/component-design" element={<ComponentDesign />} />
-          
+
           <Route
             path="/projects/:projectId"
             element={
               // <RoleProtectedRoute allowedRoles={["R&D"]}>
-                <ProjectDetail />
+              <ProjectDetail />
               // </RoleProtectedRoute>
             }
           >
