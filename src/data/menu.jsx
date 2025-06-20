@@ -13,6 +13,9 @@ import {
   FolderIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
+import { SiAmazondocumentdb } from "react-icons/si";
+import { FaStore } from "react-icons/fa";
+
 
 
 export const topCommonMenus = [
@@ -114,6 +117,16 @@ export const menuConfig = {
     {
       section: "Supply Chain",
       items: [
+        {
+          name: "SKU Management ",
+          to: "/sku-management",
+          icon: <SiAmazondocumentdb  className="h-5 w-5" />,
+        },
+        {
+          name: "Procurement",
+          to: "/procurement",
+          icon: <FaStore className="h-5 w-5"  />
+        },
         {
           name: "Supply Chain",
           to: "/supply-chain-dashboard",
