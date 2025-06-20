@@ -3,9 +3,9 @@ import SkuCard from "../../components/card/SkuCard";
 import CreateSku from "../../components/SKU/CreateSku";
 import BrowseSku from "../../components/SKU/BrowseSku";
 import PendingRequest from "../../components/SKU/PendingRequest";
-import VendorAssociations from "../../components/SKU/VendorAssociations"
-import Categories from "../../components/SKU/Categories"
-
+import VendorAssociations from "../../components/SKU/VendorAssociations";
+import Categories from "../../components/SKU/Categories";
+import BulkAssociation from "../../components/SKU/BulkAssociation";
 
 const stats = [
   {
@@ -79,10 +79,11 @@ const SkuManagement = () => {
 
   const tabs = [
     { id: "create", label: "Create New SKU" },
-    { id: "browse", label: "Browse SKUs" },
     { id: "pending", label: "Pending Requests" },
+    { id: "browse", label: "Browse SKUs" },
     { id: "vendors", label: "Vendor Associations" },
     { id: "categories", label: "Categories" },
+    { id: "bulk", label: "Bulk Association" },
   ];
   return (
     <section>
@@ -118,10 +119,12 @@ const SkuManagement = () => {
 
         {/* Content */}
         {activeTab === "create" && <CreateSku />}
-        {activeTab === "browse" && <BrowseSku /> }
         {activeTab === "pending" && <PendingRequest />}
+        {activeTab === "browse" && <BrowseSku />}
         {activeTab === "vendors" && <VendorAssociations />}
         {activeTab === "categories" && <Categories />}
+        {activeTab === "bulk" && <BulkAssociation />}
+        
       </div>
     </section>
   );
