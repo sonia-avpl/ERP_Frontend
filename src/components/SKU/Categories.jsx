@@ -1,3 +1,5 @@
+import { FaHistory, FaEdit  } from "react-icons/fa";
+import { FaPrint } from "react-icons/fa6";
 const pendingSKUs = [
   {
     code: "SKU-EL-1001",
@@ -81,13 +83,13 @@ const Categories = () => {
             {/* Actions */}
             <div className="flex flex-wrap gap-3 mt-4">
               <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
-                ✏️ Edit Details
+                <FaEdit /> Edit Details
               </button>
               <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
-                🔁 View History
+                <FaHistory /> View History
               </button>
               <button className="flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
-                🖨️ Print Label
+                <FaPrint /> Print Label
               </button>
             </div>
           </div>
