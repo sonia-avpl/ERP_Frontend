@@ -1,3 +1,6 @@
+import { FaHistory, FaEdit, FaSearch } from "react-icons/fa";
+import { GrView } from "react-icons/gr";
+import { CiExport } from "react-icons/ci";
 const statuses = {
   active: "bg-green-100 text-green-700",
   low: "bg-red-100 text-red-700",
@@ -58,11 +61,15 @@ const BrowseSku = () => {
       <h3 className="text-base font-semibold mb-4">All SKUs in Inventory</h3>
 
       <div className="flex justify-end mb-3 space-x-2">
-        <button className="border px-4 py-1 rounded-md text-sm">
-          🔍 Filters
+        <button className="flex justify-center items-center border px-4 py-1 rounded-md text-sm">
+          <span className="mr-2"><FaSearch /></span>
+          Filters
         </button>
-        <button className="bg-blue-600 text-white px-4 py-1 rounded-md text-sm">
-          📄 Export
+        <button className="flex justify-center items-center bg-blue-600 text-white px-4 py-1 rounded-md text-sm">
+          <span className="mr-2">
+            <CiExport />
+          </span>
+          Export
         </button>
       </div>
 
@@ -100,9 +107,15 @@ const BrowseSku = () => {
                   </span>
                 </td>
                 <td className="p-2 flex gap-2">
-                  <button title="View">👁️</button>
-                  <button title="Edit">✏️</button>
-                  <button title="History">🔄</button>
+                  <button title="View">
+                    <GrView />
+                  </button>
+                  <button title="Edit">
+                    <FaEdit />
+                  </button>
+                  <button title="History">
+                    <FaHistory />
+                  </button>
                 </td>
               </tr>
             ))}
