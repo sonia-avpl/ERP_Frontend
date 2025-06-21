@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaFilter, FaPlus  } from "react-icons/fa";
 import {
   EyeIcon,
   PencilSquareIcon,
@@ -60,11 +61,11 @@ const PurchaseOrder = () => {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Purchase Orders</h3>
         <div className="flex items-center space-x-2">
-          <button className="border px-4 py-2 rounded-md text-sm hover:bg-gray-100">
-            🔍 Filters
+          <button className="flex justify-center items-center border border-gray-400 px-4 py-2 rounded-md text-sm hover:bg-gray-100">
+            <FaFilter className="mr-2 h-4 w-4" />  Filters
           </button>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
-            + New PO
+          <button className="flex justify-center items-center bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+            <FaPlus className="mr-2 h-4 w-4" /> New PO
           </button>
         </div>
       </div>
