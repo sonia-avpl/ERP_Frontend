@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaHandshake } from "react-icons/fa6";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const VendorAssociations = () => {
   const [vendorForm, setVendorForm] = useState({
@@ -38,9 +39,12 @@ const VendorAssociations = () => {
   };
 
   return (
-    <div className="text-sm p-4 max-w-7xl mx-auto bg-white rounded-xl shadow mt-8">
+    <div className="max-w-full text-sm p-4 mx-auto bg-white rounded-xl shadow mt-8">
       <h2 className="text-lg font-semibold flex items-center mb-1">
-        <span className="text-xl mr-2"><FaHandshake /></span> Vendor Associations
+        <span className="text-xl mr-2">
+          <FaHandshake />
+        </span>{" "}
+        Vendor Associations
       </h2>
       <p className="mb-6 text-gray-600">
         Manage vendor relationships for each SKU
@@ -142,15 +146,15 @@ const VendorAssociations = () => {
                 preferred: "No",
               })
             }
-            className="px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-100"
+            className="px-4 py-2 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-100"
           >
-            ✖ Cancel
+            Cancel
           </button>
           <button
             type="submit"
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
           >
-            🔗 Associate Vendor
+            Associate Vendor
           </button>
         </div>
       </form>
@@ -203,12 +207,12 @@ const VendorAssociations = () => {
               </div>
             </div>
 
-            <div className="flex justify-between mt-4">
-              <button className="text-sm px-3 py-1 bg-gray-100 rounded hover:bg-gray-200">
-                ✏️ Edit
+            <div className="flex justify-between mt-4 text-gray-500">
+              <button className="flex justify-center items-center text-sm px-3 py-1 bg-gray-100 rounded  hover:text-gray-700">
+                <FaEdit className=" mr-1" /> Edit
               </button>
-              <button className="text-sm px-3 py-1 bg-gray-100 rounded hover:bg-red-100 text-red-600">
-                🗑 Remove
+              <button className="flex justify-center items-center text-sm px-3 py-1 bg-gray-100 rounded text-red-500 hover:text-red-700  ">
+                <FaTrash className="mr-1 hover:text-red-700" /> Remove
               </button>
             </div>
           </div>
