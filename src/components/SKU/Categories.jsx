@@ -19,7 +19,7 @@ const pendingSKUs = [
 
 const Categories = () => {
   return (
-    <div className="max-w-5xl mx-auto p-6 text-sm">
+    <div className="max-w-full mx-auto p-6 text-sm">
       <h2 className="text-xl font-semibold mb-6">🕒 Pending SKU Requests</h2>
 
       {pendingSKUs.map((sku, idx) => (
