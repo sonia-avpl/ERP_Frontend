@@ -29,6 +29,7 @@ import QualityControl from "../Pages/QualityControl/QualityControl";
 import ReportingSupplyChain from "../Pages/Reporting/ReportingSupplyChain";
 import SkuManagement from "../Pages/SupplyChain/SkuManagement";
 import Procurement from "../Pages/SupplyChain/Procurement";
+import GRNProcessing from "../Pages/SupplyChain/GRNProcessing";
 
 const AllRoutes = () => {
   return (
@@ -48,6 +49,7 @@ const AllRoutes = () => {
           <Route path="/user-management" element={<UserManagement />} />
           <Route path="sku-management" element={<SkuManagement />} />
           <Route path="procurement" element={<Procurement />} />
+          <Route path="grn-processing" element={<GRNProcessing />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/quality-control" element={<QualityControl />} />
