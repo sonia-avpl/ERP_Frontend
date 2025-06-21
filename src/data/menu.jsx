@@ -16,8 +16,6 @@ import {
 import { SiAmazondocumentdb } from "react-icons/si";
 import { FaStore } from "react-icons/fa";
 
-
-
 export const topCommonMenus = [
   {
     section: "Main",
@@ -53,7 +51,6 @@ export const bottomCommonMenus = [
     ],
   },
 ];
-
 
 export const menuConfig = {
   "R&D": [
@@ -113,19 +110,29 @@ export const menuConfig = {
       ],
     },
   ],
-   SupplyChain: [
+  SupplyChain: [
     {
       section: "Supply Chain",
       items: [
         {
           name: "SKU Management ",
           to: "/sku-management",
-          icon: <SiAmazondocumentdb  className="h-5 w-5" />,
+          icon: <SiAmazondocumentdb className="h-5 w-5" />,
         },
         {
           name: "Procurement",
           to: "/procurement",
-          icon: <FaStore className="h-5 w-5"  />
+          icon: <FaStore className="h-5 w-5" />,
+        },
+        {
+          name: "GRN Processing",
+          to: "/grn-processing",
+          icon: <TruckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Quality Control",
+          to: "quality-control",
+          icon: <ShieldCheckIcon className="h-5 w-5" />,
         },
         {
           name: "Supply Chain",
@@ -137,11 +144,7 @@ export const menuConfig = {
           to: "/inventory",
           icon: <ArchiveBoxIcon className="h-5 w-5" />,
         },
-        {
-          name: "Quality Control",
-          to: "quality-control",
-          icon: <ShieldCheckIcon className="h-5 w-5" />,
-        },
+
         {
           name: "Reporting",
           to: "reporting-supply-chain",
