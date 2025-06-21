@@ -86,7 +86,7 @@ const SkuManagement = () => {
     { id: "bulk", label: "Bulk Association" },
   ];
   return (
-    <section>
+    <section className="max-w-full">
       {/* SKU Card */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-gray-50">
         {stats.map((card, index) => (
@@ -99,7 +99,7 @@ const SkuManagement = () => {
           />
         ))}
       </div>
-      <div className="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow mt-10 text-sm">
+      <div className="max-w-full mx-auto p-6 bg-white rounded-xl shadow mt-10 text-sm">
         {/* Tabs */}
         <div className="flex border-b mb-6 space-x-6">
           {tabs.map((tab) => (
