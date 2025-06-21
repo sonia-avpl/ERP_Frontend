@@ -122,7 +122,7 @@ const VendorManagement = () => {
 
         <div>
           <label className="block mb-1 font-semibold text-gray-700">
-            Tax ID/GSTIN *
+            Tax ID/GSTIN <span className="text-red-700">*</span>
           </label>
           <input
             type="text"
