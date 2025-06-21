@@ -61,12 +61,12 @@ const BrowseSku = () => {
       <h3 className="text-base font-semibold mb-4">All SKUs in Inventory</h3>
 
       <div className="flex justify-end mb-3 space-x-2">
-        <button className="flex justify-center items-center border px-4 py-1 rounded-md text-sm">
+        <button className="flex justify-center items-center border border-gray-400 px-4 py-1 rounded-md text-sm">
           <span className="mr-2"><FaSearch /></span>
           Filters
         </button>
         <button className="flex justify-center items-center bg-blue-600 text-white px-4 py-1 rounded-md text-sm">
-          <span className="mr-2">
+          <span className="mr-2 h-4 w-4 ">
             <CiExport />
           </span>
           Export
