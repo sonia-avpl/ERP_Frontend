@@ -1,4 +1,4 @@
-import React from "react";
+import { FaEdit, FaHistory, FaPrint   } from "react-icons/fa";
 
 const pendingSKUs = [
   {
@@ -69,11 +69,11 @@ const getStatusBadge = (status) => {
 
 const PendingRequests = () => {
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="max-w-full p-6 mx-auto">
       <h2 className="text-xl font-semibold mb-6">🕒 Pending SKU Requests</h2>
 
       <div className="overflow-x-auto bg-white rounded-xl shadow">
-        <table className="min-w-full text-sm text-left">
+        <table className="min-w-full text-sm">
           <thead className="bg-gray-50 border-b text-gray-600 font-semibold">
             <tr>
               <th className="px-4 py-3">SKU Code</th>
@@ -100,17 +100,17 @@ const PendingRequests = () => {
                 <td className="px-4 py-3">{sku.currentStock}</td>
                 <td className="px-4 py-3">{sku.reorderLevel}</td>
                 <td className="px-4 py-3">{sku.hsn}</td>
-                <td className="px-4 py-3">{getStatusBadge(sku.status)}</td>
+                <td className="px-4 py-3 text-center">{getStatusBadge(sku.status)}</td>
                 <td className="px-4 py-3 text-center">
                   <div className="flex gap-2 justify-center">
-                    <button className="text-blue-600 hover:underline text-xs">
-                      ✏️ Edit
+                    <button className="flex justify-center items-center text-blue-600 hover:underline text-xs">
+                      <FaEdit className="mr-1 h-4 w-4" /> Edit
                     </button>
-              <button className="flex items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
-                🔁 View History
+              <button className="flex justify-center items-center gap-1 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
+                <FaHistory className="mr-1 h-4 w-4" /> History
                     </button>
-                    <button className="text-indigo-600 hover:underline text-xs">
-                      🖨️ Print
+                    <button className="flex justify-center items-center text-indigo-600 hover:underline text-xs">
+                      <FaPrint className="mr-1 h-4 w-4" /> Print
                     </button>
                   </div>
                 </td>
