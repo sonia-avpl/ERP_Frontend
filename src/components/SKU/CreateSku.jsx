@@ -28,7 +28,7 @@ const CreateSku = () => {
     "w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100";
 
   return (
-    <section className="max-w-7xl mx-auto p-6 bg-white rounded-xl shadow mt-10 text-sm">
+    <section className="max-w-full mx-auto p-6 bg-white rounded-xl shadow mt-10 text-sm">
       {/* Header */}
       <button className="text-lg font-semibold ">
         <span className="text-2xl font-extrabold mr-2">+</span> Create New Stock
@@ -221,15 +221,15 @@ const CreateSku = () => {
           <button
             type="button"
             onClick={() => setForm({})}
-            className="px-4 py-2 rounded-md border text-gray-600 hover:bg-gray-100"
+            className="px-4 py-2 rounded-md border border-gray-400 text-gray-600 hover:bg-gray-100"
           >
-            ✖ Cancel
+             Cancel
           </button>
           <button
             type="submit"
             className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
           >
-            📦 Create SKU
+             Create SKU
           </button>
         </div>
       </form>
