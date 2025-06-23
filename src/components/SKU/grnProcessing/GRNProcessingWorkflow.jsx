@@ -26,12 +26,12 @@ const steps = [
   {
     label: "Discrepancy Check",
     status: "Pending",
-    icon: <FaCheckDouble  className="h-6 w-6 text-black" />,
+    icon: <FaCheckDouble  className="h-6 w-6 text-white" />,
   },
   {
     label: "Inventory Update",
     status: "Pending",
-    icon: <FaStore  className="h-6 w-6 text-black" />,
+    icon: <FaStore  className="h-6 w-6 text-white" />,
   },
 ];
 
