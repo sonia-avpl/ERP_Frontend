@@ -2,6 +2,7 @@ import { MdPendingActions, MdToday } from "react-icons/md";
 import { FaArrowsSpin } from "react-icons/fa6";
 import SkuCard from "../../components/card/SkuCard";
 import GRNProcessingWorkflow from "../../components/SKU/grnProcessing/GRNProcessingWorkflow";
+import CreateGRN from "../../components/SKU/grnProcessing/CreateGRN";
 
 const stats = [
   {
@@ -26,7 +27,7 @@ const stats = [
 
 const GRNProcessing = () => {
   return (
-    <section>
+    <section className="bg-gray-100 min-h-screen py-10 px-4 sm:px-6 lg:px-8 space-y-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-gray-50">
         {stats.map((card, index) => (
           <SkuCard
@@ -39,6 +40,7 @@ const GRNProcessing = () => {
         ))}
       </div>
       <GRNProcessingWorkflow />
+      <CreateGRN />
     </section>
   );
 };
