@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { baseUrl } from "../../../utilis";
 import SelectField from "../../form/SelectField";
 import { usePostFile } from "../../../hooks/usePostFile";
 import * as XLSX from "xlsx";
@@ -8,7 +7,8 @@ import toast from "react-hot-toast";
 import { usePatchFile } from "../../../hooks/usePatchFile";
 import SelectCategory from "../../form/SelectCategory";
 import { usePost } from "../../../hooks/usePost";
-import { FileModules } from "../../../utills/enum";
+import { baseUrl, FileModules } from "../../../utills/enum";
+
 
 const CreateInventoryModal = ({
   isOpen,
@@ -273,31 +273,31 @@ const CreateInventoryModal = ({
     const user = JSON.parse(localStorage.getItem("user"));
     const form = new FormData();
 
-    for (let key in formData) {
-      if (key === "tags") {
-        form.append(key, JSON.stringify(formData[key]));
-      } else if (key === "images" && formData.images.length > 0) {
-        formData.images.forEach((img) => {
-          if (img instanceof File) {
-            form.append("images", img); // New file
-          } else if (img.url) {
-            form.append("images", JSON.stringify(img)); // Existing image
-          }
-        });
-      } else if (key !== "createdBy") {
-        form.append(key, formData[key]);
-      }
-    }
+    // for (let key in formData) {
+    //   if (key === "tags") {
+    //     form.append(key, JSON.stringify(formData[key]));
+    //   } else if (key === "images" && formData.images.length > 0) {
+    //     formData.images.forEach((img) => {
+    //       if (img instanceof File) {
+    //         form.append("images", img); // New file
+    //       } else if (img.url) {
+    //         form.append("images", JSON.stringify(img)); // Existing image
+    //       }
+    //     });
+    //   } else if (key !== "createdBy") {
+    //     form.append(key, formData[key]);
+    //   }
+    // }
 
-    form.append("createdBy", user._id);
-
+    // form.append("createdBy", user._id);
+    formData.createdBy=user._id
     const url = initialData
       ? `inventory/${initialData._id}`
       : `inventory/create`;
 
     const result = initialData
-      ? await patchData(url, form)
-      : await postData(url, form);
+      ? await patchData(url, formData)
+      : await postData(url, formData);
     if (result?.success) {
       await uploadImageOnSWithModule(uploads,result.data._id,FileModules.Inventory)
       onClose();

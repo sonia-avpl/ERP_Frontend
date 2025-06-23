@@ -2,27 +2,11 @@ import { useEffect, useState } from "react";
 import InputPassword from "../form/InputPassword";
 import SelectField from "../form/SelectField";
 import InputField from "../form/InputField";
+import { departments, role } from "../../utills/enum";
+import { usePost } from "../../hooks/usePost";
+import { usePatch } from "../../hooks/usePatch";
 
-const departments = [
-  "Engineering",
-  "Marketing",
-  "HR",
-  "Sales",
-  "Finance",
-  "Operations",
-];
-const roles = [
-  "Admin",
-  "Developer",
-  "Lead",
-  "Manager",
-  "Marketer",
-  "HR Manager",
-  "Sales Representative",
-  "Support Staff",
-];
-
-const UserForm = ({ initialUser, onSubmit, onCancel }) => {
+const UserForm = ({ initialUser, onCancel ,refetch}) => {
   const [user, setUser] = useState(
     initialUser || {
       id: "",
@@ -32,11 +16,12 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
       address: "",
       password: "",
       department: departments[0],
-      role: roles[0],
+      role: role[0],
     }
   );
   const [errors, setErrors] = useState({});
-
+  const { postData, loading } = usePost();
+  const { patchData } = usePatch();
   useEffect(() => {
     setUser(
       initialUser || {
@@ -46,7 +31,7 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
         phone: "",
         address: "",
         department: departments[0],
-        role: roles[0],
+        role: role[0],
       }
     );
     setErrors({});
@@ -66,9 +51,9 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
     if (!user.email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(user.email))
       newErrors.email = "Invalid email.";
-    if (!user.phone.trim()) newErrors.phone = "Phone number is required.";
-    else if (!/^\d{10}$/.test(user.phone))
-      newErrors.phone = "Phone must be 10 digits.";
+    // if (!user.phone.trim()) newErrors.phone = "Phone number is required.";
+    // else if (!/^\d{10}$/.test(user.phone))
+    //   newErrors.phone = "Phone must be 10 digits.";
     if (!user.address.trim()) newErrors.address = "Address is required.";
     if (!user.department) newErrors.department = "Department is required.";
     if (!user.role) newErrors.role = "Role is required.";
@@ -77,18 +62,32 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit(user);
+    if (!validateForm()) return;
+
+    const payload = { ...user };
+    if (!user.password) delete payload.password;
+
+    let response;
+    if (initialUser) {
+      response = await patchData(`auth/edit/${initialUser._id}`, payload);
+    } else {
+      response = await postData(`auth/add`, payload);
+    }
+
+    if (response?.success) {
+      onCancel()
+      refetch()
       setUser({
         id: "",
         name: "",
         email: "",
         phone: "",
         address: "",
+        password: "",
         department: departments[0],
-        role: roles[0],
+        role: role[0],
       });
       setErrors({});
     }
@@ -150,7 +149,6 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
             )}
           </div>
 
-          {/* Address */}
           <div>
             <label
               htmlFor="address"
@@ -189,7 +187,7 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
                 name="role"
                 value={user.role}
                 onChange={handleChange}
-                options={departments}
+                options={role}
               />
               {errors.department && (
                 <p className="text-red-500 text-xs mt-1">{errors.role}</p>
@@ -197,7 +195,6 @@ const UserForm = ({ initialUser, onSubmit, onCancel }) => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="flex justify-end mt-6">
             <button
               type="submit"

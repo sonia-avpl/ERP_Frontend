@@ -1,14 +1,17 @@
+import AdminDashboard from "./AdminDashboard";
 import DroneDashboard from "./DroneR&DSystem/DroneDashboard";
 import HrDashboard from "./HrSystem/HrDashboard";
-
+import PrincipalDashboard from "./Lms/PrincipalDashboard";
 
 const Dashboard = () => {
-  const userRole = "R&D"; // Replace with dynamic value like from context or localStorage
+  const userRole = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div>
-      {userRole === "R&D" && <DroneDashboard />}
-      {userRole === "HR" && <HrDashboard />}
+      {userRole.role === "Admin" && <AdminDashboard />}
+      {userRole.role === "R&D Manager" && <DroneDashboard />}
+      {userRole.role === "HR" && <HrDashboard />}
+      {userRole.role === "Principal" && <PrincipalDashboard />}
     </div>
   );
 };
