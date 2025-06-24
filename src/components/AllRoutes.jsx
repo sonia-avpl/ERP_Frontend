@@ -47,6 +47,14 @@ import PaymentReceived from "../Pages/SupplyChain/Sales/PaymentReceived";
 import SalesReturn from "../Pages/SupplyChain/Sales/SalesReturn";
 import CreditNotes from "../Pages/SupplyChain/Sales/CreditNotes";
 
+// Purchases pages
+import Vendors from "../Pages/SupplyChain/Purchases/Vendors";
+import PurchaseOrders from "../Pages/SupplyChain/Purchases/PurchaseOrders";
+import PurchaseReceives from "../Pages/SupplyChain/Purchases/PurchaseReceives";
+import Bills from "../Pages/SupplyChain/Purchases/Bills";
+import PaymentsMade from "../Pages/SupplyChain/Purchases/PaymentsMade";
+import VendorCredits from "../Pages/SupplyChain/Purchases/VendorCredits";
+
 const AllRoutes = () => {
   return (
     <Routes>
@@ -92,6 +100,15 @@ const AllRoutes = () => {
           />
           <Route path="/sales/returns" element={<SalesReturn />} />
           <Route path="/sales/credit-notes" element={<CreditNotes />} />
+
+          {/* Purchases routes */}
+          <Route path="/purchases/vendors" element={<Vendors />} />
+          <Route path="/purchases/orders" element={<PurchaseOrders />} />
+          <Route path="/purchases/receives" element={<PurchaseReceives />} />
+          <Route path="/purchases/bills" element={<Bills />} />
+          <Route path="/purchases/payments" element={<PaymentsMade />} />
+          <Route path="/purchases/credits" element={<VendorCredits />} />
+
 
           <Route path="/quality-control" element={<QualityControl />} />
           <Route path="/reporting" element={<Reporting />} />
