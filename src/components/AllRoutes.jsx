@@ -31,6 +31,11 @@ import SkuManagement from "../Pages/SupplyChain/SkuManagement";
 import Procurement from "../Pages/SupplyChain/Procurement";
 import GRNProcessing from "../Pages/SupplyChain/GRNProcessing";
 
+// Inventory
+import Items from "../Pages/SupplyChain/Inventory/Items";
+import ItemGroups from "../Pages/SupplyChain/Inventory/ItemGroups";
+import InventoryAdjustment from "../Pages/SupplyChain/Inventory/InventoryAdjustment";
+
 const AllRoutes = () => {
   return (
     <Routes>
@@ -51,7 +56,15 @@ const AllRoutes = () => {
           <Route path="procurement" element={<Procurement />} />
           <Route path="grn-processing" element={<GRNProcessing />} />
           <Route path="/settings" element={<Setting />} />
-          <Route path="/inventory" element={<Inventory />} />
+
+          {/* Inventory Routes */}
+          <Route path="/inventory/items" element={<Items />} />
+          <Route path="/inventory/item-groups" element={<ItemGroups />} />
+          <Route
+            path="/inventory/adjustments"
+            element={<InventoryAdjustment />}
+          />
+
           <Route path="/quality-control" element={<QualityControl />} />
           <Route path="/reporting" element={<Reporting />} />
           <Route
