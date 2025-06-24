@@ -12,6 +12,8 @@ import {
   ShieldCheckIcon,
   FolderIcon,
   UserPlusIcon,
+  Squares2X2Icon,
+  AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import { SiAmazondocumentdb } from "react-icons/si";
 import { FaStore } from "react-icons/fa";
@@ -140,10 +142,27 @@ export const menuConfig = {
           icon: <TruckIcon className="h-5 w-5" />,
         },
         {
-          name: "Inventory & SCM",
-          to: "/inventory",
+          name: "Inventory",
           icon: <ArchiveBoxIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Items",
+              to: "/inventory/items",
+              icon: <CubeIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Item Groups",
+              to: "/inventory/item-groups",
+              icon: <Squares2X2Icon className="h-4 w-4" />,
+            },
+            {
+              name: "Inventory Adjustments",
+              to: "/inventory/adjustments",
+              icon: <AdjustmentsHorizontalIcon className="h-4 w-4" />,
+            },
+          ],
         },
+        
 
         {
           name: "Reporting",
