@@ -21,6 +21,8 @@ const Sidebar = ({ userRole }) => {
 
   // Inventory drop down
   const [openInventoryDropdown, setOpenInventoryDropdown] = useState({});
+  // sales drop down
+  const [openSalesDropdown, setOpenSalesDropdown] = useState(false);
 
   // toggle function for the inventory drop down
   const toggleDropdown = (name) => {
@@ -97,6 +99,8 @@ const Sidebar = ({ userRole }) => {
                   </div>
                   {section.items.map((item, itemIdx) => {
                     const isInventory = item.name === "Inventory";
+                    const isSales = item.name === "Sales";
+
                     const isActive = location.pathname === item.to;
 
                     if (isInventory) {
@@ -163,6 +167,50 @@ const Sidebar = ({ userRole }) => {
                                 <span className="w-4 h-4 bg-gray-400 rounded-full" />
                                 Inventory Adjustments
                               </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
+                    if (isSales) {
+                      return (
+                        <div key={itemIdx} className="w-full">
+                          <button
+                            onClick={() =>
+                              setOpenSalesDropdown(!openSalesDropdown)
+                            }
+                            className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
+                              location.pathname.startsWith("/sales")
+                                ? "bg-gray-800 text-white"
+                                : "hover:bg-gray-800 hover:text-white"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon}
+                              {isSidebarExpanded && <span>{item.name}</span>}
+                            </div>
+                            {isSidebarExpanded && (
+                              <span>{openSalesDropdown ? "▲" : "▼"}</span>
+                            )}
+                          </button>
+
+                          {openSalesDropdown && isSidebarExpanded && (
+                            <div className="ml-8 mt-1 space-y-1 text-sm">
+                              {item.children.map((child, idx) => (
+                                <button
+                                  key={idx}
+                                  onClick={() => navigate(child.to)}
+                                  className={`flex items-center gap-2 p-2 rounded w-full ${
+                                    location.pathname === child.to
+                                      ? "bg-gray-700 text-white"
+                                      : "hover:bg-gray-700 hover:text-white"
+                                  }`}
+                                >
+                                  {child.icon}
+                                  <span>{child.name}</span>
+                                </button>
+                              ))}
                             </div>
                           )}
                         </div>
