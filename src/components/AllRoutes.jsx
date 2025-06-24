@@ -54,6 +54,7 @@ import PurchaseReceives from "../Pages/SupplyChain/Purchases/PurchaseReceives";
 import Bills from "../Pages/SupplyChain/Purchases/Bills";
 import PaymentsMade from "../Pages/SupplyChain/Purchases/PaymentsMade";
 import VendorCredits from "../Pages/SupplyChain/Purchases/VendorCredits";
+import NewItemForm from "./form/NewItemForm";
 
 const AllRoutes = () => {
   return (
@@ -78,6 +79,7 @@ const AllRoutes = () => {
 
           {/* Inventory Routes */}
           <Route path="/inventory/items" element={<Items />} />
+          <Route path="/inventory/items/new" element={<NewItemForm />} />
           <Route path="/inventory/item-groups" element={<ItemGroups />} />
           <Route
             path="/inventory/adjustments"
