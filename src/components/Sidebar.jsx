@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Bars3Icon} from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useGet } from "../hooks/useGet";
 import { baseUrl } from "../utilis";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -18,6 +18,17 @@ const Sidebar = ({ userRole }) => {
   const [projectName, setProjectName] = useState("");
   const { logout } = useAuth();
   const location = useLocation();
+
+  // Inventory drop down
+  const [openInventoryDropdown, setOpenInventoryDropdown] = useState({});
+
+  // toggle function for the inventory drop down
+  const toggleDropdown = (name) => {
+    setOpenInventoryDropdown((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,20 +95,96 @@ const Sidebar = ({ userRole }) => {
                   <div className="text-xs uppercase mb-2 px-2">
                     {section.section}
                   </div>
-                  {section.items.map((item, itemIdx) => (
-                    <button
-                      key={itemIdx}
-                      onClick={() => navigate(item.to)}
-                      className={`flex items-center gap-2 p-2 rounded w-full ${
-                        location.pathname === item.to
-                          ? "bg-gray-800 text-white"
-                          : "hover:bg-gray-800 hover:text-white"
-                      }`}
-                    >
-                      {item.icon}
-                      {isSidebarExpanded && <span>{item.name}</span>}
-                    </button>
-                  ))}
+                  {section.items.map((item, itemIdx) => {
+                    const isInventory = item.name === "Inventory";
+                    const isActive = location.pathname === item.to;
+
+                    if (isInventory) {
+                      return (
+                        <div key={itemIdx} className="w-full">
+                          <button
+                            onClick={() =>
+                              setOpenInventoryDropdown(!openInventoryDropdown)
+                            }
+                            className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
+                              isActive
+                                ? "bg-gray-800 text-white"
+                                : "hover:bg-gray-800 hover:text-white"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              {item.icon}
+                              {isSidebarExpanded && <span>{item.name}</span>}
+                            </div>
+                            {isSidebarExpanded && (
+                              <span className="ml-auto">
+                                {openInventoryDropdown ? "▲" : "▼"}
+                              </span>
+                            )}
+                          </button>
+
+                          {/* Dropdown Children */}
+                          {openInventoryDropdown && isSidebarExpanded && (
+                            <div className="ml-8 mt-1 space-y-1 text-sm">
+                              <button
+                                onClick={() => navigate("/inventory/items")}
+                                className={`flex items-center gap-2 p-2 rounded w-full ${
+                                  location.pathname === "/inventory/items"
+                                    ? "bg-gray-700 text-white"
+                                    : "hover:bg-gray-700 hover:text-white"
+                                }`}
+                              >
+                                <span className="w-4 h-4 bg-gray-400 rounded-full" />
+                                Items
+                              </button>
+                              <button
+                                onClick={() =>
+                                  navigate("/inventory/item-groups")
+                                }
+                                className={`flex items-center gap-2 p-2 rounded w-full ${
+                                  location.pathname === "/inventory/item-groups"
+                                    ? "bg-gray-700 text-white"
+                                    : "hover:bg-gray-700 hover:text-white"
+                                }`}
+                              >
+                                <span className="w-4 h-4 bg-gray-400 rounded-full" />
+                                Item Groups
+                              </button>
+                              <button
+                                onClick={() =>
+                                  navigate("/inventory/adjustments")
+                                }
+                                className={`flex items-center gap-2 p-2 rounded w-full ${
+                                  location.pathname === "/inventory/adjustments"
+                                    ? "bg-gray-700 text-white"
+                                    : "hover:bg-gray-700 hover:text-white"
+                                }`}
+                              >
+                                <span className="w-4 h-4 bg-gray-400 rounded-full" />
+                                Inventory Adjustments
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
+                    // Default item rendering
+                    return (
+                      <button
+                        key={itemIdx}
+                        onClick={() => navigate(item.to)}
+                        className={`flex items-center gap-2 p-2 rounded w-full ${
+                          isActive
+                            ? "bg-gray-800 text-white"
+                            : "hover:bg-gray-800 hover:text-white"
+                        }`}
+                      >
+                        {item.icon}
+                        {isSidebarExpanded && <span>{item.name}</span>}
+                      </button>
+                    );
+                  })}
                 </div>
               ))}
             </div>
