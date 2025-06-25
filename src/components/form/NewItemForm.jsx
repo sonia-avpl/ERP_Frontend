@@ -4,8 +4,7 @@ import { FaRegImage } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const NewItemForm = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const itemFormData = {
     type: "Goods",
     name: "",
     sku: "",
@@ -37,7 +36,10 @@ const NewItemForm = () => {
     openingStock: "",
     openingStockRate: "",
     reorderPoint: "",
-  });
+  };
+
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(itemFormData);
 
   const [dragActive, setDragActive] = useState(false);
 
@@ -60,8 +62,24 @@ const NewItemForm = () => {
     }));
   };
 
-  const handleImageUpload = (e) => {
-    handleFiles(e.target.files);
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+
+    const base64Images = await Promise.all(
+      files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(file);
+        });
+      })
+    );
+
+    setFormData((prev) => ({
+      ...prev,
+      images: base64Images,
+    }));
   };
 
   const handleDragOver = (e) => {
@@ -86,19 +104,26 @@ const NewItemForm = () => {
     }
   };
 
-  const handleSave = () => {
-    // Example simple validation
-    if (!formData.name.trim()) {
-      alert("Name is required.");
-      return;
-    }
-    if (!formData.unit) {
-      alert("Unit is required.");
-      return;
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    // const nextErrors = validate();
+    // setErrors(nextErrors);
+    // if (Object.keys(nextErrors).length) return;
+
+    // Save to localStorage
+    try {
+      const existingData =
+        JSON.parse(localStorage.getItem("itemFormData")) || [];
+      const newData = [...existingData, formData];
+      localStorage.setItem("itemFormData", JSON.stringify(newData));
+      console.log("Saved to localStorage:", newData);
+    } catch (error) {
+      console.error("Failed to save to localStorage:", error);
     }
 
-    // TODO: Submit formData to API or console.log for now
-    console.log("Submitting Item:", formData);
+    // Optional: Reset form or show success
+    // reset();
 
     // Simulate submission success
     alert("Item saved successfully!");
@@ -206,7 +231,10 @@ const NewItemForm = () => {
                 onChange={handleChange}
                 className="accent-blue-600"
               />
-              <label htmlFor="returnItem" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="returnItem"
+                className="text-sm font-medium text-gray-700"
+              >
                 Returnable Item <span className="text-gray-400">(?)</span>
               </label>
             </div>
@@ -256,7 +284,7 @@ const NewItemForm = () => {
                     className="w-16 h-16 border rounded overflow-hidden shadow-sm"
                   >
                     <img
-                      src={URL.createObjectURL(img)}
+                      src={img}
                       alt={`preview-${index}`}
                       className="w-full h-full object-cover"
                     />
@@ -355,11 +383,7 @@ const NewItemForm = () => {
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Brand <span className="text-gray-400">(?)</span>
           </label>
-          <select
-            name="brand"
-            className={inputClass}
-            onChange={handleChange}
-          >
+          <select name="brand" className={inputClass} onChange={handleChange}>
             <option value="">Select or Add Brand</option>
             <option value="Brand X">Brand X</option>
             <option value="Brand Y">Brand Y</option>
@@ -429,9 +453,11 @@ const NewItemForm = () => {
               id="salesInfo"
               checked={salesEnabled}
               onChange={() => setSalesEnabled(!salesEnabled)}
-              
             />
-            <label htmlFor="salesInfo" className="text-sm font-medium text-gray-700">
+            <label
+              htmlFor="salesInfo"
+              className="text-sm font-medium text-gray-700"
+            >
               Sales Information
             </label>
           </div>
@@ -495,7 +521,10 @@ const NewItemForm = () => {
               checked={purchaseEnabled}
               onChange={() => setPurchaseEnabled(!purchaseEnabled)}
             />
-            <label htmlFor="purchase" className="text-sm font-medium text-gray-700">
+            <label
+              htmlFor="purchase"
+              className="text-sm font-medium text-gray-700"
+            >
               Purchase Information
             </label>
           </div>
@@ -577,7 +606,10 @@ const NewItemForm = () => {
             checked={formData.trackInventory}
             onChange={handleChange}
           />
-          <label htmlFor="trackInventory" className="text-sm text-gray-700 font-medium">
+          <label
+            htmlFor="trackInventory"
+            className="text-sm text-gray-700 font-medium"
+          >
             Track Inventory for this item
           </label>
           <span className="text-xs text-gray-400">
