@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +8,17 @@ const Items = () => {
   const [savedItems, setSavedItems] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("itemFormData")) || [];
-    setSavedItems(data);
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/items");
+        console.log("Fetched items:", response.data);
+        setSavedItems(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
   }, []);
 
   return (
@@ -26,14 +36,14 @@ const Items = () => {
       </div>
 
       {/* Table or empty state */}
-      <div className="overflow-x-auto mt-8">
+      <div className="overflow-x-auto mt-8 mx-4">
         {savedItems.length === 0 ? (
           <div className="text-center text-gray-600 py-10">
             No items saved yet.
           </div>
         ) : (
           <table className="min-w-full border-collapse">
-            <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
+            <thead className="bg-gray-100 text-left text-sm font-medium text-gray-500">
               <tr>
                 <th className="px-3 py-2">
                   <input type="checkbox" />
@@ -52,7 +62,7 @@ const Items = () => {
                     <input type="checkbox" />
                   </td>
                   <td className="px-3 py-2 flex items-center gap-2">
-                    {item.images && item.images.length > 0 ? (
+                    {item.images?.[0] ? (
                       <img
                         src={item.images[0]}
                         alt="Item Thumbnail"
@@ -63,12 +73,9 @@ const Items = () => {
                         🖼️
                       </div>
                     )}
-                    <a
-                      href="#"
-                      className="text-indigo-600 hover:underline whitespace-nowrap"
-                    >
+                    <span className="text-indigo-600 hover:underline whitespace-nowrap">
                       {item.name || "Untitled Item"}
-                    </a>
+                    </span>
                   </td>
                   <td className="px-3 py-2">{item.sku}</td>
                   <td className="px-3 py-2">{item.type}</td>

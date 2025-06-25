@@ -9,20 +9,7 @@ const NewItemForm = () => {
     name: "",
     sku: "",
     unit: "",
-    returnable: false,
     images: [],
-    length: "",
-    width: "",
-    height: "",
-    dimensionUnit: "cm",
-    weight: "",
-    weightUnit: "kg",
-    manufacturer: "",
-    brand: "",
-    upc: "",
-    mpn: "",
-    ean: "",
-    isbn: "",
     sellingPrice: "",
     salesAccount: "Sales",
     salesDescription: "",
@@ -104,30 +91,33 @@ const NewItemForm = () => {
     }
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
 
-    // const nextErrors = validate();
-    // setErrors(nextErrors);
-    // if (Object.keys(nextErrors).length) return;
-
-    // Save to localStorage
     try {
-      const existingData =
-        JSON.parse(localStorage.getItem("itemFormData")) || [];
-      const newData = [...existingData, formData];
-      localStorage.setItem("itemFormData", JSON.stringify(newData));
-      console.log("Saved to localStorage:", newData);
+      const response = await fetch("http://localhost:5000/api/items", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save item");
+      }
+
+      const data = await response.json();
+      console.log("Saved to backend:", data);
+
+      alert("Item saved successfully!");
+      navigate(-1); // Go back
     } catch (error) {
-      console.error("Failed to save to localStorage:", error);
+      console.error("API error:", error);
+      alert("Something went wrong. Please try again.");
     }
 
-    // Optional: Reset form or show success
-    // reset();
-
-    // Simulate submission success
-    alert("Item saved successfully!");
-    navigate(-1); // Optional: go back after saving
+    console.log("Item saved successfully!");
   };
 
   const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
@@ -220,30 +210,11 @@ const NewItemForm = () => {
                 <option value="ltr">Litre (ltr)</option>
               </select>
             </div>
-
-            {/* Returnable Item */}
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="returnItem"
-                name="returnable"
-                checked={formData.returnable}
-                onChange={handleChange}
-                className="accent-blue-600"
-              />
-              <label
-                htmlFor="returnItem"
-                className="text-sm font-medium text-gray-700"
-              >
-                Returnable Item <span className="text-gray-400">(?)</span>
-              </label>
-            </div>
           </div>
 
           {/* Right Section – Image Upload */}
-          {/* Right Section – Image Upload */}
           <div
-            className={`flex flex-col items-center justify-center border-2 ${
+            className={`h-full flex flex-col items-center justify-center border-2 ${
               dragActive
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-300 bg-gray-50"
@@ -255,12 +226,12 @@ const NewItemForm = () => {
             <FaRegImage className="text-4xl text-gray-400" />
             <p className="text-sm text-gray-500">
               Drag image(s) here or{" "}
-              <span
+              <p
                 className="text-blue-600 underline cursor-pointer"
                 onClick={() => inputRef.current.click()}
               >
                 Browse images
-              </span>
+              </p>
               <input
                 ref={inputRef}
                 type="file"
@@ -269,10 +240,6 @@ const NewItemForm = () => {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-            </p>
-            <p className="text-xs text-gray-400">
-              You can add up to 15 images, each not exceeding 5 MB in size and
-              7000 x 7000 pixels resolution.
             </p>
 
             {/* Preview */}
@@ -293,153 +260,6 @@ const NewItemForm = () => {
               </div>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Dimensions & Weight Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 bg-gray-50 p-6 rounded-lg">
-        {/* Dimensions */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Dimensions{" "}
-            <span className="text-gray-400">(Length x Width x Height)</span>
-          </label>
-          <div className="flex items-center space-x-2">
-            <input
-              type="number"
-              name="length"
-              placeholder="x"
-              className={inputClass}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="width"
-              placeholder="x"
-              className={inputClass}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="height"
-              placeholder="x"
-              className={inputClass}
-              onChange={handleChange}
-            />
-            <select
-              name="dimensionUnit"
-              className={inputClass}
-              onChange={handleChange}
-            >
-              <option value="cm">cm</option>
-              <option value="mm">mm</option>
-              <option value="in">in</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Weight */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Weight
-          </label>
-          <div className="flex items-center space-x-2">
-            <input
-              type="number"
-              name="weight"
-              className="w-3/4 border border-gray-300 rounded-md p-2"
-              onChange={handleChange}
-            />
-            <select
-              name="weightUnit"
-              className="w-1/4 border border-gray-300 rounded-md p-2"
-              onChange={handleChange}
-            >
-              <option value="kg">kg</option>
-              <option value="g">g</option>
-              <option value="lb">lb</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Manufacturer */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Manufacturer <span className="text-gray-400">(?)</span>
-          </label>
-          <select
-            name="manufacturer"
-            className="w-full border border-gray-300 rounded-md p-2"
-            onChange={handleChange}
-          >
-            <option value="">Select or Add Manufacturer</option>
-            <option value="Manufacturer A">Manufacturer A</option>
-            <option value="Manufacturer B">Manufacturer B</option>
-          </select>
-        </div>
-
-        {/* Brand */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Brand <span className="text-gray-400">(?)</span>
-          </label>
-          <select name="brand" className={inputClass} onChange={handleChange}>
-            <option value="">Select or Add Brand</option>
-            <option value="Brand X">Brand X</option>
-            <option value="Brand Y">Brand Y</option>
-          </select>
-        </div>
-
-        {/* UPC */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            UPC <span className="text-gray-400">(?)</span>
-          </label>
-          <input
-            type="text"
-            name="upc"
-            className={inputClass}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* MPN */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            MPN <span className="text-gray-400">(?)</span>
-          </label>
-          <input
-            type="text"
-            name="mpn"
-            className={inputClass}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* EAN */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            EAN <span className="text-gray-400">(?)</span>
-          </label>
-          <input
-            type="text"
-            name="ean"
-            className={inputClass}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* ISBN */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            ISBN <span className="text-gray-400">(?)</span>
-          </label>
-          <input
-            type="text"
-            name="isbn"
-            className={inputClass}
-            onChange={handleChange}
-          />
         </div>
       </div>
 
