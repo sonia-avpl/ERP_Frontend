@@ -54,6 +54,7 @@ export const departments = [
   "Finance",
   "Operations",
   "R&D",
+  "College"
 ];
 
 export const role = [

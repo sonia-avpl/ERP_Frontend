@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import FeeCollectionModal from "../modals/principal/FeeCollectionModal";
+import { useGet } from "../../hooks/useGet";
 
 const StudentList = ({
   loading,
@@ -15,6 +16,8 @@ const StudentList = ({
   const navigate = useNavigate();
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showFeeModal, setShowFeeModal] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+ 
   return (
     <motion.div className="overflow-x-auto bg-white rounded-xl shadow-lg p-6 w-full">
       <div className="mb-4 transition-all duration-300 ease-in-out">
@@ -116,15 +119,17 @@ const StudentList = ({
                         >
                           <Eye className="w-4 h-4" /> View
                         </button>
-                        <button
-                          onClick={() => {
-                            setSelectedStudent(student);
-                            setShowFeeModal(true);
-                          }}
-                          className="hover:text-blue-800 flex items-center gap-1"
-                        >
-                          <Wallet className="w-4 h-4" /> Collect Fee
-                        </button>
+                        {user.role === "Principal" && (
+                          <button
+                            onClick={() => {
+                              setSelectedStudent(student);
+                              setShowFeeModal(true);
+                            }}
+                            className="hover:text-blue-800 flex items-center gap-1"
+                          >
+                            <Wallet className="w-4 h-4" /> Collect Fee
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

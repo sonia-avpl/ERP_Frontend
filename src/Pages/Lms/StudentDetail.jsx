@@ -27,11 +27,16 @@ import LoadinSpinner from "../../components/common/LoadinSpinner";
 import { useState } from "react";
 import { EditStudentModalWrapper } from "../../components/modals/principal/EditStudentModalWrapper";
 import { PencilIcon } from "lucide-react";
+import GroupedPayment from "../../components/lms/groupedPayments";
 
 const StudentDetail = () => {
   const { id } = useParams();
   const { data, loading, error, refetch } = useGet(`admission/${id}`);
   const [showEditModal, setShowEditModal] = useState(false);
+  const { data: feeTransaction } = useGet(
+    `fees/getSingleFeeDetails/${data?.data?.studentId}`
+  );
+  console.log("feeTransaction", feeTransaction);
   if (loading) {
     return <LoadinSpinner text="Loading users..." />;
   }
@@ -225,20 +230,42 @@ const StudentDetail = () => {
           </div>
 
           <div className="lg:col-span-2 space-y-8">
-            <div className="border border-gray-200 rounded-lg p-6 bg-white">
               <SectionHeader icon={BookOpenIcon} title="Fee Installments" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {student.courseName.map((course, index) => (
-                  <div
-                    key={index}
-                    className="flex text-sm items-center text-gray-700 p-2 bg-blue-50 rounded-md"
-                  >
-                    <AcademicCapIcon className="h-6 w-6 text-green-600 mr-3 flex-shrink-0" />
-                    <span className="font-medium">{course}</span>
+              <GroupedPayment feeTransaction={feeTransaction}/>
+            {/* <div className="border border-gray-200 rounded-lg p-6 bg-white">
+              <SectionHeader icon={BookOpenIcon} title="Fee Installments" />
+
+              {feeTransaction?.map((fee, feeIndex) => (
+                <div key={fee._id} className="mb-4">
+                  <div className="text-gray-800 font-semibold mb-2">
+                    Student ID: {fee.admissionForm.studentId} | Name:{" "}
+                    {fee.admissionForm.name}
                   </div>
-                ))}
-              </div>
-            </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {fee.payments.map((payment, index) => (
+                      <div
+                        key={payment._id}
+                        className="flex justify-between items-center text-sm text-gray-700 p-3 bg-blue-50 rounded-md"
+                      >
+                        <div>
+                          <div className="font-medium">
+                            Installment {index + 1}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {new Date(payment.date).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="text-green-600 font-semibold">
+                          ₹{payment.amount}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div> */}
+
             <div className="border border-gray-200 rounded-lg p-6 bg-white">
               <SectionHeader icon={BookOpenIcon} title="Courses" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

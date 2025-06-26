@@ -80,8 +80,6 @@ const UserManagement = () => {
       setCurrentPage(page);
     }
   };
-
-  // Filters UI
   const filtersUI = (
     <>
       <div className="flex justify-between items-center mb-4 flex-wrap gap-4">

@@ -6,7 +6,7 @@ import { departments, role } from "../../utills/enum";
 import { usePost } from "../../hooks/usePost";
 import { usePatch } from "../../hooks/usePatch";
 
-const UserForm = ({ initialUser, onCancel ,refetch}) => {
+const UserForm = ({ initialUser, onCancel, refetch }) => {
   const [user, setUser] = useState(
     initialUser || {
       id: "",
@@ -77,8 +77,8 @@ const UserForm = ({ initialUser, onCancel ,refetch}) => {
     }
 
     if (response?.success) {
-      onCancel()
-      refetch()
+      onCancel();
+      refetch();
       setUser({
         id: "",
         name: "",
@@ -137,13 +137,15 @@ const UserForm = ({ initialUser, onCancel ,refetch}) => {
             {errors.phone && (
               <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
             )}
-            <InputPassword
-              label="Password"
-              name="password"
-              value={user.password}
-              onChange={handleChange}
-              required
-            />
+            {!initialUser && (
+              <InputPassword
+                label="Password"
+                name="password"
+                value={user.password}
+                onChange={handleChange}
+                required
+              />
+            )}
             {errors.phone && (
               <p className="text-red-500 text-xs mt-1">{errors.password}</p>
             )}
@@ -171,7 +173,7 @@ const UserForm = ({ initialUser, onCancel ,refetch}) => {
             )}
             <div className="grid md:grid-cols-2 gap-4 pt-5">
               <SelectField
-                label="Supplier Type"
+                label="Department"
                 id="department"
                 name="department"
                 value={user.department}
