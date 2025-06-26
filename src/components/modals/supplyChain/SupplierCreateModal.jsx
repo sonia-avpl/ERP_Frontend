@@ -2,7 +2,8 @@ import { useState } from "react";
 import SelectField from "../../form/SelectField";
 import InputField from "../../form/InputField";
 import { usePost } from "../../../hooks/usePost";
-import { baseUrl } from "../../../utilis";
+import { baseUrl } from "../../../utills/enum";
+
 
 const SupplierCreateModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({

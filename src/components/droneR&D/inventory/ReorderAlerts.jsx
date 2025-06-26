@@ -1,9 +1,12 @@
-import { ExclamationCircleIcon, BellSlashIcon } from "@heroicons/react/24/outline";
+import {
+  ExclamationCircleIcon,
+  BellSlashIcon,
+} from "@heroicons/react/24/outline";
 import { useGet } from "../../../hooks/useGet";
-import { baseUrl } from "../../../utilis";
+
 
 const ReorderAlerts = () => {
-  const { data: alert } = useGet(`${baseUrl}/inventory/alerts`);
+  const { data: alert } = useGet(`inventory/alerts`);
   console.log("alert", alert);
 
   return (

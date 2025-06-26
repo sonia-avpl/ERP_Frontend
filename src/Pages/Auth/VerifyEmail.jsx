@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { usePost } from "../../hooks/usePost";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
+
 
 function VerifyEmail() {
   const [email, setEmail] = useState("");
@@ -42,8 +44,8 @@ function VerifyEmail() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const enteredOtp = otp.join("");
-    console.log("enteredOtp",enteredOtp)
-   
+    console.log("enteredOtp", enteredOtp);
+
     const result = await postData(`${baseUrl}/auth/verify-email`, {
       email,
       otp: enteredOtp,
@@ -89,14 +91,18 @@ function VerifyEmail() {
           type="submit"
           disabled={loading}
           className={`w-full py-2 rounded text-white ${
-            loading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            loading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
           } transition`}
         >
           {loading ? "Verifying..." : "Verify Email"}
         </button>
 
         {error && (
-          <p className="text-red-500 mt-4">{error.response?.data?.message || error.message}</p>
+          <p className="text-red-500 mt-4">
+            {error.response?.data?.message || error.message}
+          </p>
         )}
       </form>
     </div>

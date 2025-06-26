@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import ApiService from "../services/axiosInstance";
@@ -17,10 +16,15 @@ export function usePostFile(token) {
       toast.success(res.data.message);
       return res.data;
     } catch (err) {
-      const message = err.response?.data?.message || err.message;
-      setError(message);
+      const messages = err.response?.data?.message || err.message;
+      setError(messages);
       setResponse(null);
-      toast.error(`Error: ${message}`);
+
+      if (Array.isArray(messages)) {
+        messages.forEach((msg) => toast.error(msg.message));
+      } else {
+        toast.error(`Error: ${messages}`);
+      }
     } finally {
       setLoading(false);
     }
