@@ -87,70 +87,64 @@ const AllRoutes = () => {
             <Route path="/user-management" element={<UserManagement />} />
             <Route path="/project-managment" element={<ProjectManagement />} />
             <Route path="/inventory" element={<Inventory />} />
-            <Route path="/quality-control" element={<QualityControl />} />
+          
             <Route path="/reporting" element={<Reporting />} />
             <Route path="/settings" element={<Setting />} />
           </Route>
 
-          {/* Common Routes */}
-          <Route path="/sku-management" element={<SkuManagement />} />
-          <Route path="/procurement" element={<Procurement />} />
-          <Route path="/grn-processing" element={<GRNProcessing />} />
-
-          {/* Inventory Routes */}
-          <Route path="/inventory/items" element={<Items />} />
-          <Route path="/inventory/items/new" element={<NewItemForm />} />
-          <Route path="/inventory/item-groups" element={<ItemGroups />} />
           <Route
-            path="/inventory/adjustments"
-            element={<InventoryAdjustment />}
-          />
+            element={
+              <RoleProtectedRoute allowedRoles={["Admin", "Supply Chain"]} />
+            }
+          >
+            <Route path="/sku-management" element={<SkuManagement />} />
+            <Route path="/procurement" element={<Procurement />} />
+            <Route path="/grn-processing" element={<GRNProcessing />} />
+            {/* Inventory Routes */}
+            <Route path="/inventory/items" element={<Items />} />
+            <Route path="/inventory/items/new" element={<NewItemForm />} />
+            <Route path="/inventory/item-groups" element={<ItemGroups />} />
+            <Route
+              path="/inventory/adjustments"
+              element={<InventoryAdjustment />}
+            />
+              <Route path="/quality-control" element={<QualityControl />} />
+            {/* Sales Routes */}
+            <Route path="/sales/customers" element={<Customers />} />
+            <Route path="/sales/orders" element={<SalesOrder />} />
+            <Route path="/sales/packages" element={<Packages />} />
+            <Route path="/sales/shipments" element={<Shipments />} />
+            <Route
+              path="/sales/delivery-challans"
+              element={<DeliveryChallans />}
+            />
+            <Route path="/sales/invoices" element={<Invoices />} />
+            <Route
+              path="/sales/payments-received"
+              element={<PaymentReceived />}
+            />
+            <Route path="/sales/returns" element={<SalesReturn />} />
+            <Route path="/sales/credit-notes" element={<CreditNotes />} />
 
-          {/* Sales Routes */}
-          <Route path="/sales/customers" element={<Customers />} />
-          <Route path="/sales/orders" element={<SalesOrder />} />
-          <Route path="/sales/packages" element={<Packages />} />
-          <Route path="/sales/shipments" element={<Shipments />} />
-          <Route
-            path="/sales/delivery-challans"
-            element={<DeliveryChallans />}
-          />
-          <Route path="/sales/invoices" element={<Invoices />} />
-          <Route
-            path="/sales/payments-received"
-            element={<PaymentReceived />}
-          />
-          <Route path="/sales/returns" element={<SalesReturn />} />
-          <Route path="/sales/credit-notes" element={<CreditNotes />} />
+            {/* Purchases Routes */}
+            <Route path="/purchases/vendors" element={<Vendors />} />
+            <Route path="/purchases/orders" element={<PurchaseOrders />} />
+            <Route path="/purchases/receives" element={<PurchaseReceives />} />
+            <Route path="/purchases/bills" element={<Bills />} />
+            <Route path="/purchases/payments" element={<PaymentsMade />} />
+            <Route path="/purchases/credits" element={<VendorCredits />} />
+            <Route
+              path="/reporting-supply-chain"
+              element={<ReportingSupplyChain />}
+            />
 
-          {/* Purchases Routes */}
-          <Route path="/purchases/vendors" element={<Vendors />} />
-          <Route path="/purchases/orders" element={<PurchaseOrders />} />
-          <Route path="/purchases/receives" element={<PurchaseReceives />} />
-          <Route path="/purchases/bills" element={<Bills />} />
-          <Route path="/purchases/payments" element={<PaymentsMade />} />
-          <Route path="/purchases/credits" element={<VendorCredits />} />
-
-          {/* Reporting Supply Chain */}
-          <Route
-            path="/reporting-supply-chain"
-            element={<ReportingSupplyChain />}
-          />
-
-          {/* Supply Chain Dashboard with Nested Routes */}
-          <Route path="/supply-chain-dashboard" element={<SupplyChain />}>
-            <Route index element={<Navigate to="overview" replace />} />
-            <Route path="overview" element={<Overview />} />
-            <Route path="documents" element={<Documents />} />
-            <Route path="supplier" element={<Supllier />} />
-          </Route>
-
-          {/* Project Detail Nested Pages */}
-          <Route path="/projects/:projectId" element={<ProjectDetail />}>
-            <Route index element={<Navigate to="board" replace />} />
-            <Route path="board" element={<BoardPage />} />
-            <Route path="list" element={<List />} />
-            <Route path="table" element={<Table />} />
+            {/* Project Detail Nested Pages */}
+            <Route path="/projects/:projectId" element={<ProjectDetail />}>
+              <Route index element={<Navigate to="board" replace />} />
+              <Route path="board" element={<BoardPage />} />
+              <Route path="list" element={<List />} />
+              <Route path="table" element={<Table />} />
+            </Route>
           </Route>
 
           {/* R&D Manager and Admin Access */}

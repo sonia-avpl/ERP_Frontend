@@ -165,11 +165,7 @@ export const menuConfig = {
           to: "quality-control",
           icon: <ShieldCheckIcon className="h-5 w-5" />,
         },
-        {
-          name: "Supply Chain",
-          to: "/supply-chain-dashboard",
-          icon: <TruckIcon className="h-5 w-5" />,
-        },
+     
         {
           name: "Inventory",
           icon: <ArchiveBoxXMarkIcon className="h-5 w-5" />,
