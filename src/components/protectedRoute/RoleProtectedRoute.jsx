@@ -1,17 +1,18 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const RoleProtectedRoute = ({ children, allowedRoles }) => {
+const RoleProtectedRoute = ({ allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
+   console.log("user",user.role)
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />; // or a 403 page
+    return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default RoleProtectedRoute;

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const UserProfileCard = ({ setOpen }) => {
+const UserProfileCard = ({ setOpen, userRole }) => {
   const navigate = useNavigate();
 
   const handleClick = (path) => {
@@ -19,22 +19,27 @@ const UserProfileCard = ({ setOpen }) => {
             Profile
           </button>
         </div>
-        <div>
-          <button
-            onClick={() => handleClick("/user-management")}
-            className="w-full text-left px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition"
-          >
-            User Management
-          </button>
-        </div>
-        <div>
-          <button
-            onClick={() => handleClick("/project-managment")}
-            className="w-full text-left px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition"
-          >
-            Project Management
-          </button>
-        </div>
+        {userRole === "Admin" && (
+          <>
+            <div>
+              <button
+                onClick={() => handleClick("/user-management")}
+                className="w-full text-left px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition"
+              >
+                User Management
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={() => handleClick("/project-managment")}
+                className="w-full text-left px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition"
+              >
+                Project Management
+              </button>
+            </div>
+          </>
+        )}
+
         <div>
           <button
             onClick={() => handleClick("/settings")}

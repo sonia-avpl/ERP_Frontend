@@ -4,11 +4,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-
-
 import CreateInventoryModal from "../../modals/inventory/CreateInventoryModal";
 import { usePatch } from "../../../hooks/usePatch";
-import { baseUrl } from "../../../utilis";
+import { baseUrl } from "../../../utills/enum";
 
 const InventoryTable = ({ loading, error, data, refetch, categories }) => {
   const [showModal, setShowModal] = useState(false);

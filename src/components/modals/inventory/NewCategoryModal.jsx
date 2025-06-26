@@ -3,8 +3,8 @@ import InputField from "../../form/InputField";
 import TextAreaField from "../../form/TextAreaField";
 import CheckboxField from "../../form/CheckboxField";
 import { usePostFile } from "../../../hooks/usePostFile";
-import { baseUrl } from "../../../utilis";
 import { usePatchFile } from "../../../hooks/usePatchFile";
+import { baseUrl } from "../../../utills/enum";
 
 const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
   const [formData, setFormData] = useState({
@@ -25,9 +25,7 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
         icon: null,
         isActive: editingCategory.isActive ?? true,
       });
-      setPreviewUrl(
-        editingCategory.icon ? editingCategory.imageUrl : null
-      );
+      setPreviewUrl(editingCategory.icon ? editingCategory.imageUrl : null);
     }
   }, [editingCategory]);
 
@@ -58,7 +56,6 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
       }));
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -127,7 +124,7 @@ const NewCategoryModal = ({ isOpen, onClose, refetch, editingCategory }) => {
               onChange={handleFileChange}
               className="border rounded p-2"
             />
-              
+
             {previewUrl && (
               <img
                 src={previewUrl}

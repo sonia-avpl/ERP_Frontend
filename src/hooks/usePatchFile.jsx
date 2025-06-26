@@ -11,21 +11,23 @@ export function usePatchFile(token) {
   const patchData = async (url, body) => {
     setLoading(true);
     try {
-      const res = await ApiService.patch(url, body, {
-        headers: {
-        //   Authorization: `Bearer ${token}`,
-           "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await ApiService.patch(url, body, {});
+      console.log(res);
       setResponse(res.data);
       setError(null);
-       toast.success(res.data.message);
-     
+      toast.success(res.data.message);
+
       return res.data;
     } catch (err) {
-      setError(err);
+      const messages = err.response?.data?.message || err.message;
+      setError(messages);
       setResponse(null);
-      
+
+      if (Array.isArray(messages)) {
+        messages.forEach((msg) => toast.error(msg.message));
+      } else {
+        toast.error(`Error: ${messages}`);
+      }
     } finally {
       setLoading(false);
     }

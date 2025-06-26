@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { usePost } from "../../hooks/usePost";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
+
 
 function VerifyResetOtp() {
-  const [otp, setOtp] = useState(["", "", "", "","",""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const { postData, loading, error } = usePost();
   const navigate = useNavigate();
   const email = localStorage.getItem("resetEmail");

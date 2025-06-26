@@ -1,8 +1,8 @@
-
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
 
 const statusList = ["Todo", "In Progress", "Done"];
 
@@ -10,7 +10,9 @@ const KanbanBoard = ({ projectId }) => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    axios.get(`${baseUrl}/tasks/${projectId}`).then((res) => setTasks(res.data));
+    axios
+      .get(`${baseUrl}/tasks/${projectId}`)
+      .then((res) => setTasks(res.data));
   }, [projectId]);
 
   const onDragEnd = async (result) => {

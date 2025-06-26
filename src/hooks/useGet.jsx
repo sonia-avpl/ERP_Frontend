@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ApiService from "../services/axiosInstance";
 
-export function useGet(url, token) {
+export function useGet(url) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -22,7 +22,7 @@ export function useGet(url, token) {
 
   useEffect(() => {
     fetchData();
-  }, [url, token]);
+  }, [url]);
 
   return { data, setData, loading, error, refetch: fetchData };
 }

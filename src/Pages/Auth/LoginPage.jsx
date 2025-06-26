@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { usePost } from "../../hooks/usePost";
 import InputField from "../../components/form/InputField";
-import { Link, useNavigate } from "react-router-dom";
-import { baseUrl } from "../../utilis";
+import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../utills/enum";
+
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,7 +18,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = await postData('auth/login', form);
+    const data = await postData("auth/login", form);
     if (data) {
       localStorage.setItem("token", JSON.stringify(data.token));
       localStorage.setItem("user", JSON.stringify(data.user));
@@ -42,7 +43,7 @@ function Login() {
         onSubmit={showForgot ? handleForgotSubmit : handleSubmit}
         className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
       >
-           <img src="/logo/logo.png" alt="logo" className="w-28 mx-auto mb-6" />
+        <img src="/logo/logo.png" alt="logo" className="w-28 mx-auto mb-6" />
         <h2 className="text-2xl font-semibold mb-6 text-center">
           {showForgot ? "Forgot Password" : "Login to your account"}
         </h2>
@@ -115,12 +116,6 @@ function Login() {
             </p>
           </>
         )}
-        <p className="text-sm mt-4 text-center">
-         Don’t have an account?
-          <Link to="/register" className="text-blue-600 hover:underline">
-           Sign up
-          </Link>
-        </p>
         {error && (
           <p className="text-red-500 text-center mt-4">
             {error.message || "An error occurred"}

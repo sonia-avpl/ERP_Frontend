@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useGet } from "../../../hooks/useGet";
 import { usePostFile } from "../../../hooks/usePostFile";
 import { usePatchFile } from "../../../hooks/usePatchFile"; // Import usePatchFile
-import { componentTypes } from "../../../utilis";
+import { componentTypes } from "../../../utills/enum";
 
 const NewComponentInputForm = ({
   onClose,
@@ -43,7 +43,11 @@ const NewComponentInputForm = ({
   const [user, setUser] = useState(null);
   const { data: categories } = useGet(`categories`);
   const { postData, isLoading: postLoading, error: postError } = usePostFile(); // Renamed loading and error
-  const { patchData, isLoading: patchLoading, error: patchError } = usePatchFile(); // Destructure patchData and its loading/error
+  const {
+    patchData,
+    isLoading: patchLoading,
+    error: patchError,
+  } = usePatchFile(); // Destructure patchData and its loading/error
 
   // Combine loading and error states for UI
   const isLoading = postLoading || patchLoading;
@@ -70,7 +74,7 @@ const NewComponentInputForm = ({
         name: initialData.name || "",
         componentType: initialData.componentType || "",
         // Set category to its _id for the select input
-        category: initialData.category?._id || "", 
+        category: initialData.category?._id || "",
         useCase: initialData.useCase || "",
         // Explicitly set each nested property with fallback to empty string
         physicalProperties: {
@@ -161,14 +165,20 @@ const NewComponentInputForm = ({
     // This ensures each sub-property is a separate field in FormData
     for (const key in formData.physicalProperties) {
       if (formData.physicalProperties[key]) {
-        form.append(`physicalProperties.${key}`, formData.physicalProperties[key]);
+        form.append(
+          `physicalProperties.${key}`,
+          formData.physicalProperties[key]
+        );
       }
     }
 
     // Append nested electricalProperties
     for (const key in formData.electricalProperties) {
       if (formData.electricalProperties[key]) {
-        form.append(`electricalProperties.${key}`, formData.electricalProperties[key]);
+        form.append(
+          `electricalProperties.${key}`,
+          formData.electricalProperties[key]
+        );
       }
     }
 
@@ -244,7 +254,9 @@ const NewComponentInputForm = ({
           )}
           {/* Name Input */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Name</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">
+              Name
+            </label>
             <input
               name="name"
               value={formData.name}
@@ -276,7 +288,9 @@ const NewComponentInputForm = ({
           </div>
           {/* Category Select */}
           <div>
-            <label className="block text-sm font-medium mb-1 text-gray-700">Category</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">
+              Category
+            </label>
             <select
               name="category"
               value={formData.category}
@@ -423,7 +437,9 @@ const NewComponentInputForm = ({
           </div>
           {/* Use Case Textarea */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-1 text-gray-700">Use Case</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">
+              Use Case
+            </label>
             <textarea
               name="useCase"
               value={formData.useCase}
