@@ -12,9 +12,7 @@ import {
   ShieldCheckIcon,
   FolderIcon,
   UserPlusIcon,
-
   AcademicCapIcon,
-} from "@heroicons/react/24/outline";
   Squares2X2Icon,
   AdjustmentsHorizontalIcon,
   ClipboardDocumentListIcon,
@@ -23,6 +21,14 @@ import {
   ArchiveBoxXMarkIcon,
   CubeTransparentIcon,
 } from "@heroicons/react/24/outline";
+//   Squares2X2Icon,
+//   AdjustmentsHorizontalIcon,
+//   ClipboardDocumentListIcon,
+//   DocumentIcon,
+//   ReceiptRefundIcon,
+//   ArchiveBoxXMarkIcon,
+//   CubeTransparentIcon,
+// } from "@heroicons/react/24/outline";
 import { SiAmazondocumentdb } from "react-icons/si";
 import { FaStore } from "react-icons/fa";
 import {
@@ -135,7 +141,7 @@ export const menuConfig = {
       ],
     },
   ],
-  SupplyChain: [
+  "Supply Chain": [
     {
       section: "Supply Chain",
       items: [

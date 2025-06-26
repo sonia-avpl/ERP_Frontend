@@ -54,7 +54,8 @@ export const departments = [
   "Finance",
   "Operations",
   "R&D",
-  "College"
+  "College",
+  "Supply Chain",
 ];
 
 export const role = [
@@ -67,5 +68,5 @@ export const role = [
   "Support Staff",
   "R&D Manager",
   "Principal",
+  "Supply Chain",
 ];
-
