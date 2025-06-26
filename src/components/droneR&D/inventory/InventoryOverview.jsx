@@ -7,7 +7,6 @@ import { useState } from "react";
 import Pagination from "../../pagination/Pagination";
 import InventoryTable from "../table/InventoryTable";
 
-
 const InventoryOverview = ({
   data,
   loading,

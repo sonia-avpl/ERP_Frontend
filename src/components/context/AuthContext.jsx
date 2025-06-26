@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
 
 const AuthContext = createContext();
 
@@ -65,7 +66,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, fetchUserData ,logout}}>
+    <AuthContext.Provider
+      value={{ user, loading, error, fetchUserData, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

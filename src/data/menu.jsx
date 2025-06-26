@@ -12,6 +12,9 @@ import {
   ShieldCheckIcon,
   FolderIcon,
   UserPlusIcon,
+
+  AcademicCapIcon,
+} from "@heroicons/react/24/outline";
   Squares2X2Icon,
   AdjustmentsHorizontalIcon,
   ClipboardDocumentListIcon,
@@ -37,6 +40,7 @@ import {
 import { PiCubeTransparentLight } from "react-icons/pi";
 import { HiAdjustmentsHorizontal, HiOutlineSquares2X2 } from "react-icons/hi2";
 
+
 export const topCommonMenus = [
   {
     section: "Main",
@@ -54,16 +58,16 @@ export const bottomCommonMenus = [
   {
     section: "Administration",
     items: [
-      {
-        name: "User Management",
-        to: "/user-management",
-        icon: <UserGroupIcon className="h-5 w-5" />,
-      },
-      {
-        name: "Project Management",
-        to: "/project-managment",
-        icon: <UserPlusIcon className="h-5 w-5" />,
-      },
+      // {
+      //   name: "User Management",
+      //   to: "/user-management",
+      //   icon: <UserGroupIcon className="h-5 w-5" />,
+      // },
+      // {
+      //   name: "Project Management",
+      //   to: "/project-managment",
+      //   icon: <UserPlusIcon className="h-5 w-5" />,
+      // },
       {
         name: "Settings",
         to: "/settings",
@@ -74,7 +78,7 @@ export const bottomCommonMenus = [
 ];
 
 export const menuConfig = {
-  "R&D": [
+  "R&D Manager": [
     {
       section: "R&D Modules",
       items: [
@@ -308,6 +312,96 @@ export const menuConfig = {
         {
           name: "Budget Tracking",
           to: "/budget-tracking",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+  ],
+  Principal: [
+    {
+      section: "Principal Panel",
+      items: [
+        {
+          name: "Student List",
+          to: "/all-students",
+          icon: <FolderIcon className="h-5 w-5" />,
+        },
+        {
+          name: "New Admission",
+          to: "/admission-form",
+          icon: <AcademicCapIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+  ],
+  Admin: [
+    {
+      section: "Principal Panel",
+      items: [
+        {
+          name: "Student List",
+          to: "/all-students",
+          icon: <FolderIcon className="h-5 w-5" />,
+        },
+        {
+          name: "New Admission",
+          to: "/admission-form",
+          icon: <AcademicCapIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+    {
+      section: "R&D Modules",
+      items: [
+        {
+          name: "Component Design",
+          to: "/component-design",
+          icon: <CubeIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Prototype Management",
+          to: "/prototype-management",
+          icon: <BeakerIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Testing & Validation",
+          to: "/testing-validation",
+          icon: <ClipboardDocumentCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Compliance & Docs",
+          to: "/compliance-docs",
+          icon: <PuzzlePieceIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Reporting",
+          to: "/reporting",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+
+    {
+      section: "Supply Chain",
+      items: [
+        {
+          name: "Supply Chain",
+          to: "/supply-chain-dashboard",
+          icon: <TruckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Inventory & SCM",
+          to: "/inventory",
+          icon: <ArchiveBoxIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Quality Control",
+          to: "quality-control",
+          icon: <ShieldCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Reporting",
+          to: "reporting",
           icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],

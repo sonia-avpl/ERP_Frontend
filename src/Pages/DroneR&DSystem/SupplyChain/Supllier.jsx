@@ -1,14 +1,8 @@
-import {
-  MapPinIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import SupplierCreateModal from "../../../components/modals/supplyChain/SupplierCreateModal";
 import { useGet } from "../../../hooks/useGet";
-import { baseUrl } from "../../../utilis";
 import CustomTable from "../../../components/droneR&D/table/CustomTable";
-
+import { baseUrl } from "../../../utills/enum";
 
 const Supplier = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,10 +67,10 @@ const Supplier = () => {
     { Header: "Location", accessor: "supplierLocation" },
     { Header: "Status", accessor: "supplierApprovalStatus" },
   ];
-const formattedSuppliers = suppliers.map((supplier) => ({
-  ...supplier,
-  bankName: supplier.supplierBankDetails?.bankName || "N/A",
-}));
+  const formattedSuppliers = suppliers.map((supplier) => ({
+    ...supplier,
+    bankName: supplier.supplierBankDetails?.bankName || "N/A",
+  }));
 
   const handleEdit = (supplier) => {
     console.log("Edit", supplier);
@@ -85,7 +79,6 @@ const formattedSuppliers = suppliers.map((supplier) => ({
   const handleDelete = (supplier) => {
     console.log("Delete", supplier);
   };
-
 
   return (
     <div className="bg-white rounded-xl shadow-sm">

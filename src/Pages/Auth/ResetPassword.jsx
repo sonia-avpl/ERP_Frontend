@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { usePost } from "../../hooks/usePost";
 import { useNavigate, useParams } from "react-router-dom";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
   const { postData, loading, error } = usePost();
   const navigate = useNavigate();
   const email = localStorage.getItem("resetEmail");
-  const {token}=useParams()
-  
+  const { token } = useParams();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await postData(`${baseUrl}/auth/reset-password/${token}`, {
@@ -23,7 +24,10 @@ function ResetPassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm mx-auto mt-20 p-4 bg-white rounded shadow">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-sm mx-auto mt-20 p-4 bg-white rounded shadow"
+    >
       <h2 className="text-xl mb-4">Set New Password</h2>
       <input
         className="border w-full p-2 mb-4"
@@ -33,7 +37,11 @@ function ResetPassword() {
         placeholder="Enter new password"
         required
       />
-      <button className="bg-green-600 text-white py-2 px-4 rounded w-full" type="submit" disabled={loading}>
+      <button
+        className="bg-green-600 text-white py-2 px-4 rounded w-full"
+        type="submit"
+        disabled={loading}
+      >
         {loading ? "Resetting..." : "Reset Password"}
       </button>
       {error && <p className="text-red-500 mt-2 text-sm">{error.message}</p>}

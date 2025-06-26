@@ -4,7 +4,8 @@ import InputField from "../../components/form/InputField";
 import InputPassword from "../../components/form/InputPassword";
 import SelectField from "../../components/form/SelectField";
 import { usePost } from "../../hooks/usePost";
-import { baseUrl } from "../../utilis";
+import { baseUrl } from "../../utills/enum";
+
 
 function Register() {
   const [formData, setFormData] = useState({
