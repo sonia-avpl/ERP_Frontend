@@ -1,6 +1,6 @@
 const Reporting = () => {
   return (
-    <div>Reporting</div>
+    <div>Reporting R&D</div>
   )
 }
 

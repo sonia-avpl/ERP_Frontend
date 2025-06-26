@@ -12,8 +12,34 @@ import {
   ShieldCheckIcon,
   FolderIcon,
   UserPlusIcon,
+
   AcademicCapIcon,
 } from "@heroicons/react/24/outline";
+  Squares2X2Icon,
+  AdjustmentsHorizontalIcon,
+  ClipboardDocumentListIcon,
+  DocumentIcon,
+  ReceiptRefundIcon,
+  ArchiveBoxXMarkIcon,
+  CubeTransparentIcon,
+} from "@heroicons/react/24/outline";
+import { SiAmazondocumentdb } from "react-icons/si";
+import { FaStore } from "react-icons/fa";
+import {
+  BanknoteIcon,
+  CreditCardIcon,
+  FileTextIcon,
+  PackageIcon,
+  RefreshCcwIcon,
+  RotateCcwIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
+  TruckElectricIcon,
+  UsersIcon,
+} from "lucide-react";
+import { PiCubeTransparentLight } from "react-icons/pi";
+import { HiAdjustmentsHorizontal, HiOutlineSquares2X2 } from "react-icons/hi2";
+
 
 export const topCommonMenus = [
   {
@@ -103,7 +129,155 @@ export const menuConfig = {
         },
         {
           name: "Reporting",
-          to: "reporting",
+          to: "reporting-supply-chain",
+          icon: <ChartBarIcon className="h-5 w-5" />,
+        },
+      ],
+    },
+  ],
+  SupplyChain: [
+    {
+      section: "Supply Chain",
+      items: [
+        {
+          name: "SKU Management ",
+          to: "/sku-management",
+          icon: <SiAmazondocumentdb className="h-5 w-5" />,
+        },
+        {
+          name: "Procurement",
+          to: "/procurement",
+          icon: <FaStore className="h-5 w-5" />,
+        },
+        {
+          name: "GRN Processing",
+          to: "/grn-processing",
+          icon: <TruckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Quality Control",
+          to: "quality-control",
+          icon: <ShieldCheckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Supply Chain",
+          to: "/supply-chain-dashboard",
+          icon: <TruckIcon className="h-5 w-5" />,
+        },
+        {
+          name: "Inventory",
+          icon: <ArchiveBoxXMarkIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Items",
+              to: "/inventory/items",
+              icon: <PiCubeTransparentLight className="h-4 w-4" />,
+            },
+            {
+              name: "Item Groups",
+              to: "/inventory/item-groups",
+              icon: <HiOutlineSquares2X2 className="h-4 w-4" />,
+            },
+            {
+              name: "Inventory Adjustments",
+              to: "/inventory/adjustments",
+              icon: <HiAdjustmentsHorizontal className="h-4 w-4" />,
+            },
+          ],
+        },
+
+        {
+          name: "Sales",
+          icon: <ShoppingCartIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Customers",
+              to: "/sales/customers",
+              icon: <UsersIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Sales Orders",
+              to: "/sales/orders",
+              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Packages",
+              to: "/sales/packages",
+              icon: <PackageIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Shipments",
+              to: "/sales/shipments",
+              icon: <TruckIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Delivery Challans",
+              to: "/sales/delivery-challans",
+              icon: <DocumentIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Invoices",
+              to: "/sales/invoices",
+              icon: <DocumentIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Payments Received",
+              to: "/sales/payments-received",
+              icon: <CreditCardIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Sales Returns",
+              to: "/sales/returns",
+              icon: <ReceiptRefundIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Credit Notes",
+              to: "/sales/credit-notes",
+              icon: <RefreshCcwIcon className="h-4 w-4" />,
+            },
+          ],
+        },
+
+        {
+          name: "Purchases",
+          icon: <ShoppingBagIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Vendors",
+              to: "/purchases/vendors",
+              icon: <UsersIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Purchase Orders",
+              to: "/purchases/orders",
+              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Purchase Receives",
+              to: "/purchases/receives",
+              icon: <TruckElectricIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Bills",
+              to: "/purchases/bills",
+              icon: <FileTextIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Payments Made",
+              to: "/purchases/payments",
+              icon: <BanknoteIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Vendor Credits",
+              to: "/purchases/credits",
+              icon: <RotateCcwIcon className="h-4 w-4" />,
+            },
+          ],
+        },
+
+        {
+          name: "Reporting",
+          to: "reporting-supply-chain",
           icon: <ChartBarIcon className="h-5 w-5" />,
         },
       ],

@@ -4,8 +4,11 @@ import {
   BugAntIcon,
   DocumentTextIcon,
 } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import NewTest from "../../form/NewTest";
 
 const TestModuleHeader = () => {
+  const [newTest, setNewTest] = useState(false);
   return (
     <div className="module-header flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 border-b border-gray-200">
       {/* Left: Title and description */}
@@ -20,10 +23,14 @@ const TestModuleHeader = () => {
 
       {/* Right: Action Buttons */}
       <div className="module-actions flex flex-wrap gap-2">
-        <button className="btn bg-gray-200 text-gray-800 px-2 py-1 text-sm rounded flex items-center gap-1">
+        <button
+          onClick={() => setNewTest(true)}
+          className="btn bg-gray-200 text-gray-800 px-2 py-1 text-sm rounded flex items-center gap-1"
+        >
           <PlusIcon className="w-4 h-4" />
           New
         </button>
+        {newTest && <NewTest onClose={() => setNewTest(false)} />}
         <button className="btn bg-green-600 text-white px-2 py-1 text-sm rounded flex items-center gap-1 hover:bg-green-700">
           <PlayIcon className="w-4 h-4" />
           Start

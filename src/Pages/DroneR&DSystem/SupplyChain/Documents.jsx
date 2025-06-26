@@ -62,7 +62,7 @@ const Documents = () => {
             Document Management
           </h3>
         </div>
-        <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="border-2 border-dashed border-green-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50 transition-colors cursor-pointer">
             <DocumentCheckIcon className="w-8 h-8 text-green-600 mx-auto mb-3" />
             <h4 className="font-semibold text-gray-800 mb-2">
@@ -99,7 +99,9 @@ const Documents = () => {
               <DrnInputForm onClose={() => setShowDrnForm(false)} />
             )}
           </div>
-          <div className="border-2 border-dashed border-yellow-300 rounded-lg p-6 text-center hover:border-yellow-500 hover:bg-yellow-50 transition-colors cursor-pointer">
+
+          {/* ERN */}
+          {/* <div className="border-2 border-dashed border-yellow-300 rounded-lg p-6 text-center hover:border-yellow-500 hover:bg-yellow-50 transition-colors cursor-pointer">
             <ClockIcon className="w-8 h-8 text-yellow-600 mx-auto mb-3" />
             <h4 className="font-semibold text-gray-800 mb-2">
               Expiry Requisition Note (ERN)
@@ -113,7 +115,7 @@ const Documents = () => {
              {showErnForm && (
               <ErnInputForm onClose={() => setShowErnForm(false)} />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

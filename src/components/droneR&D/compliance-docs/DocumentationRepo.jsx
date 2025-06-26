@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import UploadDocuments from "../../form/UploadDocuments";
 
 const categories = [
   "All Documents",
@@ -73,20 +74,25 @@ const documents = [
 
 const DocumentationRepo = () => {
   const [activeCategory, setActiveCategory] = useState("All Documents");
+  const [uploadDocs, setUploadDocs] = useState(false);
 
   return (
     <div className="documentation-repo space-y-6">
       {/* Header */}
       <div className="repo-header flex justify-between items-center">
-        <h3 className="repo-title text-xl font-semibold text-gray-800">Document Repository</h3>
+        <h3 className="repo-title text-xl font-semibold text-gray-800">
+          Document Repository
+        </h3>
         <motion.button
           whileTap={{ scale: 0.95 }}
           whileHover={{ scale: 1.05 }}
-          className="btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
+          onClick={() => setUploadDocs(true)}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center gap-2"
         >
           <PlusIcon className="w-5 h-5" />
           New Document
         </motion.button>
+        {uploadDocs && <UploadDocuments onClose={() => setUploadDocs(false)} />}
       </div>
 
       {/* Categories */}
@@ -119,11 +125,15 @@ const DocumentationRepo = () => {
             whileHover={{ scale: 1.02 }}
           >
             <div className="doc-icon mb-2">{doc.icon}</div>
-            <div className="doc-title font-medium text-gray-800">{doc.title}</div>
+            <div className="doc-title font-medium text-gray-800">
+              {doc.title}
+            </div>
             <p className="text-sm text-gray-600 mb-3">{doc.description}</p>
             <div className="doc-meta flex justify-between items-center text-xs text-gray-500">
               <div>Version {doc.version}</div>
-              <div className={`doc-status px-2 py-0.5 rounded ${doc.statusClass}`}>
+              <div
+                className={`doc-status px-2 py-0.5 rounded ${doc.statusClass}`}
+              >
                 {doc.status}
               </div>
             </div>
