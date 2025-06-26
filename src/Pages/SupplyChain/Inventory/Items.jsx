@@ -74,7 +74,11 @@ const Items = () => {
                       </div>
                     )}
                     <span className="text-indigo-600 hover:underline whitespace-nowrap">
-                      {item.name || "Untitled Item"}
+                      <button
+                        onClick={() => navigate(`/inventory/items/${item._id}`)}
+                      >
+                        {item.name || "Untitled Item"}
+                      </button>
                     </span>
                   </td>
                   <td className="px-3 py-2">{item.sku}</td>
