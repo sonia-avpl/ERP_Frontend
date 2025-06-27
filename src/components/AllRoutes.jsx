@@ -67,6 +67,7 @@ import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
 
 import NewItemForm from "./form/NewItemForm";
 import ItemDetails from "../components/inventory/ItemDetails"
+import EditItemForm from "../components/form/EditItemForm"
 
 const AllRoutes = () => {
   return (
@@ -104,6 +105,7 @@ const AllRoutes = () => {
             {/* Inventory Routes */}
             <Route path="/inventory/items" element={<Items />} />
             <Route path="/inventory/items/:id" element={<ItemDetails />} />
+            <Route path="/inventory/items/:id/edit" element={<EditItemForm />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route
