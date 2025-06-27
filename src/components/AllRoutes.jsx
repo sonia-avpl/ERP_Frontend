@@ -109,7 +109,7 @@ const AllRoutes = () => {
             <Route path="/inventory/items/:id/edit" element={<EditItemForm />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
-            <Route path="/inventory/vendor/new" element={<VendorForm />} />
+            <Route path="/inventory/vendors/new" element={<VendorForm />} />
             <Route
               path="/inventory/adjustments"
               element={<InventoryAdjustment />}
