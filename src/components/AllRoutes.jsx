@@ -66,6 +66,7 @@ import PrototypeManagement from "../Pages/DroneR&DSystem/PrototypeManagement";
 import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
 
 import NewItemForm from "./form/NewItemForm";
+import ItemDetails from "../components/inventory/ItemDetails"
 
 const AllRoutes = () => {
   return (
@@ -102,6 +103,7 @@ const AllRoutes = () => {
             <Route path="/grn-processing" element={<GRNProcessing />} />
             {/* Inventory Routes */}
             <Route path="/inventory/items" element={<Items />} />
+            <Route path="/inventory/items/:id" element={<ItemDetails />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route
