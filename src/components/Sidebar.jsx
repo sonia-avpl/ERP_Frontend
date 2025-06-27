@@ -18,7 +18,7 @@ const Sidebar = ({ userRole }) => {
   const location = useLocation();
 
   // Inventory drop down
-  const [openInventoryDropdown, setOpenInventoryDropdown] = useState({});
+  const [openInventoryDropdown, setOpenInventoryDropdown] = useState(false);
   // sales drop down
   const [openSalesDropdown, setOpenSalesDropdown] = useState(false);
   // purchase drop down
