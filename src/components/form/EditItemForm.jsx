@@ -76,6 +76,14 @@ export default function EditItemForm() {
     setFormData((prev) => ({ ...prev, images: [...prev.images, ...previews] }));
   };
 
+  //   handle remove image
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   /* Drag events */
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -233,13 +241,20 @@ export default function EditItemForm() {
                 {formData.images.map((img, index) => (
                   <div
                     key={index}
-                    className="w-16 h-16 border rounded overflow-hidden shadow-sm"
+                    className="relative w-16 h-16 border rounded overflow-hidden shadow-sm"
                   >
                     <img
                       src={img}
                       alt={`preview-${index}`}
                       className="w-full h-full object-cover"
                     />
+                    <button
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-0 right-0 bg-white text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
+                      title="Remove image"
+                    >
+                      ×
+                    </button>
                   </div>
                 ))}
               </div>
@@ -399,7 +414,7 @@ export default function EditItemForm() {
         </div>
       </div>
 
-      {/* ───────────────────────────────────── Inventory tracking */}
+      {/*  Inventory tracking */}
       <div className="bg-gray-50 px-6 py-6 rounded-lg mt-6 shadow-sm border border-gray-200">
         <div className="flex items-center space-x-2">
           <input
@@ -499,7 +514,7 @@ export default function EditItemForm() {
         )}
       </div>
 
-      {/* ───────────────────────────────────── Action buttons */}
+      {/*  Action buttons */}
       <div className="flex justify-end gap-4 mt-8 px-6 pb-6">
         <button
           onClick={() => navigate(-1)}

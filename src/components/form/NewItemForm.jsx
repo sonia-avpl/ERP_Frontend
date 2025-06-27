@@ -69,6 +69,14 @@ const NewItemForm = () => {
     }));
   };
 
+  //   handle remove image
+  const handleRemoveImage = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -248,13 +256,20 @@ const NewItemForm = () => {
                 {formData.images.map((img, index) => (
                   <div
                     key={index}
-                    className="w-16 h-16 border rounded overflow-hidden shadow-sm"
+                    className="relative w-16 h-16 border rounded overflow-hidden shadow-sm"
                   >
                     <img
                       src={img}
                       alt={`preview-${index}`}
                       className="w-full h-full object-cover"
                     />
+                    <button
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-0 right-0 bg-white text-red-600 rounded-full w-5 h-5 flex items-center justify-center text-xs shadow"
+                      title="Remove image"
+                    >
+                      ×
+                    </button>
                   </div>
                 ))}
               </div>
