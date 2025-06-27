@@ -32,105 +32,81 @@ const ItemDetails = () => {
   if (!item) return <div className="p-4">Item not found.</div>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow space-y-4">
-      <h2 className="text-2xl font-bold">{item.name || "Untitled Item"}</h2>
+   <section className="p-6 md:p-8 max-w-4xl mx-auto bg-white rounded-2xl shadow-md space-y-6">
+  <div className="flex items-center justify-between">
+    <h2 className="text-2xl font-bold text-gray-800">{item.name || "Untitled Item"}</h2>
+    {item.images?.[0] && (
+      <img
+        src={item.images[0]}
+        alt={item.name}
+        className="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm"
+      />
+    )}
+  </div>
 
-      {/* Thumbnail */}
-      {item.images?.[0] && (
-        <img
-          src={item.images[0]}
-          alt={item.name}
-          className="w-32 h-32 object-cover rounded border"
-        />
-      )}
+  {/* Basic Info */}
+  <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-700">
+    <div><span className="font-medium">Type:</span> {item.type}</div>
+    <div><span className="font-medium">SKU:</span> {item.sku}</div>
+    <div><span className="font-medium">Unit:</span> {item.unit}</div>
+    <div><span className="font-medium">Preferred Vendor:</span> {item.preferredVendor || "—"}</div>
+  </div>
 
-      {/* Basic Info */}
-      <div className="grid md:grid-cols-2 gap-4 text-sm">
-        <div>
-          <strong>Type:</strong> {item.type}
-        </div>
-        <div>
-          <strong>SKU:</strong> {item.sku}
-        </div>
-        <div>
-          <strong>Unit:</strong> {item.unit}
-        </div>
-        <div>
-          <strong>Preferred Vendor:</strong> {item.preferredVendor || "—"}
-        </div>
-      </div>
-
-      {/* Sales Info */}
-      <div className="mt-4">
-        <h3 className="font-semibold text-lg mb-2">Sales Information</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <strong>Selling Price:</strong> ₹{item.sellingPrice || "—"}
-          </div>
-          <div>
-            <strong>Sales Account:</strong> {item.salesAccount}
-          </div>
-          <div className="md:col-span-2">
-            <strong>Description:</strong> {item.salesDescription || "—"}
-          </div>
-        </div>
-      </div>
-
-      {/* Purchase Info */}
-      <div className="mt-4">
-        <h3 className="font-semibold text-lg mb-2">Purchase Information</h3>
-        <div className="grid md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <strong>Cost Price:</strong> ₹{item.costPrice || "—"}
-          </div>
-          <div>
-            <strong>Purchase Account:</strong> {item.purchaseAccount}
-          </div>
-          <div className="md:col-span-2">
-            <strong>Description:</strong> {item.purchaseDescription || "—"}
-          </div>
-        </div>
-      </div>
-
-      {/* Inventory Tracking */}
-      {item.trackInventory && (
-        <div className="mt-4">
-          <h3 className="font-semibold text-lg mb-2">Inventory Tracking</h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <strong>Inventory Account:</strong> {item.inventoryAccount}
-            </div>
-            <div>
-              <strong>Valuation Method:</strong> {item.valuationMethod}
-            </div>
-            <div>
-              <strong>Opening Stock:</strong> {item.openingStock}
-            </div>
-            <div>
-              <strong>Opening Stock Rate:</strong> ₹{item.openingStockRate}
-            </div>
-            <div>
-              <strong>Reorder Point:</strong> {item.reorderPoint}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mt-6">
-        <button
-          onClick={() => navigate(`/inventory/items/${item._id}/edit`)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-        >
-          Edit Item
-        </button>
-        <button
-          onClick={() => navigate(`/inventory/items`)}
-          className="text-blue-600 hover:underline text-sm"
-        >
-          ← Go Back
-        </button>
+  {/* Sales Info */}
+  <div>
+    <h3 className="font-semibold text-lg text-gray-800 mb-3 border-b pb-1">Sales Information</h3>
+    <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-700">
+      <div><span className="font-medium">Selling Price:</span> ₹{item.sellingPrice || "—"}</div>
+      <div><span className="font-medium">Sales Account:</span> {item.salesAccount}</div>
+      <div className="md:col-span-2">
+        <span className="font-medium">Description:</span> {item.salesDescription || "—"}
       </div>
     </div>
+  </div>
+
+  {/* Purchase Info */}
+  <div>
+    <h3 className="font-semibold text-lg text-gray-800 mb-3 border-b pb-1">Purchase Information</h3>
+    <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-700">
+      <div><span className="font-medium">Cost Price:</span> ₹{item.costPrice || "—"}</div>
+      <div><span className="font-medium">Purchase Account:</span> {item.purchaseAccount}</div>
+      <div className="md:col-span-2">
+        <span className="font-medium">Description:</span> {item.purchaseDescription || "—"}
+      </div>
+    </div>
+  </div>
+
+  {/* Inventory Tracking */}
+  {item.trackInventory && (
+    <div>
+      <h3 className="font-semibold text-lg text-gray-800 mb-3 border-b pb-1">Inventory Tracking</h3>
+      <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-700">
+        <div><span className="font-medium">Inventory Account:</span> {item.inventoryAccount}</div>
+        <div><span className="font-medium">Valuation Method:</span> {item.valuationMethod}</div>
+        <div><span className="font-medium">Opening Stock:</span> {item.openingStock}</div>
+        <div><span className="font-medium">Opening Stock Rate:</span> ₹{item.openingStockRate}</div>
+        <div><span className="font-medium">Reorder Point:</span> {item.reorderPoint}</div>
+      </div>
+    </div>
+  )}
+
+  <div className="mt-6 flex items-center gap-4">
+  <button
+    onClick={() => navigate(`/inventory/items/${item._id}/edit`)}
+    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md text-sm font-medium shadow"
+  >
+    Update Item
+  </button>
+  <button
+    onClick={() => navigate(`/inventory/items`)}
+    className="bg-gray-200 hover:bg-gray-200 text-gray-800 px-5 py-2 rounded-md text-sm font-medium border border-gray-300 shadow-sm transition"
+  >
+    ← Go Back
+  </button>
+</div>
+
+</section>
+
   );
 };
 
