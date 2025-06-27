@@ -1,3 +1,4 @@
+import axios from "axios";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { FaRegImage } from "react-icons/fa";
@@ -103,29 +104,26 @@ const NewItemForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/items", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/items",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error("Failed to save item");
-      }
-
-      const data = await response.json();
-      console.log("Saved to backend:", data);
-
+      console.log("Saved to backend:", response.data);
       alert("Item saved successfully!");
-      navigate(-1); // Go back
+      navigate(-1); // Navigate back
     } catch (error) {
       console.error("API error:", error);
-      alert("Something went wrong. Please try again.");
+      const message =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+      alert(message);
     }
-
-    console.log("Item saved successfully!");
   };
 
   const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
