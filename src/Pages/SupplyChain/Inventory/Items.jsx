@@ -2,6 +2,7 @@ import axios from "axios";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../../utills/enum";
 
 const Items = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Items = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/items");
+        const response = await axios.get(`${baseUrl}/items`);
         console.log("Fetched items:", response.data);
         setSavedItems(response.data);
       } catch (error) {
