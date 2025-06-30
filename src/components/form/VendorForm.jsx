@@ -1,9 +1,12 @@
-import axios from "axios";
+// import axios from "axios";
 import { X } from "lucide-react";
 import { useState } from "react";
-import { FaRegImage } from "react-icons/fa";
 import { Mail, Phone, Smartphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import OtherDetails from "../purchases/vendor/OtherDetails";
+import Address from "../purchases/vendor/Address";
+import ContactPerson from "../purchases/vendor/ContactPerson";
+import BankDetails from "../purchases/vendor/BankDetails";
 
 const VendorForm = () => {
   const navigate = useNavigate();
@@ -17,6 +20,19 @@ const VendorForm = () => {
     workPhone: "",
     mobile: "",
   });
+  const [otherDetails, setOtherDetails] = useState({});
+  const [addressDetails, setAddressDetails] = useState({});
+  const [contactPersons, setContactPersons] = useState({});
+  const [bankDetails, setBankDetails] = useState([]);
+
+  const [activeTab, setActiveTab] = useState("other");
+
+  const tabs = [
+    { id: "other", label: "Other Details" },
+    { id: "address", label: "Address" },
+    { id: "contact", label: "Contact Person" },
+    { id: "bank", label: "Bank Details" },
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,23 +42,22 @@ const VendorForm = () => {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post("#", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const vendorData = {
+      ...formData,
+      otherDetails,
+      addressDetails,
+      contactPersons,
+      bankDetails,
+    };
 
-      console.log("Saved to backend:", response.data);
-      alert("Item saved successfully!");
-      navigate(-1); // Navigate back
-    } catch (error) {
-      console.error("API error:", error);
-      const message =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
-      alert(message);
-    }
+    console.log("Collected Vendor Data:", vendorData);
+
+    const savedVendors = JSON.parse(localStorage.getItem("vendorList")) || [];
+    savedVendors.push(vendorData);
+    localStorage.setItem("vendorList", JSON.stringify(savedVendors));
+
+    alert("Vendor saved successfully!");
+    navigate(-1);
   };
 
   const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
@@ -63,17 +78,6 @@ const VendorForm = () => {
             Primary Contact <span className="text-gray-400">(i)</span>
           </label>
           <div className="flex gap-3">
-            <select
-              name="salutation"
-              value={formData.salutation}
-              onChange={handleChange}
-              className="w-1/4 border border-gray-300 rounded p-2"
-            >
-              <option value="">Salutation</option>
-              <option value="Mr">Mr.</option>
-              <option value="Ms">Ms.</option>
-              <option value="Dr">Dr.</option>
-            </select>
             <input
               type="text"
               name="firstName"
@@ -87,6 +91,7 @@ const VendorForm = () => {
               name="lastName"
               placeholder="Last Name"
               value={formData.lastName}
+              F
               onChange={handleChange}
               className="w-1/3 border border-gray-300 rounded p-2"
             />
@@ -172,6 +177,39 @@ const VendorForm = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-full mx-auto p-6 bg-white rounded-xl shadow mt-10 text-sm">
+        {/* Tabs */}
+        <div className="flex border-b mb-6 space-x-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-2 font-semibold ${
+                activeTab === tab.id
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-700 hover:text-blue-600"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        {activeTab === "other" && (
+          <OtherDetails data={otherDetails} setData={setOtherDetails} />
+        )}
+        {activeTab === "address" && (
+          <Address data={addressDetails} setData={setAddressDetails} />
+        )}
+        {activeTab === "contact" && (
+          <ContactPerson data={contactPersons} setData={setContactPersons} />
+        )}
+        {activeTab === "bank" && (
+          <BankDetails data={bankDetails} setData={setBankDetails} />
+        )}
       </div>
 
       {/* Action Buttons */}
