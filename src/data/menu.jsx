@@ -46,7 +46,6 @@ import {
 import { PiCubeTransparentLight } from "react-icons/pi";
 import { HiAdjustmentsHorizontal, HiOutlineSquares2X2 } from "react-icons/hi2";
 
-
 export const topCommonMenus = [
   {
     section: "Main",
@@ -165,7 +164,7 @@ export const menuConfig = {
           to: "quality-control",
           icon: <ShieldCheckIcon className="h-5 w-5" />,
         },
-     
+
         {
           name: "Inventory",
           icon: <ArchiveBoxXMarkIcon className="h-5 w-5" />,
@@ -240,42 +239,42 @@ export const menuConfig = {
         //   ],
         // },
 
-        // {
-        //   name: "Purchases",
-        //   icon: <ShoppingBagIcon className="h-5 w-5" />,
-        //   children: [
-        //     {
-        //       name: "Vendors",
-        //       to: "/purchases/vendors",
-        //       icon: <UsersIcon className="h-4 w-4" />,
-        //     },
-        //     {
-        //       name: "Purchase Orders",
-        //       to: "/purchases/orders",
-        //       icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
-        //     },
-        //     {
-        //       name: "Purchase Receives",
-        //       to: "/purchases/receives",
-        //       icon: <TruckElectricIcon className="h-4 w-4" />,
-        //     },
-        //     {
-        //       name: "Bills",
-        //       to: "/purchases/bills",
-        //       icon: <FileTextIcon className="h-4 w-4" />,
-        //     },
-        //     {
-        //       name: "Payments Made",
-        //       to: "/purchases/payments",
-        //       icon: <BanknoteIcon className="h-4 w-4" />,
-        //     },
-        //     {
-        //       name: "Vendor Credits",
-        //       to: "/purchases/credits",
-        //       icon: <RotateCcwIcon className="h-4 w-4" />,
-        //     },
-        //   ],
-        // },
+        {
+          name: "Purchases",
+          icon: <ShoppingBagIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Vendors",
+              to: "/purchases/vendors",
+              icon: <UsersIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Purchase Orders",
+              to: "/purchases/orders",
+              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Purchase Receives",
+              to: "/purchases/receives",
+              icon: <TruckElectricIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Bills",
+              to: "/purchases/bills",
+              icon: <FileTextIcon className="h-4 w-4" />,
+            },
+            // {
+            //   name: "Payments Made",
+            //   to: "/purchases/payments",
+            //   icon: <BanknoteIcon className="h-4 w-4" />,
+            // },
+            // {
+            //   name: "Vendor Credits",
+            //   to: "/purchases/credits",
+            //   icon: <RotateCcwIcon className="h-4 w-4" />,
+            // },
+          ],
+        },
 
         {
           name: "Reporting",
