@@ -141,7 +141,7 @@ const NewItemForm = () => {
           {/* Left Section */}
           <div className="space-y-5">
             {/* Type */}
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Type <span className="text-gray-400">(?)</span>
               </label>
@@ -168,7 +168,8 @@ const NewItemForm = () => {
                   <span>Service</span>
                 </label>
               </div>
-            </div>
+            </div> 
+            */}
 
             {/* Name */}
             <div>
