@@ -66,8 +66,8 @@ import PrototypeManagement from "../Pages/DroneR&DSystem/PrototypeManagement";
 import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
 
 import NewItemForm from "./form/NewItemForm";
-import ItemDetails from "../components/inventory/ItemDetails"
-import EditItemForm from "../components/form/EditItemForm"
+import ItemDetails from "../components/inventory/ItemDetails";
+import EditItemForm from "../components/form/EditItemForm";
 import VendorForm from "./form/VendorForm";
 
 const AllRoutes = () => {
@@ -90,7 +90,7 @@ const AllRoutes = () => {
             <Route path="/user-management" element={<UserManagement />} />
             <Route path="/project-managment" element={<ProjectManagement />} />
             <Route path="/inventory" element={<Inventory />} />
-          
+
             <Route path="/reporting" element={<Reporting />} />
             <Route path="/settings" element={<Setting />} />
           </Route>
@@ -106,7 +106,10 @@ const AllRoutes = () => {
             {/* Inventory Routes */}
             <Route path="/inventory/items" element={<Items />} />
             <Route path="/inventory/items/:id" element={<ItemDetails />} />
-            <Route path="/inventory/items/:id/edit" element={<EditItemForm />} />
+            <Route
+              path="/inventory/items/:id/edit"
+              element={<EditItemForm />}
+            />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route path="/inventory/vendors/new" element={<VendorForm />} />
@@ -114,9 +117,9 @@ const AllRoutes = () => {
               path="/inventory/adjustments"
               element={<InventoryAdjustment />}
             />
-              <Route path="/quality-control" element={<QualityControl />} />
+            <Route path="/quality-control" element={<QualityControl />} />
             {/* Sales Routes */}
-            <Route path="/sales/customers" element={<Customers />} />
+            {/* <Route path="/sales/customers" element={<Customers />} />
             <Route path="/sales/orders" element={<SalesOrder />} />
             <Route path="/sales/packages" element={<Packages />} />
             <Route path="/sales/shipments" element={<Shipments />} />
@@ -130,10 +133,10 @@ const AllRoutes = () => {
               element={<PaymentReceived />}
             />
             <Route path="/sales/returns" element={<SalesReturn />} />
-            <Route path="/sales/credit-notes" element={<CreditNotes />} />
+            <Route path="/sales/credit-notes" element={<CreditNotes />} /> */}
 
             {/* Purchases Routes */}
-            <Route path="/purchases/vendors" element={<Vendors />} />
+            {/* <Route path="/purchases/vendors" element={<Vendors />} />
             <Route path="/purchases/orders" element={<PurchaseOrders />} />
             <Route path="/purchases/receives" element={<PurchaseReceives />} />
             <Route path="/purchases/bills" element={<Bills />} />
@@ -142,7 +145,7 @@ const AllRoutes = () => {
             <Route
               path="/reporting-supply-chain"
               element={<ReportingSupplyChain />}
-            />
+            /> */}
 
             {/* Project Detail Nested Pages */}
             <Route path="/projects/:projectId" element={<ProjectDetail />}>
