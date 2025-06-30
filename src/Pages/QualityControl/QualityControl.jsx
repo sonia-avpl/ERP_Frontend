@@ -255,7 +255,7 @@ const QualityControl = () => {
           </div>
           <div>
             <label className="block mb-1 font-semibold text-gray-700">
-              Discrepancy Type <span className="text-red-700">*</span>
+              Responsible Party <span className="text-red-700">*</span>
             </label>
             <select
               name="responsibleParty"
