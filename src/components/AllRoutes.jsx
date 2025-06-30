@@ -136,7 +136,7 @@ const AllRoutes = () => {
             <Route path="/sales/credit-notes" element={<CreditNotes />} /> */}
 
             {/* Purchases Routes */}
-            {/* <Route path="/purchases/vendors" element={<Vendors />} />
+            <Route path="/purchases/vendors" element={<Vendors />} />
             <Route path="/purchases/orders" element={<PurchaseOrders />} />
             <Route path="/purchases/receives" element={<PurchaseReceives />} />
             <Route path="/purchases/bills" element={<Bills />} />
@@ -145,7 +145,7 @@ const AllRoutes = () => {
             <Route
               path="/reporting-supply-chain"
               element={<ReportingSupplyChain />}
-            /> */}
+            />
 
             {/* Project Detail Nested Pages */}
             <Route path="/projects/:projectId" element={<ProjectDetail />}>
