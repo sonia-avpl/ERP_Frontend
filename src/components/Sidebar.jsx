@@ -85,7 +85,7 @@ const Sidebar = ({ userRole }) => {
                       {section.items.map((item, itemIdx) => {
                         const isInventory = item.name === "Inventory";
                         // const isSales = item.name === "Sales";
-                        // const isPurchases = item.name === "Purchases";
+                        const isPurchases = item.name === "Purchases";
 
                         const isActive = location.pathname === item.to;
 
@@ -194,59 +194,59 @@ const Sidebar = ({ userRole }) => {
                         //   );
                         // }
 
-                        // if (isPurchases) {
-                        //   return (
-                        //     <div key={itemIdx} className="w-full">
-                        //       <button
-                        //         onClick={() =>
-                        //           setOpenPurchasesDropdown(
-                        //             !openPurchasesDropdown
-                        //           )
-                        //         }
-                        //         className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                        //           location.pathname.startsWith("/purchases")
-                        //             ? "bg-gray-800 text-white"
-                        //             : "hover:bg-gray-800 hover:text-white"
-                        //         }`}
-                        //       >
-                        //         <div className="flex items-center gap-2">
-                        //           {item.icon}
-                        //           {isSidebarExpanded && (
-                        //             <span>{item.name}</span>
-                        //           )}
-                        //         </div>
-                        //         {isSidebarExpanded && (
-                        //           <span>
-                        //             {openPurchasesDropdown ? (
-                        //               <FaSortUp />
-                        //             ) : (
-                        //               <FaCaretDown />
-                        //             )}
-                        //           </span>
-                        //         )}
-                        //       </button>
+                        if (isPurchases) {
+                          return (
+                            <div key={itemIdx} className="w-full">
+                              <button
+                                onClick={() =>
+                                  setOpenPurchasesDropdown(
+                                    !openPurchasesDropdown
+                                  )
+                                }
+                                className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
+                                  location.pathname.startsWith("/purchases")
+                                    ? "bg-gray-800 text-white"
+                                    : "hover:bg-gray-800 hover:text-white"
+                                }`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  {item.icon}
+                                  {isSidebarExpanded && (
+                                    <span>{item.name}</span>
+                                  )}
+                                </div>
+                                {isSidebarExpanded && (
+                                  <span>
+                                    {openPurchasesDropdown ? (
+                                      <FaSortUp />
+                                    ) : (
+                                      <FaCaretDown />
+                                    )}
+                                  </span>
+                                )}
+                              </button>
 
-                        //       {openPurchasesDropdown && isSidebarExpanded && (
-                        //         <div className="ml-8 mt-1 space-y-1 text-sm">
-                        //           {item.children.map((child, idx) => (
-                        //             <button
-                        //               key={idx}
-                        //               onClick={() => navigate(child.to)}
-                        //               className={`flex items-center gap-2 p-2 rounded w-full ${
-                        //                 location.pathname === child.to
-                        //                   ? "bg-gray-700 text-white"
-                        //                   : "hover:bg-gray-700 hover:text-white"
-                        //               }`}
-                        //             >
-                        //               {child.icon}
-                        //               <span>{child.name}</span>
-                        //             </button>
-                        //           ))}
-                        //         </div>
-                        //       )}
-                        //     </div>
-                        //   );
-                        // }
+                              {openPurchasesDropdown && isSidebarExpanded && (
+                                <div className="ml-8 mt-1 space-y-1 text-sm">
+                                  {item.children.map((child, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => navigate(child.to)}
+                                      className={`flex items-center gap-2 p-2 rounded w-full ${
+                                        location.pathname === child.to
+                                          ? "bg-gray-700 text-white"
+                                          : "hover:bg-gray-700 hover:text-white"
+                                      }`}
+                                    >
+                                      {child.icon}
+                                      <span>{child.name}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
 
                         // Default item rendering
                         return (
