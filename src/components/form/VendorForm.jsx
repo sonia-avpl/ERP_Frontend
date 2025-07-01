@@ -77,7 +77,7 @@ const VendorForm = ({ onClose }) => {
             {/* Primary Contact */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Primary Contact <span className="text-gray-400">(i)</span>
+                Primary Contact 
               </label>
               <div className="flex gap-3">
                 <input
@@ -115,8 +115,8 @@ const VendorForm = ({ onClose }) => {
 
             {/* Display Name */}
             <div>
-              <label className="block text-sm font-medium text-red-600 mb-1">
-                Vendor Display Name* <span className="text-gray-400">(i)</span>
+              <label className="block text-sm font-medium  mb-1">
+                Vendor Display Name
               </label>
               <select
                 name="displayName"
@@ -133,7 +133,7 @@ const VendorForm = ({ onClose }) => {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Email <span className="text-gray-400">(i)</span>
+                Vendor Email 
               </label>
               <div className="flex items-center border border-gray-300 rounded p-2">
                 <Mail className="w-4 h-4 text-gray-400 mr-2" />
@@ -151,7 +151,7 @@ const VendorForm = ({ onClose }) => {
             {/* Phones */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Phone <span className="text-gray-400">(i)</span>
+                Vendor Phone 
               </label>
               <div className="flex gap-4">
                 <div className="flex items-center border border-gray-300 rounded p-2 w-1/2">
