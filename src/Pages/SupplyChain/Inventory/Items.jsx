@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 const Items = () => {
   const navigate = useNavigate();
   const [savedItems, setSavedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -45,9 +47,19 @@ const Items = () => {
           <table className="min-w-full border-collapse">
             <thead className="bg-gray-100 text-left text-sm font-medium text-gray-500">
               <tr>
-                <th className="px-3 py-2">
-                  <input type="checkbox" />
-                </th>
+                <input
+                  type="checkbox"
+                  checked={selectAll}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+                    setSelectAll(isChecked);
+                    setSelectedItems(
+                      isChecked ? savedItems.map((item) => item._id) : []
+                    );
+                    
+                  }}
+                  className="accent-blue-600 w-4 ml-[12px] mt-[8px] h-4 rounded cursor-pointer"
+                />
                 <th className="px-3 py-2">NAME</th>
                 <th className="px-3 py-2">SKU</th>
                 <th className="px-3 py-2">TYPE</th>
@@ -57,9 +69,26 @@ const Items = () => {
             </thead>
             <tbody className="text-sm divide-y divide-gray-200">
               {savedItems.map((item, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
+                <tr
+                  key={idx}
+                  className={`hover:bg-gray-50 ${
+                    selectedItems.includes(item._id) ? "bg-blue-50" : ""
+                  }`}
+                >
                   <td className="px-3 py-2">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item._id)}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        setSelectedItems((prev) =>
+                          isChecked
+                            ? [...prev, item._id]
+                            : prev.filter((id) => id !== item._id)
+                        );
+                      }}
+                      className="accent-blue-600 w-4 h-4 rounded cursor-pointer"
+                    />
                   </td>
                   <td className="px-3 py-2 flex items-center gap-2">
                     {item.images?.[0] ? (
@@ -74,7 +103,11 @@ const Items = () => {
                       </div>
                     )}
                     <span className="text-indigo-600 hover:underline whitespace-nowrap">
-                      {item.name || "Untitled Item"}
+                      <button
+                        onClick={() => navigate(`/inventory/items/${item._id}`)}
+                      >
+                        {item.name || "Untitled Item"}
+                      </button>
                     </span>
                   </td>
                   <td className="px-3 py-2">{item.sku}</td>

@@ -187,57 +187,57 @@ export const menuConfig = {
           ],
         },
 
-        {
-          name: "Sales",
-          icon: <ShoppingCartIcon className="h-5 w-5" />,
-          children: [
-            {
-              name: "Customers",
-              to: "/sales/customers",
-              icon: <UsersIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Sales Orders",
-              to: "/sales/orders",
-              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Packages",
-              to: "/sales/packages",
-              icon: <PackageIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Shipments",
-              to: "/sales/shipments",
-              icon: <TruckIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Delivery Challans",
-              to: "/sales/delivery-challans",
-              icon: <DocumentIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Invoices",
-              to: "/sales/invoices",
-              icon: <DocumentIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Payments Received",
-              to: "/sales/payments-received",
-              icon: <CreditCardIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Sales Returns",
-              to: "/sales/returns",
-              icon: <ReceiptRefundIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Credit Notes",
-              to: "/sales/credit-notes",
-              icon: <RefreshCcwIcon className="h-4 w-4" />,
-            },
-          ],
-        },
+        // {
+        //   name: "Sales",
+        //   icon: <ShoppingCartIcon className="h-5 w-5" />,
+        //   children: [
+        //     {
+        //       name: "Customers",
+        //       to: "/sales/customers",
+        //       icon: <UsersIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Sales Orders",
+        //       to: "/sales/orders",
+        //       icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Packages",
+        //       to: "/sales/packages",
+        //       icon: <PackageIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Shipments",
+        //       to: "/sales/shipments",
+        //       icon: <TruckIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Delivery Challans",
+        //       to: "/sales/delivery-challans",
+        //       icon: <DocumentIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Invoices",
+        //       to: "/sales/invoices",
+        //       icon: <DocumentIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Payments Received",
+        //       to: "/sales/payments-received",
+        //       icon: <CreditCardIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Sales Returns",
+        //       to: "/sales/returns",
+        //       icon: <ReceiptRefundIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Credit Notes",
+        //       to: "/sales/credit-notes",
+        //       icon: <RefreshCcwIcon className="h-4 w-4" />,
+        //     },
+        //   ],
+        // },
 
         {
           name: "Purchases",
@@ -263,16 +263,16 @@ export const menuConfig = {
               to: "/purchases/bills",
               icon: <FileTextIcon className="h-4 w-4" />,
             },
-            {
-              name: "Payments Made",
-              to: "/purchases/payments",
-              icon: <BanknoteIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Vendor Credits",
-              to: "/purchases/credits",
-              icon: <RotateCcwIcon className="h-4 w-4" />,
-            },
+            // {
+            //   name: "Payments Made",
+            //   to: "/purchases/payments",
+            //   icon: <BanknoteIcon className="h-4 w-4" />,
+            // },
+            // {
+            //   name: "Vendor Credits",
+            //   to: "/purchases/credits",
+            //   icon: <RotateCcwIcon className="h-4 w-4" />,
+            // },
           ],
         },
 

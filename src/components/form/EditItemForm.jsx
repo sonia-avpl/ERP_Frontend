@@ -1,11 +1,22 @@
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { X } from "lucide-react";
-import { useRef, useState } from "react";
 import { FaRegImage } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
-const NewItemForm = () => {
-  const itemFormData = {
+/**
+ * EditItemForm – full‑screen form to edit an existing inventory item.
+ * Fetches the item by :id, pre‑fills all fields, allows local image preview,
+ * and updates via PUT /api/items/:id. On success, redirects back to the
+ * item details page.
+ */
+export default function EditItemForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  //  state
+  const [formData, setFormData] = useState({
     type: "Goods",
     name: "",
     sku: "",
@@ -24,17 +35,33 @@ const NewItemForm = () => {
     openingStock: "",
     openingStockRate: "",
     reorderPoint: "",
-  };
-
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(itemFormData);
-
+  });
+  const [salesEnabled, setSalesEnabled] = useState(false);
+  const [purchaseEnabled, setPurchaseEnabled] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const [salesEnabled, setSalesEnabled] = useState(true);
-  const [purchaseEnabled, setPurchaseEnabled] = useState(true);
-  const inputRef = useRef(null);
+  // fetch item
+  useEffect(() => {
+    const fetchItem = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://localhost:5000/api/items/${id}`
+        );
 
+        data.images = data.images || [];
+        setFormData(data);
+        setSalesEnabled(!!data.sellingPrice);
+        setPurchaseEnabled(!!data.costPrice);
+      } catch (err) {
+        console.error("Failed to load item", err);
+        navigate("/inventory/items");
+      }
+    };
+    fetchItem();
+  }, [id, navigate]);
+
+  //  handlers
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -42,32 +69,11 @@ const NewItemForm = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const handleFiles = (files) => {
-    const selected = Array.from(files);
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...selected].slice(0, 15),
-    }));
-  };
 
-  const handleImageUpload = async (e) => {
-    const files = Array.from(e.target.files);
-
-    const base64Images = await Promise.all(
-      files.map((file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (err) => reject(err);
-          reader.readAsDataURL(file);
-        });
-      })
-    );
-
-    setFormData((prev) => ({
-      ...prev,
-      images: base64Images,
-    }));
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files || []);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setFormData((prev) => ({ ...prev, images: [...prev.images, ...previews] }));
   };
 
   //   handle remove image
@@ -78,70 +84,53 @@ const NewItemForm = () => {
     }));
   };
 
+  /* Drag events */
   const handleDragOver = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     setDragActive(true);
   };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-  };
-
+  const handleDragLeave = () => setDragActive(false);
   const handleDrop = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFiles(e.dataTransfer.files);
-      e.dataTransfer.clearData();
-    }
+    const files = Array.from(e.dataTransfer.files || []);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setFormData((prev) => ({ ...prev, images: [...prev.images, ...previews] }));
   };
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-
+  /** Save (PUT) */
+  const handleSave = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/items",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("Saved to backend:", response.data);
-      alert("Item saved successfully!");
-      navigate(-1); // Navigate back
-    } catch (error) {
-      console.error("API error:", error);
-      const message =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
-      alert(message);
+      setSaving(true);
+      await axios.put(`http://localhost:5000/api/items/${id}`, formData);
+      navigate(`/inventory/items/${id}`);
+    } catch (err) {
+      console.error("Update failed", err);
+    } finally {
+      setSaving(false);
     }
   };
 
-  const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
+  const inputClass =
+    "w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   return (
     <section className="w-full bg-white p-6 md:p-8 lg:p-10 mx-auto max-w-6xl rounded-lg shadow-sm">
+      {/* header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">New Item</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Edit Item</h2>
         <button onClick={() => navigate(-1)}>
           <X className="w-6 h-6 text-gray-500 hover:text-gray-700 transition duration-150" />
         </button>
       </div>
+
+      {/* main grid */}
       <div className="p-6 bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          {/* Left Section */}
+          {/*  Left section */}
           <div className="space-y-5">
             {/* Type */}
-            {/* <div>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Type <span className="text-gray-400">(?)</span>
               </label>
@@ -153,7 +142,6 @@ const NewItemForm = () => {
                     value="Goods"
                     checked={formData.type === "Goods"}
                     onChange={handleChange}
-                    className={inputClass}
                   />
                   <span>Goods</span>
                 </label>
@@ -168,8 +156,7 @@ const NewItemForm = () => {
                   <span>Service</span>
                 </label>
               </div>
-            </div> 
-            */}
+            </div>
 
             {/* Name */}
             <div>
@@ -219,7 +206,7 @@ const NewItemForm = () => {
             </div>
           </div>
 
-          {/* Right Section – Image Upload */}
+          {/*  Right section – image upload */}
           <div
             className={`h-full flex flex-col items-center justify-center border-2 ${
               dragActive
@@ -233,12 +220,12 @@ const NewItemForm = () => {
             <FaRegImage className="text-4xl text-gray-400" />
             <p className="text-sm text-gray-500">
               Drag image(s) here or{" "}
-              <p
+              <span
                 className="text-blue-600 underline cursor-pointer"
-                onClick={() => inputRef.current.click()}
+                onClick={() => inputRef.current?.click()}
               >
                 Browse images
-              </p>
+              </span>
               <input
                 ref={inputRef}
                 type="file"
@@ -249,7 +236,6 @@ const NewItemForm = () => {
               />
             </p>
 
-            {/* Preview */}
             {formData.images.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
                 {formData.images.map((img, index) => (
@@ -277,9 +263,9 @@ const NewItemForm = () => {
         </div>
       </div>
 
-      {/* Sales & Purchase Section */}
+      {/* Sales & Purchase */}
       <div className="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200">
-        {/* Sales Information */}
+        {/* Sales */}
         <div>
           <div className="flex items-center space-x-2 mb-2">
             <input
@@ -295,7 +281,6 @@ const NewItemForm = () => {
               Sales Information
             </label>
           </div>
-
           {salesEnabled && (
             <>
               <div className="mb-3">
@@ -346,23 +331,22 @@ const NewItemForm = () => {
           )}
         </div>
 
-        {/* Purchase Information */}
+        {/* Purchase */}
         <div>
-          <div className="flex items-center space-x-2 mb-2">
+          <div className="flex items-center space-x-2 mb-2 mt-6 md:mt-0">
             <input
               type="checkbox"
-              id="purchase"
+              id="purchaseInfo"
               checked={purchaseEnabled}
               onChange={() => setPurchaseEnabled(!purchaseEnabled)}
             />
             <label
-              htmlFor="purchase"
+              htmlFor="purchaseInfo"
               className="text-sm font-medium text-gray-700"
             >
               Purchase Information
             </label>
           </div>
-
           {purchaseEnabled && (
             <>
               <div className="mb-3">
@@ -430,7 +414,7 @@ const NewItemForm = () => {
         </div>
       </div>
 
-      {/* Inventory Tracking */}
+      {/*  Inventory tracking */}
       <div className="bg-gray-50 px-6 py-6 rounded-lg mt-6 shadow-sm border border-gray-200">
         <div className="flex items-center space-x-2">
           <input
@@ -452,10 +436,8 @@ const NewItemForm = () => {
           </span>
         </div>
 
-        {/* Inventory Details: Only if sales & purchase are enabled */}
         {formData.trackInventory && salesEnabled && purchaseEnabled && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            {/* Inventory Account */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Inventory Account <span className="text-red-600">*</span>
@@ -472,7 +454,6 @@ const NewItemForm = () => {
               </select>
             </div>
 
-            {/* Inventory Valuation Method */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Inventory Valuation Method{" "}
@@ -491,7 +472,6 @@ const NewItemForm = () => {
               </select>
             </div>
 
-            {/* Opening Stock */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Opening Stock
@@ -505,7 +485,6 @@ const NewItemForm = () => {
               />
             </div>
 
-            {/* Opening Stock Rate per Unit */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Opening Stock Rate per Unit
@@ -519,7 +498,6 @@ const NewItemForm = () => {
               />
             </div>
 
-            {/* Reorder Point */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Reorder Point
@@ -536,7 +514,7 @@ const NewItemForm = () => {
         )}
       </div>
 
-      {/* Action Buttons */}
+      {/*  Action buttons */}
       <div className="flex justify-end gap-4 mt-8 px-6 pb-6">
         <button
           onClick={() => navigate(-1)}
@@ -546,13 +524,12 @@ const NewItemForm = () => {
         </button>
         <button
           onClick={handleSave}
-          className="px-5 py-2.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm"
+          disabled={saving}
+          className="px-5 py-2.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm disabled:opacity-50"
         >
-          Save
+          {saving ? "Saving…" : "Save"}
         </button>
       </div>
     </section>
   );
-};
-
-export default NewItemForm;
+}

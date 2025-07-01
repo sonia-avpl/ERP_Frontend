@@ -255,7 +255,7 @@ const QualityControl = () => {
           </div>
           <div>
             <label className="block mb-1 font-semibold text-gray-700">
-              Discrepancy Type <span className="text-red-700">*</span>
+              Responsible Party <span className="text-red-700">*</span>
             </label>
             <select
               name="responsibleParty"
@@ -290,10 +290,10 @@ const QualityControl = () => {
         <button className="flex items-center gap-2 border px-4 py-2 rounded-lg border-gray-400 hover:bg-gray-400 hover:text-white">
           Cancel
         </button>
-        <button className="flex items-center gap-2 text-white px-4 py-2  bg-orange-500 hover:bg-orange-700 rounded-lg">
+        {/* <button className="flex items-center gap-2 text-white px-4 py-2  bg-orange-500 hover:bg-orange-700 rounded-lg">
           Create Discrepancy Note
-        </button>
-        <button className="flex items-center gap-2 text-white px-4 py-2  bg-green-600 hover:bg-green-700 rounded-lg">
+        </button> */}
+        <button className="flex items-center gap-2 text-white px-4 py-2  bg-orange-500 hover:bg-orange-700 rounded-lg">
           <FaPaperPlane /> Complete QC
         </button>
       </div>
