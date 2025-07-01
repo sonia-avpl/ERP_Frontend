@@ -23,7 +23,7 @@ const VendorForm = ({ onClose }) => {
 
   const [otherDetails, setOtherDetails] = useState({});
   const [addressDetails, setAddressDetails] = useState({});
-  const [contactPersons, setContactPersons] = useState({});
+  const [contactPersons, setContactPersons] = useState([]);
   const [bankDetails, setBankDetails] = useState([]);
 
   const [activeTab, setActiveTab] = useState("other");
@@ -51,6 +51,7 @@ const VendorForm = ({ onClose }) => {
       bankDetails,
     };
 
+    console.log("Vendor Data:", vendorData);
     const savedVendors = JSON.parse(localStorage.getItem("vendorList")) || [];
     savedVendors.push(vendorData);
     localStorage.setItem("vendorList", JSON.stringify(savedVendors));
@@ -77,7 +78,7 @@ const VendorForm = ({ onClose }) => {
             {/* Primary Contact */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Primary Contact 
+                Primary Contact
               </label>
               <div className="flex gap-3">
                 <input
@@ -133,7 +134,7 @@ const VendorForm = ({ onClose }) => {
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Email 
+                Vendor Email
               </label>
               <div className="flex items-center border border-gray-300 rounded p-2">
                 <Mail className="w-4 h-4 text-gray-400 mr-2" />
@@ -151,7 +152,7 @@ const VendorForm = ({ onClose }) => {
             {/* Phones */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Phone 
+                Vendor Phone
               </label>
               <div className="flex gap-4">
                 <div className="flex items-center border border-gray-300 rounded p-2 w-1/2">
@@ -200,28 +201,32 @@ const VendorForm = ({ onClose }) => {
             </div>
 
             {/* Conditional Tab Content */}
-            {activeTab === "other" && (
+            <div style={{ display: activeTab === "other" ? "block" : "none" }}>
               <OtherDetails data={otherDetails} setData={setOtherDetails} />
-            )}
-            {activeTab === "address" && (
+            </div>
+            <div
+              style={{ display: activeTab === "address" ? "block" : "none" }}
+            >
               <Address data={addressDetails} setData={setAddressDetails} />
-            )}
-            {activeTab === "contact" && (
+            </div>
+            <div
+              style={{ display: activeTab === "contact" ? "block" : "none" }}
+            >
               <ContactPerson
                 data={contactPersons}
                 setData={setContactPersons}
               />
-            )}
-            {activeTab === "bank" && (
+            </div>
+            <div style={{ display: activeTab === "bank" ? "block" : "none" }}>
               <BankDetails data={bankDetails} setData={setBankDetails} />
-            )}
+            </div>
           </div>
         </div>
 
-        <div className="md:col-span-2 m-4 text-center">
+        <div className="md:col-span-2 m-4 text-end">
           <button
             onClick={handleSave}
-            className="w-full px-6 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors duration-300 disabled:bg-blue-300 disabled:cursor-not-allowed"
+            className="px-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-colors duration-300 disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
             Add Vendor
           </button>
