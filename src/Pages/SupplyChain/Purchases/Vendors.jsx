@@ -1,10 +1,12 @@
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import VendorForm from "../../../components/form/VendorForm";
+// import { useNavigate } from "react-router-dom";
 
 const Vendors = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [vendors, setVendors] = useState([]);
+  const [showVendorForm, setShowVendorForm] = useState();
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("vendorList")) || [];
@@ -15,12 +17,15 @@ const Vendors = () => {
       <div className="flex items-center justify-between p-4 border-b">
         <div className="text-lg font-semibold">Vendors</div>
         <button
-          onClick={() => navigate("/inventory/vendors/new")}
+          onClick={() => setShowVendorForm(true)}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
         >
           <Plus className="w-4 h-4" />
           New
         </button>
+        {showVendorForm && (
+          <VendorForm onClose={() => setShowVendorForm(false)} />
+        )}
       </div>
 
       {/* Table or empty state */}
@@ -74,5 +79,3 @@ const Vendors = () => {
 };
 
 export default Vendors;
-
-
