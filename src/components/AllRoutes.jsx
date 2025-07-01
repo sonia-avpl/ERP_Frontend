@@ -59,6 +59,10 @@ import Bills from "../Pages/SupplyChain/Purchases/Bills";
 import PaymentsMade from "../Pages/SupplyChain/Purchases/PaymentsMade";
 import VendorCredits from "../Pages/SupplyChain/Purchases/VendorCredits";
 
+import NewItemForm from "./form/NewItemForm";
+import ItemDetails from "../components/inventory/ItemDetails";
+
+
 // R&D Pages
 import TestingValidation from "../Pages/DroneR&DSystem/TestingValidation";
 import ComplianceDocs from "../Pages/DroneR&DSystem/ComplianceDocs";
@@ -82,10 +86,61 @@ const AllRoutes = () => {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route element={<RoleProtectedRoute allowedRoles={["Admin"]} />}>
-            <Route path="/user-management" element={<UserManagement />} />
-            <Route path="/project-managment" element={<ProjectManagement />} />
+           
+
+
+          <Route path="/project-managment" element={<ProjectManagement />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="sku-management" element={<SkuManagement />} />
+          <Route path="procurement" element={<Procurement />} />
+          <Route path="grn-processing" element={<GRNProcessing />} />
+          <Route path="/settings" element={<Setting />} />
+
+          {/* Inventory Routes */}
+          <Route path="/inventory/items" element={<Items />} />
+          <Route path="/inventory/items/new" element={<NewItemForm />} />
+          <Route path="/inventory/items/:id" element={<ItemDetails />} />
+          <Route path="/inventory/item-groups" element={<ItemGroups />} />
+          <Route
+            path="/inventory/adjustments"
+            element={<InventoryAdjustment />}
+          />
+
+          {/* Sales Routes */}
+          <Route path="/sales/customers" element={<Customers />} />
+          <Route path="/sales/orders" element={<SalesOrder />} />
+          <Route path="/sales/packages" element={<Packages />} />
+          <Route path="/sales/shipments" element={<Shipments />} />
+          <Route
+            path="/sales/delivery-challans"
+            element={<DeliveryChallans />}
+          />
+          <Route path="/sales/invoices" element={<Invoices />} />
+          <Route
+            path="/sales/payments-received"
+            element={<PaymentReceived />}
+          />
+          <Route path="/sales/returns" element={<SalesReturn />} />
+          <Route path="/sales/credit-notes" element={<CreditNotes />} />
+
+          {/* Purchases routes */}
+          <Route path="/purchases/vendors" element={<Vendors />} />
+          <Route path="/purchases/orders" element={<PurchaseOrders />} />
+          <Route path="/purchases/receives" element={<PurchaseReceives />} />
+          <Route path="/purchases/bills" element={<Bills />} />
+          <Route path="/purchases/payments" element={<PaymentsMade />} />
+          <Route path="/purchases/credits" element={<VendorCredits />} />
+
+
+          <Route path="/quality-control" element={<QualityControl />} />
+          <Route path="/reporting" element={<Reporting />} />
+          <Route
+            path="/reporting-supply-chain"
+            element={<ReportingSupplyChain />}
+          />
 
             <Route path="/inventory" element={<Inventory />} />
+
 
 
             <Route path="/reporting" element={<Reporting />} />
