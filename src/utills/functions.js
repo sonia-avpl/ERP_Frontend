@@ -52,3 +52,51 @@ export const groupPaymentsByMonth = (feeTransaction) => {
 
   return grouped;
 };
+
+export const getFeeDetails = (institute, trade, type, category) => {
+  return feeMatrix.find(
+    (item) =>
+      item.institute.toLowerCase() === institute.toLowerCase() &&
+      item.trade.toLowerCase() === trade.toLowerCase() &&
+      item.type.toLowerCase() === type.toLowerCase() &&
+      item.category.toLowerCase() === category.toLowerCase()
+  );
+};
+
+export const handleDownload = (selectedStudents) => {
+  if (selectedStudents.length === 0) {
+    alert("No students selected for download.");
+    return;
+  }
+
+  const csvHeader = [
+    "Registration No",
+    "Name",
+    "Fee Status",
+    "Total Fees",
+    "Paid Amount",
+    "Bank Submitted",
+  ];
+
+  const csvRows = selectedStudents.map((s) => [
+    s.registrationNo,
+    s.name,
+    s.feeStatus ? "Submitted" : "Pending",
+    s.totalFees,
+    s.totalPaid,
+    s.bankSubmitted ? "Yes" : "No",
+  ]);
+
+  const csvContent = [csvHeader, ...csvRows]
+    .map((row) => row.map((val) => `"${val}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "selected_students.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+};

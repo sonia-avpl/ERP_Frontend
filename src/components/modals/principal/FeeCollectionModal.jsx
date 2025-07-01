@@ -2,13 +2,12 @@ import { useState } from "react";
 import { usePost } from "../../../hooks/usePost";
 import { useGet } from "../../../hooks/useGet";
 
-const FeeCollectionModal = ({ isOpen, onClose, student }) => {
+const FeeCollectionModal = ({ isOpen, onClose, student, refetch,data }) => {
   const [payingAmount, setPayingAmount] = useState("");
   const { postData, loading } = usePost();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const { data } = useGet(`fees/getSingleFeeDetails/${student?.studentId}`);
-
+ 
 
   const handleConfirmPayment = async () => {
     const amount = parseFloat(payingAmount);
@@ -31,19 +30,15 @@ const FeeCollectionModal = ({ isOpen, onClose, student }) => {
       bankSubmitted: false,
     };
 
-    try {
-      const res = await postData("fees/addFee", payload);
-      console.log("Fee added:", res);
-      onClose();
-    } catch (err) {
-      console.error("Payment error:", err);
-    }
+    const res = await postData("fees/addFee", payload);
+    refetch();
+    console.log("Fee added:", res);
+    onClose();
   };
 
   if (!isOpen || !student) return null;
 
-  const due = data?.[0]?.dueAmt ?? student.totalFees;
-    console.log(data)
+
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-70 z-50 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
       <div className="relative bg-white rounded-xl p-7 w-full max-w-sm shadow-xl border border-gray-100 transform scale-95 animate-scale-up-bounce">
@@ -69,7 +64,7 @@ const FeeCollectionModal = ({ isOpen, onClose, student }) => {
           </p>
           <p className="text-sm text-teal-700 mt-2">{student.email}</p>
           <p className="text-sm text-teal-700 mt-1">
-            Due: ₹{due}
+            Due: ₹{student.dueAmount}
           </p>
         </div>
 
@@ -104,8 +99,8 @@ const FeeCollectionModal = ({ isOpen, onClose, student }) => {
             <button
               type="submit"
               onClick={handleConfirmPayment}
-              className="px-6 py-2.5 bg-gradient-to-br from-teal-500 to-emerald-600 text-white font-semibold rounded-lg shadow-md hover:scale-105"
-              disabled={loading}
+              className="px-6 py-2.5 bg-gradient-to-br from-teal-500 to-emerald-600 text-white font-semibold rounded-lg shadow-md hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading || student?.dueAmount <= 0}
             >
               {loading ? "Processing..." : "Confirm Payment"}
             </button>

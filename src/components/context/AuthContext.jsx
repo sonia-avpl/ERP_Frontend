@@ -21,40 +21,38 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchUserData = async () => {
-    const token = JSON.parse(localStorage.getItem("token"));
+  // const fetchUserData = async () => {
+  //   const token = JSON.parse(localStorage.getItem("token"));
 
-    if (!token) {
-      console.warn("No token found, skipping user fetch.");
-      setUser(null);
-      setLoading(false);
-      return;
-    }
+  //   if (!token) {
+  //     console.warn("No token found, skipping user fetch.");
+  //     setUser(null);
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.get(`${baseUrl}/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // ✅ CORRECT
-        },
-      });
+  //   try {
+  //     const response = await axios.get(`${baseUrl}/auth/me`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`, // ✅ CORRECT
+  //       },
+  //     });
 
-      if (response?.data) {
-        setUser(response.data);
-        localStorage.setItem("user", JSON.stringify(response.data));
-        setError(null);
-      } else {
-        throw new Error("Invalid response");
-      }
-    } catch (err) {
-      console.error("Fetch user failed:", err.response?.data || err.message);
-      setError("Session expired or invalid.");
-      setUser(null); // clear user on failure
-      // localStorage.removeItem("user");
-      // localStorage.removeItem("token");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     if (response?.data) {
+  //       setUser(response.data);
+  //       localStorage.setItem("user", JSON.stringify(response.data));
+  //       setError(null);
+  //     } else {
+  //       throw new Error("Invalid response");
+  //     }
+  //   } catch (err) {
+  //     console.error("Fetch user failed:", err.response?.data || err.message);
+  //     setError("Session expired or invalid.");
+  //     setUser(null);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const logout = () => {
     setUser(null);
     setError(null);
@@ -62,12 +60,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
   useEffect(() => {
-    fetchUserData();
+    // fetchUserData();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, error, fetchUserData, logout }}
+      value={{ user, loading, error, logout }}
     >
       {children}
     </AuthContext.Provider>
