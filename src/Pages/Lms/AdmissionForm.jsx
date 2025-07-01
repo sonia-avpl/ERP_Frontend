@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Decrations from "../../components/lms/Decrations";
 import OtherInformation from "../../components/lms/OtherInformation";
 import Educational from "../../components/lms/Educational";
@@ -7,8 +7,9 @@ import Courses from "../../components/lms/Courses";
 import { getTodayDate } from "../../utills/functions";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePost } from "../../hooks/usePost";
-import { FileModules } from "../../utills/enum";
+import { baseUrl, FileModules } from "../../utills/enum";
 import { itiLocations, polytechnicLocations } from "../../utills/helper";
+import ApiService from "../../services/axiosInstance";
 
 const AdmissionForm = () => {
   const { postData, loading } = usePostFile();
@@ -20,7 +21,8 @@ const AdmissionForm = () => {
     applicationReceivedOn: getTodayDate(),
     registrationNo: "",
     totalFees: "",
-    courseName: [],
+    courseName: "",
+    tuitionFeePerMonth: "",
     name: "",
     fatherName: "",
     motherName: "",
@@ -88,6 +90,41 @@ const AdmissionForm = () => {
   const [candidateSignaturePreview, setCandidateSignaturePreview] =
     useState(null);
   const [parentSignaturePreview, setParentSignaturePreview] = useState(null);
+  useEffect(() => {
+    const fetchCourseFeeDetails = async () => {
+      const selectedCourse = formData.courseName;
+      const selectedCategory = formData.category;
+
+      if (!selectedCourse || !selectedCategory) return;
+
+      try {
+        const res = await ApiService.get(
+          `admission/fee-details?category=${selectedCategory}&courseName=${selectedCourse}`
+        );
+        const { totalFee, cautionFee, courseDuration, tuitionFeePerMonth } =
+          res.data;
+        console.log("res", res.data);
+        setFormData((prev) => ({
+          ...prev,
+          totalFees: totalFee || "",
+          cautionFee: cautionFee || "",
+          courseDuration: courseDuration || "",
+          tuitionFeePerMonth: tuitionFeePerMonth || "",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch course fee details:", error);
+        setFormData((prev) => ({
+          ...prev,
+          totalFees: "",
+          cautionFee: "",
+          courseDuration: "",
+          tuitionFeePerMonth: "",
+        }));
+      }
+    };
+
+    fetchCourseFeeDetails();
+  }, [formData.courseName, formData.category]);
 
   const handleSignatureChange = (e, declarationType) => {
     const file = e.target.files[0];
@@ -151,21 +188,17 @@ const AdmissionForm = () => {
   };
 
   const handleCourseToggle = (course) => {
-    setFormData((prev) => {
-      const isSelected = prev.courseName.includes(course);
-      return {
-        ...prev,
-        courseName: isSelected
-          ? prev.courseName.filter((c) => c !== course)
-          : [...prev.courseName, course],
-      };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      courseName: course,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { ...formData };
     payload.collegeLocation = collegeLocation;
+    payload.courseType=courseType
     console.log("payload", payload);
     const result = await postData(`admission/add`, payload);
     if (result?.success) {
@@ -260,11 +293,34 @@ const AdmissionForm = () => {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <section className="bg-blue-50 p-6 rounded-lg shadow-sm">
-              <h2 className="lg:text-xl text-sm font-semibold text-blue-700 mb-4">
-                Application Details
-              </h2>
+              <Courses
+                formData={formData}
+                handleCourseToggle={handleCourseToggle}
+                courseType={courseType}
+              />
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:text-base text-xs">
+                <div>
+                  <label
+                    htmlFor="category"
+                    className="block text-gray-700  font-medium mb-1"
+                  >
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    id="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="input w-full p-2"
+                  >
+                    <option value="">Select Category</option>
+                    <option>General</option>
+                    <option>OBC</option>
+                    <option>SC</option>
+                    <option>ST</option>
+                  </select>
+                </div>
                 <div>
                   <label
                     htmlFor="applicationReceivedOn"
@@ -298,10 +354,11 @@ const AdmissionForm = () => {
                     className="input w-full  p-2"
                   />
                 </div>
+
                 <div className="">
                   <label
                     htmlFor="totalFees"
-                    className="block text-gray-700 font-medium mb-1 "
+                    className="block text-gray-700 font-medium mb-1"
                   >
                     Total Fees (Rs)
                   </label>
@@ -311,17 +368,49 @@ const AdmissionForm = () => {
                     id="totalFees"
                     value={formData.totalFees}
                     onChange={handleChange}
-                    placeholder="e.g., 50000"
-                    className="input w-full p-2"
+                    readOnly
+                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Caution Fee (Rs)
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formData.cautionFee}
+                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Course Duration
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formData.courseDuration}
+                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Tuition Fee/Month (40Rs)
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formData.tuitionFeePerMonth}
+                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
                   />
                 </div>
               </div>
             </section>
 
-            <Courses
-              formData={formData}
-              handleCourseToggle={handleCourseToggle}
-            />
             <PersonalInformation
               formData={formData}
               handleChange={handleChange}
@@ -356,159 +445,6 @@ const AdmissionForm = () => {
         </div>
       )}
     </>
-
-    // <>
-    //   {!showForm && (
-    //     <div className="mx-4 bg-white lg:p-8 p-4 rounded-xl shadow-lg my-8 space-y-6">
-    //       <div>
-    //         <label className="block font-semibold text-gray-700 mb-2">
-    //           Select Course Type
-    //         </label>
-    //         <select
-    //           value={courseType}
-    //           onChange={(e) => setCourseType(e.target.value)}
-    //           className="input w-full p-2"
-    //         >
-    //           <option value="">-- Select --</option>
-    //           <option value="iti">ITI</option>
-    //           <option value="polytechnic">Polytechnic</option>
-    //         </select>
-    //       </div>
-
-    //       {courseType && (
-    //         <div>
-    //           <label className="block font-semibold text-gray-700 mb-2">
-    //             Select College Location
-    //           </label>
-    //           <select
-    //             value={collegeLocation}
-    //             onChange={(e) => setCollegeLocation(e.target.value)}
-    //             className="input w-full p-2"
-    //           >
-    //             <option value="">-- Select College --</option>
-    //             {getFilteredLocations().map((location, i) => (
-    //               <option key={i} value={location}>
-    //                 {location}
-    //               </option>
-    //             ))}
-    //           </select>
-    //         </div>
-    //       )}
-
-    //       {courseType && collegeLocation && (
-    //         <button
-    //           onClick={() => setShowForm(true)}
-    //           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-    //         >
-    //           Proceed to Admission Form
-    //         </button>
-    //       )}
-    //     </div>
-    //   )}
-    //   {showForm && (
-    //     <div className="mx-4 bg-white lg:p-8 p-4 rounded-xl shadow-lg my-8">
-    //       <h1 className="lg:text-3xl font-bold text-center text-blue-800 mb-8">
-    //         Student Admission Form
-    //       </h1>
-
-    //       <form onSubmit={handleSubmit} className="space-y-8">
-    //         <section className="bg-blue-50 p-6 rounded-lg shadow-sm">
-    //           <h2 className="lg:text-xl text-sm font-semibold text-blue-700 mb-4">
-    //             Application Details
-    //           </h2>
-
-    //           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:text-base text-xs">
-    //             <div>
-    //               <label
-    //                 htmlFor="applicationReceivedOn"
-    //                 className="block text-gray-700 font-medium mb-1"
-    //               >
-    //                 Application Received On
-    //               </label>
-    //               <input
-    //                 type="date"
-    //                 name="applicationReceivedOn"
-    //                 id="applicationReceivedOn"
-    //                 value={formData.applicationReceivedOn}
-    //                 onChange={handleChange}
-    //                 className="input w-full p-2 "
-    //               />
-    //             </div>
-    //             <div>
-    //               <label
-    //                 htmlFor="registrationNo"
-    //                 className="block text-gray-700  font-medium mb-1"
-    //               >
-    //                 Registration No.
-    //               </label>
-    //               <input
-    //                 type="text"
-    //                 name="registrationNo"
-    //                 id="registrationNo"
-    //                 value={formData.registrationNo}
-    //                 onChange={handleChange}
-    //                 placeholder="e.g., REG12345"
-    //                 className="input w-full  p-2"
-    //               />
-    //             </div>
-    //             <div className="">
-    //               <label
-    //                 htmlFor="totalFees"
-    //                 className="block text-gray-700 font-medium mb-1 "
-    //               >
-    //                 Total Fees (Rs)
-    //               </label>
-    //               <input
-    //                 type="number"
-    //                 name="totalFees"
-    //                 id="totalFees"
-    //                 value={formData.totalFees}
-    //                 onChange={handleChange}
-    //                 placeholder="e.g., 50000"
-    //                 className="input w-full p-2"
-    //               />
-    //             </div>
-    //           </div>
-    //         </section>
-
-    //         <Courses
-    //           formData={formData}
-    //           handleCourseToggle={handleCourseToggle}
-    //         />
-    //         <PersonalInformation
-    //           formData={formData}
-    //           handleChange={handleChange}
-    //         />
-    //         <Educational
-    //           formData={formData}
-    //           handleEducationChange={handleEducationChange}
-    //         />
-    //         <OtherInformation formData={formData} handleChange={handleChange} />
-    //         <Decrations
-    //           formData={formData}
-    //           handleChange={handleChange}
-    //           parentSignaturePreview={parentSignaturePreview}
-    //           candidateSignaturePreview={candidateSignaturePreview}
-    //           handleSignatureChange={handleSignatureChange}
-    //         />
-    //         <div className="text-center">
-    //           <button
-    //             type="submit"
-    //             disabled={loading}
-    //             className={`bg-blue-600 text-white font-semibold lg:py-3 lg:px-8 p-2 text-sm rounded-lg transition duration-300 ease-in-out shadow-lg
-    //     ${
-    //       loading
-    //         ? "opacity-50 cursor-not-allowed"
-    //         : "hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-    //     }`}
-    //           >
-    //             {loading ? "Submitting..." : "Submit Admission Form"}
-    //           </button>
-    //         </div>
-    //       </form>
-    //     </div>
-    //   )}
-    // </>
   );
 };
 

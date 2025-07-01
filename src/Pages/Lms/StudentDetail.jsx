@@ -22,6 +22,7 @@ import {
   InformationCircleIcon,
   MapPinIcon,
   CalendarIcon,
+  ClockIcon,
 } from "@heroicons/react/24/outline";
 import LoadinSpinner from "../../components/common/LoadinSpinner";
 import { useState } from "react";
@@ -36,13 +37,19 @@ const StudentDetail = () => {
   const { data: feeTransaction } = useGet(
     `fees/getSingleFeeDetails/${data?.data?.studentId}`
   );
-  console.log("feeTransaction", feeTransaction);
+  const student = data?.data;
+
+  const totalPaid =
+    feeTransaction?.reduce((acc, txn) => acc + txn.payingAmt, 0) || 0;
+  const dueAmount = student?.totalFees - totalPaid;
+
+  console.log("data", data);
+
   if (loading) {
     return <LoadinSpinner text="Loading users..." />;
   }
 
-  const student = data?.data;
-
+  console.log("student", student);
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
@@ -110,6 +117,22 @@ const StudentDetail = () => {
               <span className="font-medium">Applied:</span>{" "}
               {formatDate(student.applicationReceivedOn)}
             </p>
+           
+              <div className="text-xs text-gray-500 flex items-center mt-1">
+                <AcademicCapIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0 " />
+                <span className="font-medium">{student.courseName}</span>
+              </div>
+
+              <div className="text-xs text-gray-500 flex items-center mt-1 ">
+                <MapPinIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
+                <span className="font-medium">{student.collegeLocation}</span>
+              </div>
+
+              <div className="text-xs text-gray-500 flex items-center mt-1 ">
+                <ClockIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
+                <span className="font-medium">{student.courseDuration}</span>
+              </div>
+           
           </div>
 
           <div className="flex flex-col gap-2 mt-4 md:mt-0 flex-shrink-0 w-full md:w-auto">
@@ -134,9 +157,14 @@ const StudentDetail = () => {
                 {student.feeStatus ? "PAID" : "DUE"}
               </span>
 
-              <div className="flex items-center text-2xl font-bold text-gray-800">
-                <CurrencyRupeeIcon className="h-6 w-6 text-gray-600 mr-2" />
-                {student.totalFees.toLocaleString("en-IN")}
+              <div className="flex flex-col text-gray-800">
+                <div className="flex items-center text-2xl font-bold">
+                  <CurrencyRupeeIcon className="h-6 w-6 text-gray-600 mr-2" />
+                  <p>{dueAmount}</p>
+                </div>
+                <div className="text-xs text-gray-500 mt-1 ml-8">
+                  Total: ₹{student.totalFees.toLocaleString("en-IN")}
+                </div>
               </div>
             </div>
           </div>
@@ -230,56 +258,13 @@ const StudentDetail = () => {
           </div>
 
           <div className="lg:col-span-2 space-y-8">
-              <SectionHeader icon={BookOpenIcon} title="Fee Installments" />
-              <GroupedPayment feeTransaction={feeTransaction}/>
-            {/* <div className="border border-gray-200 rounded-lg p-6 bg-white">
-              <SectionHeader icon={BookOpenIcon} title="Fee Installments" />
-
-              {feeTransaction?.map((fee, feeIndex) => (
-                <div key={fee._id} className="mb-4">
-                  <div className="text-gray-800 font-semibold mb-2">
-                    Student ID: {fee.admissionForm.studentId} | Name:{" "}
-                    {fee.admissionForm.name}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {fee.payments.map((payment, index) => (
-                      <div
-                        key={payment._id}
-                        className="flex justify-between items-center text-sm text-gray-700 p-3 bg-blue-50 rounded-md"
-                      >
-                        <div>
-                          <div className="font-medium">
-                            Installment {index + 1}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {new Date(payment.date).toLocaleDateString()}
-                          </div>
-                        </div>
-                        <div className="text-green-600 font-semibold">
-                          ₹{payment.amount}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div> */}
-
             <div className="border border-gray-200 rounded-lg p-6 bg-white">
-              <SectionHeader icon={BookOpenIcon} title="Courses" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {student.courseName.map((course, index) => (
-                  <div
-                    key={index}
-                    className="flex text-sm items-center text-gray-700 p-2 bg-blue-50 rounded-md"
-                  >
-                    <AcademicCapIcon className="h-6 w-6 text-green-600 mr-3 flex-shrink-0" />
-                    <span className="font-medium">{course}</span>
-                  </div>
-                ))}
-              </div>
+              <SectionHeader icon={BookOpenIcon} title="Fee Installments" />
+              <GroupedPayment feeTransaction={feeTransaction} />
             </div>
+
+        
+
             <div className="border border-gray-200 rounded-lg p-6 bg-white">
               <SectionHeader icon={SparklesIcon} title="Education History" />
               <div className="overflow-x-auto">
@@ -404,8 +389,7 @@ const StudentDetail = () => {
                     </div>
                   </div>
                   <div className="flex items-start text-gray-700 py-1">
-                    {" "}
-                    {/* changed to items-start */}
+                    
                     <TrophyIcon
                       className={`h-5 w-5 ${
                         student.isSportPerson

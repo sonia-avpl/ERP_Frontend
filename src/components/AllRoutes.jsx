@@ -70,28 +70,21 @@ import NewItemForm from "./form/NewItemForm";
 const AllRoutes = () => {
   return (
     <Routes>
-      {/* Auth Routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<Register />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
-
-      {/* Protected Routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-
-          {/* Admin-only Routes */}
           <Route element={<RoleProtectedRoute allowedRoles={["Admin"]} />}>
             <Route path="/user-management" element={<UserManagement />} />
             <Route path="/project-managment" element={<ProjectManagement />} />
-            <Route path="/inventory" element={<Inventory />} />
-          
+            <Route path="/inventory" element={<Inventory />} />          
             <Route path="/reporting" element={<Reporting />} />
             <Route path="/settings" element={<Setting />} />
           </Route>
-
           <Route
             element={
               <RoleProtectedRoute allowedRoles={["Admin", "Supply Chain"]} />
@@ -100,7 +93,6 @@ const AllRoutes = () => {
             <Route path="/sku-management" element={<SkuManagement />} />
             <Route path="/procurement" element={<Procurement />} />
             <Route path="/grn-processing" element={<GRNProcessing />} />
-            {/* Inventory Routes */}
             <Route path="/inventory/items" element={<Items />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
@@ -162,7 +154,7 @@ const AllRoutes = () => {
             <Route path="/component-design" element={<ComponentDesign />} />
           </Route>
 
-          {/* LMS: Principal and Admin */}
+         
           <Route
             element={
               <RoleProtectedRoute allowedRoles={["Admin", "Principal"]} />

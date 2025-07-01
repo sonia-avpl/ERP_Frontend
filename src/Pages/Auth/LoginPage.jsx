@@ -19,9 +19,11 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await postData("auth/login", form);
+    console.log(data)
     if (data) {
       localStorage.setItem("token", JSON.stringify(data.token));
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("acl", JSON.stringify(data.acl));
       navigate("/");
     }
   };
