@@ -18,14 +18,21 @@ export const componentTypes = [
   "Sensor",
   "Telemetry Module",
 ];
-export const courses = [
+export const ItiCourses = [
   "Electrician",
   "Fitter",
   "Welder",
-  "Drone Tech.",
-  "COPA",
-  "Fashion design and Tech.",
-  "Drone pilot",
+  "Computer Operator and Programming Assistant",
+  "Fashion Design and Technology",
+  "Drone Pilot (Junior)",
+  "Drone Technician",
+ 
+];
+export const polytechnicCourses = [
+  "Diploma in Computer Science and Engineering",
+  "Diploma in IT technology",
+  "Diploma in Fashion Design and Technology",
+  "Diploma in Apparel Design and Fashion Technology"
 ];
 
 export const subjectOptions = [
@@ -54,7 +61,8 @@ export const departments = [
   "Finance",
   "Operations",
   "R&D",
-  "College"
+  "College",
+  "Supply Chain",
 ];
 
 export const role = [
@@ -67,5 +75,5 @@ export const role = [
   "Support Staff",
   "R&D Manager",
   "Principal",
+  "Supply Chain",
 ];
-

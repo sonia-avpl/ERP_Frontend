@@ -5,10 +5,6 @@ import List from "../Pages/ProjectManagmentSystem/teamSpace/List";
 import Table from "../Pages/ProjectManagmentSystem/teamSpace/Table";
 import BoardPage from "../Pages/ProjectManagmentSystem/teamSpace/BoardPage";
 import Inventory from "../Pages/DroneR&DSystem/Inventory";
-import TestingValidation from "../Pages/DroneR&DSystem/TestingValidation";
-import ComplianceDocs from "../Pages/DroneR&DSystem/ComplianceDocs";
-import PrototypeManagement from "../Pages/DroneR&DSystem/PrototypeManagement";
-import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
 import LoginPage from "../Pages/Auth/LoginPage";
 import Register from "../Pages/Auth/Register";
 import VerifyEmail from "../Pages/Auth/VerifyEmail";
@@ -17,6 +13,7 @@ import ResetPassword from "../Pages/Auth/ResetPassword";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import RoleProtectedRoute from "./protectedRoute/RoleProtectedRoute";
 import Layout from "./layout/Layout";
+
 import SupplyChain from "../Pages/DroneR&DSystem/SupplyChain/SupplyChain";
 import ProjectManagement from "../Pages/ProjectManagmentSystem/ProjectManagement";
 import Documents from "../Pages/DroneR&DSystem/SupplyChain/Documents";
@@ -28,12 +25,11 @@ import Reporting from "../Pages/Reporting/Reporting";
 import QualityControl from "../Pages/QualityControl/QualityControl";
 
 import PrincipalDashboard from "../Pages/Lms/PrincipalDashboard";
-import StudentList from "./list/StudentList";
+import StudentDetail from "../Pages/Lms/StudentDetail";
 import FeeSubmittedStudent from "../Pages/Lms/FeeSubmittedStudent";
 import StudentPage from "../Pages/Lms/StudentPage";
 import AdmissionForm from "../Pages/Lms/AdmissionForm";
-import StudentDetail from "../Pages/Lms/StudentDetail";
-=======
+
 import ReportingSupplyChain from "../Pages/Reporting/ReportingSupplyChain";
 import SkuManagement from "../Pages/SupplyChain/SkuManagement";
 import Procurement from "../Pages/SupplyChain/Procurement";
@@ -62,9 +58,21 @@ import PurchaseReceives from "../Pages/SupplyChain/Purchases/PurchaseReceives";
 import Bills from "../Pages/SupplyChain/Purchases/Bills";
 import PaymentsMade from "../Pages/SupplyChain/Purchases/PaymentsMade";
 import VendorCredits from "../Pages/SupplyChain/Purchases/VendorCredits";
+
 import NewItemForm from "./form/NewItemForm";
 import ItemDetails from "../components/inventory/ItemDetails";
 
+
+// R&D Pages
+import TestingValidation from "../Pages/DroneR&DSystem/TestingValidation";
+import ComplianceDocs from "../Pages/DroneR&DSystem/ComplianceDocs";
+import PrototypeManagement from "../Pages/DroneR&DSystem/PrototypeManagement";
+import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
+
+import NewItemForm from "./form/NewItemForm";
+import ItemDetails from "../components/inventory/ItemDetails";
+import EditItemForm from "../components/form/EditItemForm";
+import VendorForm from "./form/VendorForm";
 
 const AllRoutes = () => {
   return (
@@ -77,14 +85,9 @@ const AllRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-
           <Route element={<RoleProtectedRoute allowedRoles={["Admin"]} />}>
-            <Route path="/user-management" element={<UserManagement />} />
-            <Route path="/project-managment" element={<ProjectManagement />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/quality-control" element={<QualityControl />} />
-            <Route path="/reporting" element={<Reporting />} />
-          </Route>
+           
+
 
           <Route path="/project-managment" element={<ProjectManagement />} />
           <Route path="/user-management" element={<UserManagement />} />
@@ -136,39 +139,74 @@ const AllRoutes = () => {
             element={<ReportingSupplyChain />}
           />
 
+            <Route path="/inventory" element={<Inventory />} />
 
-          <Route path="/supply-chain-dashboard" element={<SupplyChain />}>
-            <Route index element={<Navigate to="overview" replace />} />
-            <Route path="overview" element={<Overview />} />
-            <Route path="documents" element={<Documents />} />
-            <Route path="supplier" element={<Supllier />} />
+
+
+            <Route path="/reporting" element={<Reporting />} />
+            <Route path="/settings" element={<Setting />} />
           </Route>
-
-
-          <Route path="/projects/:projectId" element={<ProjectDetail />}>
-
-          <Route path="/testing-validation" element={<TestingValidation />} />
-          <Route path="/compliance-docs" element={<ComplianceDocs />} />
           <Route
-            path="/prototype-management"
-            element={<PrototypeManagement />}
-          />
-          <Route path="/component-design" element={<ComponentDesign />} />
-
-          <Route
-            path="/projects/:projectId"
             element={
-              // <RoleProtectedRoute allowedRoles={["R&D"]}>
-              <ProjectDetail />
-              // </RoleProtectedRoute>
+              <RoleProtectedRoute allowedRoles={["Admin", "Supply Chain"]} />
             }
           >
+            <Route path="/sku-management" element={<SkuManagement />} />
+            <Route path="/procurement" element={<Procurement />} />
+            <Route path="/grn-processing" element={<GRNProcessing />} />
+            <Route path="/inventory/items" element={<Items />} />
+            <Route path="/inventory/items/:id" element={<ItemDetails />} />
+            <Route
+              path="/inventory/items/:id/edit"
+              element={<EditItemForm />}
+            />
+            <Route path="/inventory/items/new" element={<NewItemForm />} />
+            <Route path="/inventory/item-groups" element={<ItemGroups />} />
+            <Route path="/inventory/vendors/new" element={<VendorForm />} />
+            <Route
+              path="/inventory/adjustments"
+              element={<InventoryAdjustment />}
+            />
+            <Route path="/quality-control" element={<QualityControl />} />
+            {/* Sales Routes */}
+            {/* <Route path="/sales/customers" element={<Customers />} />
+            <Route path="/sales/orders" element={<SalesOrder />} />
+            <Route path="/sales/packages" element={<Packages />} />
+            <Route path="/sales/shipments" element={<Shipments />} />
+            <Route
+              path="/sales/delivery-challans"
+              element={<DeliveryChallans />}
+            />
+            <Route path="/sales/invoices" element={<Invoices />} />
+            <Route
+              path="/sales/payments-received"
+              element={<PaymentReceived />}
+            />
+            <Route path="/sales/returns" element={<SalesReturn />} />
+            <Route path="/sales/credit-notes" element={<CreditNotes />} /> */}
 
-            <Route index element={<Navigate to="board" replace />} />
-            <Route path="board" element={<BoardPage />} />
-            <Route path="list" element={<List />} />
-            <Route path="table" element={<Table />} />
+            {/* Purchases Routes */}
+            <Route path="/purchases/vendors" element={<Vendors />} />
+            <Route path="/purchases/orders" element={<PurchaseOrders />} />
+            <Route path="/purchases/receives" element={<PurchaseReceives />} />
+            <Route path="/purchases/bills" element={<Bills />} />
+            <Route path="/purchases/payments" element={<PaymentsMade />} />
+            <Route path="/purchases/credits" element={<VendorCredits />} />
+            <Route
+              path="/reporting-supply-chain"
+              element={<ReportingSupplyChain />}
+            />
+
+            {/* Project Detail Nested Pages */}
+            <Route path="/projects/:projectId" element={<ProjectDetail />}>
+              <Route index element={<Navigate to="board" replace />} />
+              <Route path="board" element={<BoardPage />} />
+              <Route path="list" element={<List />} />
+              <Route path="table" element={<Table />} />
+            </Route>
           </Route>
+
+          {/* R&D Manager and Admin Access */}
           <Route
             element={
               <RoleProtectedRoute allowedRoles={["Admin", "R&D Manager"]} />
@@ -182,6 +220,8 @@ const AllRoutes = () => {
             />
             <Route path="/component-design" element={<ComponentDesign />} />
           </Route>
+
+         
           <Route
             element={
               <RoleProtectedRoute allowedRoles={["Admin", "Principal"]} />
@@ -195,7 +235,6 @@ const AllRoutes = () => {
             <Route path="/student-details/:id" element={<StudentDetail />} />
             <Route path="/admission-form" element={<AdmissionForm />} />
             <Route path="/all-submitted" element={<FeeSubmittedStudent />} />
-            <Route path="/settings" element={<Setting />} />
           </Route>
         </Route>
       </Route>

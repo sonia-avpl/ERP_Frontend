@@ -4,6 +4,7 @@ const SupplyChain = () => {
   return (
     <div className="p-4">
       <Outlet />
+      <p>Supply Chain</p>
     </div>
   );
 };

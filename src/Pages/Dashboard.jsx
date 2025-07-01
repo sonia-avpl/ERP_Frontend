@@ -5,16 +5,16 @@ import HrDashboard from "./HrSystem/HrDashboard";
 import PrincipalDashboard from "./Lms/PrincipalDashboard";
 
 const Dashboard = () => {
-
-  const userRole = JSON.parse(localStorage.getItem("user"));
+  // const userRole = JSON.parse(localStorage.getItem("user"));
+  const userRole = "Principal";
 
   return (
     <div>
-      {userRole.role === "Admin" && <AdminDashboard />}
-      {userRole.role === "R&D Manager" && <DroneDashboard />}
-      {userRole.role === "HR" && <HrDashboard />}
-      {userRole.role === "Principal" && <PrincipalDashboard />}
-      {userRole.role === "HR" && <SupplyChain />}
+      {userRole === "Admin" && <AdminDashboard />}
+      {userRole === "R&D Manager" && <DroneDashboard />}
+      {userRole === "HR" && <HrDashboard />}
+      {userRole === "Principal" && <PrincipalDashboard />}
+      {userRole === "Supply Chain" && <SupplyChain />}
     </div>
   );
 };

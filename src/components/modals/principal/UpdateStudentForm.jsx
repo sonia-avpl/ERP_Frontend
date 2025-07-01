@@ -13,7 +13,8 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
     applicationReceivedOn: getTodayDate(),
     registrationNo: "",
     totalFees: "",
-    courseName: [],
+    courseName: "",
+    courseType:"",
     name: "",
     fatherName: "",
     motherName: "",
@@ -281,7 +282,7 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
           </div>
         </section>
 
-        <Courses formData={formData} handleCourseToggle={handleCourseToggle} />
+        <Courses formData={formData} handleCourseToggle={handleCourseToggle} courseType={formData.courseType}/>
         <PersonalInformation formData={formData} handleChange={handleChange} />
         <Educational
           formData={formData}

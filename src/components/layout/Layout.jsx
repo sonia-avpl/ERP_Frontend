@@ -28,7 +28,7 @@ const Layout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
 
-      {user && <Sidebar userRole={user.role} />}
+      {user && <Sidebar userRole="Admin" />}
       <main className="flex-1 overflow-y-auto h-full">
         <header className="bg-white shadow-sm border-b">
           <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-4 gap-4 lg:gap-0">
@@ -47,7 +47,7 @@ const Layout = () => {
                   </div>
                 </button>
 
-                {open && <UserProfileCard setOpen={setOpen} userRole={user.role}/>}
+                {open && <UserProfileCard setOpen={setOpen} userRole={"Admin"}/>}
               </div>
             </div>
           </div>

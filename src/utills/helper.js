@@ -23,3 +23,4 @@ export const polytechnicLocations = [
   "Govt. Girls Polytechnic, Sadar, Mirzapur",
   "Govt. Polytechnic, Dhampur, Bijnor",
 ];
+

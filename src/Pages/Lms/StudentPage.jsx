@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import StudentList from "../../components/list/StudentList";
 import { useGet } from "../../hooks/useGet";
 import LoadinSpinner from "../../components/common/LoadinSpinner";
+import { itiLocations, polytechnicLocations } from "../../utills/helper";
 
 const ITEMS_PER_PAGE = 5;
 
 const StudentPage = () => {
-  const { data, loading } = useGet(`admission`);
+  const [locationFilter, setLocationFilter] = useState("");
+  const { data, loading, refetch } = useGet(
+    `admission${locationFilter ? `?location=${locationFilter}` : ""}`
+  );
   const admissionList = data?.data || [];
-
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [feeStatusFilter, setFeeStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const allLocations = [...itiLocations, ...polytechnicLocations];
   useEffect(() => {
     const delay = setTimeout(() => {
       setSearchTerm(inputValue);
@@ -62,11 +66,23 @@ const StudentPage = () => {
         <option value="Submitted">Submitted</option>
         <option value="Pending">Pending</option>
       </select>
+      <select
+        value={locationFilter}
+        onChange={(e) => setLocationFilter(e.target.value)}
+        className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
+      >
+        <option value="">All Locations</option>
+        {allLocations.map((loc, index) => (
+          <option key={index} value={loc}>
+            {loc}
+          </option>
+        ))}
+      </select>
     </div>
   );
-if (loading) {
-  return <LoadinSpinner text="Loading users..." />;
-}
+  if (loading) {
+    return <LoadinSpinner text="Loading users..." />;
+  }
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
       <StudentList
@@ -76,6 +92,7 @@ if (loading) {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        refetch={refetch}
       />
     </div>
   );

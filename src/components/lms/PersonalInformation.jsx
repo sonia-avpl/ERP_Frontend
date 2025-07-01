@@ -116,28 +116,7 @@ const PersonalInformation = ({ formData, handleChange }) => {
             className="input w-full p-2"
           />
         </div>
-        <div>
-          <label
-            htmlFor="category"
-            className="block text-gray-700  font-medium mb-1"
-          >
-            Category
-          </label>
-          <select
-            name="category"
-            id="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="input w-full p-2"
-          >
-            <option value="">Select Category</option>
-            <option>Gen</option>
-            <option>OBC</option>
-            <option>SC</option>
-            <option>ST</option>
-            <option>Freedom Fighter</option>
-          </select>
-        </div>
+      
         <div>
           <label
             htmlFor="nationality"
