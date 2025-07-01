@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 
 const ContactPerson = () => {
   const [contacts, setContacts] = useState([
-    { salutation: "", firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
+    {firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
   ]);
 
   const handleChange = (index, e) => {
@@ -16,7 +16,7 @@ const ContactPerson = () => {
   const addContact = () => {
     setContacts([
       ...contacts,
-      { salutation: "", firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
+      {firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
     ]);
   };
 
@@ -31,7 +31,7 @@ const ContactPerson = () => {
         <table className="min-w-full border border-gray-300 text-sm text-left text-gray-800">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border border-gray-300 px-3 py-2">Salutation</th>
+              {/* <th className="border border-gray-300 px-3 py-2">Salutation</th> */}
               <th className="border border-gray-300 px-3 py-2">First Name</th>
               <th className="border border-gray-300 px-3 py-2">Last Name</th>
               <th className="border border-gray-300 px-3 py-2">Email Address</th>
@@ -43,7 +43,7 @@ const ContactPerson = () => {
           <tbody>
             {contacts.map((contact, index) => (
               <tr key={index}>
-                <td className="border border-gray-300 px-2 py-1">
+                {/* <td className="border border-gray-300 px-2 py-1">
                   <select
                     name="salutation"
                     value={contact.salutation}
@@ -56,7 +56,7 @@ const ContactPerson = () => {
                     <option value="Mrs.">Mrs.</option>
                     <option value="Dr.">Dr.</option>
                   </select>
-                </td>
+                </td> */}
                 <td className="border border-gray-300 px-2 py-1">
                   <input
                     name="firstName"

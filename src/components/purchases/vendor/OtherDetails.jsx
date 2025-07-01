@@ -5,7 +5,6 @@ const OtherDetails = () => {
     pan: "",
     currency: "",
     paymentTerm: "",
-    priceList: "",
     document: [],
   });
   const handleChange = (e) => {
@@ -32,7 +31,7 @@ const OtherDetails = () => {
 
       {/* Currency */}
       <div>
-        <label className="block text-sm font-medium text-red-600 mb-1">
+        <label className="block text-sm font-medium mb-1">
           Currency
         </label>
         <select
@@ -65,7 +64,7 @@ const OtherDetails = () => {
       </div>
 
       {/* Price List */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Price List
         </label>
@@ -79,7 +78,7 @@ const OtherDetails = () => {
           <option value=" price-list">PriceBook-3</option>
           <option value=" price-list">PriceBook-4</option>
         </select>
-      </div>
+      </div> */}
 
       {/* Document */}
       <div>
