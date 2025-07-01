@@ -2,15 +2,12 @@ import React, { useState } from "react";
 
 const Address = () => {
   const initialAddress = {
-    attention: "",
     country: "",
     street1: "",
-    street2: "",
     city: "",
     state: "",
     zip: "",
     phone: "",
-    fax: "",
   };
 
   const [billingAddress, setBillingAddress] = useState(initialAddress);
@@ -31,7 +28,7 @@ const Address = () => {
 
   const renderFields = (type, data, handleChangeFn) => (
     <>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label className="block text-sm font-medium mb-1">Attention</label>
         <input
           name="attention"
@@ -39,7 +36,7 @@ const Address = () => {
           onChange={handleChangeFn}
           className={inputClass}
         />
-      </div>
+      </div> */}
 
       <div className="mb-3">
         <label className="block text-sm font-medium mb-1">
@@ -66,13 +63,13 @@ const Address = () => {
           onChange={handleChangeFn}
           className={inputClass}
         />
-        <textarea
+        {/* <textarea
           name="street2"
           placeholder="Street 2"
           value={data.street2}
           onChange={handleChangeFn}
           className={inputClass}
-        />
+        /> */}
       </div>
 
       <div className="mb-3">
@@ -119,7 +116,7 @@ const Address = () => {
         />
       </div>
 
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium mb-1">Fax Number</label>
         <input
           name="fax"
@@ -127,7 +124,7 @@ const Address = () => {
           onChange={handleChangeFn}
           className={inputClass}
         />
-      </div>
+      </div> */}
     </>
   );
   return (
