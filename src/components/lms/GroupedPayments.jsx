@@ -5,7 +5,7 @@ const GroupedPayment = ({ feeTransaction }) => {
   const groupedPayments = groupPaymentsByMonth(feeTransaction);
   
   return (
-    <div className="border border-gray-200 rounded-lg p-6 bg-white">
+    <div className="">
       {Object.entries(groupedPayments)
         .sort(([a], [b]) => new Date(a + " 1") - new Date(b + " 1"))
         .map(([month, payments]) => (
