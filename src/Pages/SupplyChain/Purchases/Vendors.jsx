@@ -8,7 +8,7 @@ const Vendors = () => {
 
   const { data, loading, refetch } = useGet("/vendors");
   // const vendors = data?. || [];
-  console.log("Vendors fetched from API:", data);
+  // console.log("Vendors fetched from API:", data);
 
   const handleCloseForm = () => {
     setShowVendorForm(false);
