@@ -1,23 +1,18 @@
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import VendorForm from "../../../components/form/VendorForm";
+import { useGet } from "../../../hooks/useGet";
 
 const Vendors = () => {
-  const [vendors, setVendors] = useState([]);
   const [showVendorForm, setShowVendorForm] = useState(false);
 
-  const fetchVendors = () => {
-    const data = JSON.parse(localStorage.getItem("vendorList")) || [];
-    setVendors(data);
-  };
-
-  useEffect(() => {
-    fetchVendors();
-  }, []);
+  const { data, loading, refetch } = useGet("/vendors");
+  // const vendors = data?. || [];
+  console.log("Vendors fetched from API:", data);
 
   const handleCloseForm = () => {
     setShowVendorForm(false);
-    fetchVendors();
+    refetch();
   };
 
   return (
@@ -35,7 +30,11 @@ const Vendors = () => {
       </div>
 
       <div className="overflow-x-auto p-4 bg-white rounded-b-xl shadow-md mx-4 mt-0">
-        {vendors.length === 0 ? (
+        {loading ? (
+          <div className="text-center text-gray-600 py-10">
+            Loading vendors...
+          </div>
+        ) : data?.length === 0 ? (
           <div className="text-center text-gray-600 py-10">No vendor yet.</div>
         ) : (
           <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden">
@@ -54,7 +53,7 @@ const Vendors = () => {
               </tr>
             </thead>
             <tbody className="bg-gray-50 text-gray-700">
-              {vendors.map((vendor, index) => (
+              {data?.map((vendor, index) => (
                 <tr
                   key={index}
                   className="border-t hover:bg-gray-100 transition"
@@ -67,9 +66,13 @@ const Vendors = () => {
                   </td>
                   <td className="px-4 py-2">{vendor.companyName}</td>
                   <td className="px-4 py-2 text-blue-600 underline">
-                    {vendor.email}
+                    {vendor.contactPersons?.[0]?.email || "N/A"}
                   </td>
-                  <td className="px-4 py-2">{vendor.mobile}</td>
+                  <td className="px-4 py-2">
+                    {vendor.vendorMobileNumber ||
+                      vendor.vendorPhoneNumber ||
+                      "N/A"}
+                  </td>
                   <td className="px-4 py-2">
                     Rs.{Math.floor(Math.random() * 1000)}
                   </td>
@@ -78,7 +81,7 @@ const Vendors = () => {
                   </td>
                   <td className="px-4 py-2 text-center">
                     <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
-                      view
+                      View
                     </button>
                   </td>
                 </tr>
