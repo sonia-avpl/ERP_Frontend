@@ -35,7 +35,7 @@ const Vendors = () => {
           <div className="text-center text-gray-600 py-10">
             Loading vendors...
           </div>
-        ) : data?.length === 0 ? (
+        ) : data?.data?.length === 0 ? (
           <div className="text-center text-gray-600 py-10">No vendor yet.</div>
         ) : (
           <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden">
@@ -54,7 +54,7 @@ const Vendors = () => {
               </tr>
             </thead>
             <tbody className="bg-gray-50 text-gray-700">
-              {data?.map((vendor, index) => (
+              {data?.data?.map((vendor, index) => (
                 <tr
                   key={index}
                   className="border-t hover:bg-gray-100 transition"
