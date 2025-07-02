@@ -6,19 +6,19 @@ import OtherDetails from "../purchases/vendor/OtherDetails";
 import Address from "../purchases/vendor/Address";
 import ContactPerson from "../purchases/vendor/ContactPerson";
 import BankDetails from "../purchases/vendor/BankDetails";
+import { usePostFile } from "../../hooks/usePostFile";
 
 const VendorForm = ({ onClose }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    salutation: "",
     firstName: "",
     lastName: "",
     companyName: "",
-    displayName: "",
+    displayNameType: "",
     email: "",
-    workPhone: "",
-    mobile: "",
+    vendorPhoneNumber: "",
+    vendorMobileNumber: "",
   });
 
   const [otherDetails, setOtherDetails] = useState({});
@@ -40,24 +40,31 @@ const VendorForm = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = (e) => {
+  const token = localStorage.getItem("token");
+  const { postData, loading, error } = usePostFile(token);
+
+  const handleSave = async (e) => {
     e.preventDefault();
 
     const vendorData = {
       ...formData,
       otherDetails,
-      addressDetails,
+      address: addressDetails,
       contactPersons,
       bankDetails,
     };
 
-    console.log("Vendor Data:", vendorData);
-    const savedVendors = JSON.parse(localStorage.getItem("vendorList")) || [];
-    savedVendors.push(vendorData);
-    localStorage.setItem("vendorList", JSON.stringify(savedVendors));
+    console.log("Sending to backend:", vendorData);
 
-    alert("Vendor saved successfully!");
-    navigate(-1);
+    try {
+      const res = await postData("vendors/add", vendorData);
+      if (res) {
+        alert("Vendor saved successfully!");
+        navigate(-1);
+      }
+    } catch (err) {
+      console.error("Save failed:", err.message);
+    }
   };
 
   return (
@@ -120,14 +127,13 @@ const VendorForm = ({ onClose }) => {
                 Vendor Display Name
               </label>
               <select
-                name="displayName"
-                value={formData.displayName}
+                name="displayNameType"
+                value={formData.displayNameType}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded p-2"
               >
-                <option value="">Select a display name</option>
-                <option value="Use Company Name">Use Company Name</option>
-                <option value="Use Contact Name">Use Contact Name</option>
+                <option value="">Select Display Name</option>
+                <option value="Company Name">Company Name</option>
+                <option value="Contact Name">Contact Name</option>
               </select>
             </div>
 
@@ -159,9 +165,11 @@ const VendorForm = ({ onClose }) => {
                   <Phone className="w-4 h-4 text-gray-400 mr-2" />
                   <input
                     type="tel"
-                    name="workPhone"
-                    placeholder="Work Phone"
-                    value={formData.workPhone}
+                    name="vendorPhoneNumber"
+                    placeholder="Mobile Number"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    value={formData.vendorPhoneNumber}
                     onChange={handleChange}
                     className="w-full outline-none"
                   />
@@ -170,9 +178,11 @@ const VendorForm = ({ onClose }) => {
                   <Smartphone className="w-4 h-4 text-gray-400 mr-2" />
                   <input
                     type="tel"
-                    name="mobile"
-                    placeholder="Mobile"
-                    value={formData.mobile}
+                    name="vendorMobileNumber"
+                    placeholder="Mobile Number"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    value={formData.vendorMobileNumber}
                     onChange={handleChange}
                     className="w-full outline-none"
                   />
@@ -230,6 +240,19 @@ const VendorForm = ({ onClose }) => {
           >
             Add Vendor
           </button>
+          {loading && <p className="text-blue-500 mt-2">Saving vendor...</p>}
+
+          {Array.isArray(error) ? (
+            error.map((err, i) => (
+              <p key={i} className="text-red-600 mt-2">
+                Error: {err.message}
+              </p>
+            ))
+          ) : error ? (
+            <p className="text-red-600 mt-2">
+              Error: {typeof error === "string" ? error : error.message}
+            </p>
+          ) : null}
         </div>
       </div>
     </section>
