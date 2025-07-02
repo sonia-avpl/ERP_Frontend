@@ -6,25 +6,38 @@ import OtherDetails from "../purchases/vendor/OtherDetails";
 import Address from "../purchases/vendor/Address";
 import ContactPerson from "../purchases/vendor/ContactPerson";
 import BankDetails from "../purchases/vendor/BankDetails";
+import { usePostFile } from "../../hooks/usePostFile";
+import { usePatch } from "../../hooks/usePatch";
 
-const VendorForm = ({ onClose }) => {
+const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    salutation: "",
-    firstName: "",
-    lastName: "",
-    companyName: "",
-    displayName: "",
-    email: "",
-    workPhone: "",
-    mobile: "",
+    firstName: existingData?.firstName || "",
+    lastName: existingData?.lastName || "",
+    companyName: existingData?.companyName || "",
+    displayNameType: existingData?.displayNameType || "",
+    email: existingData?.email || "",
+    vendorPhoneNumber: existingData?.vendorPhoneNumber || "",
+    vendorMobileNumber: existingData?.vendorMobileNumber || "",
   });
 
-  const [otherDetails, setOtherDetails] = useState({});
-  const [addressDetails, setAddressDetails] = useState({});
-  const [contactPersons, setContactPersons] = useState([]);
-  const [bankDetails, setBankDetails] = useState([]);
+  const [otherDetails, setOtherDetails] = useState(
+    existingData?.otherDetails || {}
+  );
+  const [addressDetails, setAddressDetails] = useState(
+    existingData?.address || {
+      billing: { country: "", state: "", city: "", pincode: "", address: "" },
+      shipping: { country: "", state: "", city: "", pincode: "", address: "" },
+    }
+  );
+
+  const [contactPersons, setContactPersons] = useState(
+    existingData?.contactPersons || []
+  );
+  const [bankDetails, setBankDetails] = useState(
+    existingData?.bankDetails || []
+  );
 
   const [activeTab, setActiveTab] = useState("other");
 
@@ -40,24 +53,47 @@ const VendorForm = ({ onClose }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = (e) => {
+  const token = localStorage.getItem("token");
+  const {
+    postData,
+    loading: postLoading,
+    error: postError,
+  } = usePostFile(token);
+  const {
+    patchData,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch(token);
+
+  const handleSave = async (e) => {
     e.preventDefault();
 
     const vendorData = {
       ...formData,
       otherDetails,
-      addressDetails,
+      address: addressDetails,
       contactPersons,
       bankDetails,
     };
 
-    console.log("Vendor Data:", vendorData);
-    const savedVendors = JSON.parse(localStorage.getItem("vendorList")) || [];
-    savedVendors.push(vendorData);
-    localStorage.setItem("vendorList", JSON.stringify(savedVendors));
+    try {
+      let res;
+      if (mode === "edit") {
+        // PATCH request to update vendor
+        res = await patchData(`vendors/${existingData._id}`, vendorData);
+        refetch()
+      } else {
+        // POST request to create new vendor
+        res = await postData("vendors/add", vendorData);
+      }
 
-    alert("Vendor saved successfully!");
-    navigate(-1);
+      if (res) {
+        alert(`Vendor ${mode === "edit" ? "updated" : "saved"} successfully!`);
+        onClose();
+      }
+    } catch (err) {
+      console.error("Save failed:", err.message);
+    }
   };
 
   return (
@@ -120,14 +156,14 @@ const VendorForm = ({ onClose }) => {
                 Vendor Display Name
               </label>
               <select
-                name="displayName"
-                value={formData.displayName}
+                name="displayNameType"
+                value={formData.displayNameType}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded p-2"
               >
-                <option value="">Select a display name</option>
-                <option value="Use Company Name">Use Company Name</option>
-                <option value="Use Contact Name">Use Contact Name</option>
+                <option value="">Select Display Name</option>
+                <option value="Company Name">Company Name</option>
+                <option value="Contact Name">Contact Name</option>
               </select>
             </div>
 
@@ -159,9 +195,11 @@ const VendorForm = ({ onClose }) => {
                   <Phone className="w-4 h-4 text-gray-400 mr-2" />
                   <input
                     type="tel"
-                    name="workPhone"
-                    placeholder="Work Phone"
-                    value={formData.workPhone}
+                    name="vendorPhoneNumber"
+                    placeholder="Mobile Number"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    value={formData.vendorPhoneNumber}
                     onChange={handleChange}
                     className="w-full outline-none"
                   />
@@ -170,9 +208,11 @@ const VendorForm = ({ onClose }) => {
                   <Smartphone className="w-4 h-4 text-gray-400 mr-2" />
                   <input
                     type="tel"
-                    name="mobile"
-                    placeholder="Mobile"
-                    value={formData.mobile}
+                    name="vendorMobileNumber"
+                    placeholder="Mobile Number"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    value={formData.vendorMobileNumber}
                     onChange={handleChange}
                     className="w-full outline-none"
                   />
@@ -230,6 +270,15 @@ const VendorForm = ({ onClose }) => {
           >
             Add Vendor
           </button>
+          {(postLoading || patchLoading) && (
+            <p className="text-blue-500 mt-2">Saving vendor...</p>
+          )}
+
+          {(postError || patchError) && (
+            <p className="text-red-600 mt-2">
+              Error: {postError?.message || patchError?.message}
+            </p>
+          )}
         </div>
       </div>
     </section>

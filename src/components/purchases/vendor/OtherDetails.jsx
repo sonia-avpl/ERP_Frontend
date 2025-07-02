@@ -28,12 +28,22 @@ const OtherDetails = ({ data, setData }) => {
           className={inputClass}
         />
       </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          GST NO.
+        </label>
+        <input
+          type="text"
+          name="gstNo"
+          value={data.gstNo || ""}
+          onChange={handleChange}
+          className={inputClass}
+        />
+      </div>
 
       {/* Currency */}
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Currency
-        </label>
+        <label className="block text-sm font-medium mb-1">Currency</label>
         <select
           name="currency"
           value={data.currency || ""}
@@ -81,15 +91,32 @@ const OtherDetails = ({ data, setData }) => {
       </div> */}
 
       {/* Document */}
+      {/* Document Upload */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Document
         </label>
+
+        {data.document && typeof data.document === "string" && (
+          <div className="mb-2 text-sm">
+            <a
+              href={`/${data.document}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              View Current Document
+            </a>
+          </div>
+        )}
+
+        {/* File Upload Input */}
         <input
           type="file"
           name="document"
-          value={data.document || ""}
-          onChange={handleChange}
+          onChange={(e) =>
+            setData((prev) => ({ ...prev, document: e.target.files?.[0] }))
+          }
           className={inputClass}
         />
       </div>
