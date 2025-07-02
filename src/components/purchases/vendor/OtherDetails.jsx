@@ -28,6 +28,18 @@ const OtherDetails = ({ data, setData }) => {
           className={inputClass}
         />
       </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          GST NO.
+        </label>
+        <input
+          type="text"
+          name="gstNO"
+          value={data.gstNO || ""}
+          onChange={handleChange}
+          className={inputClass}
+        />
+      </div>
 
       {/* Currency */}
       <div>
