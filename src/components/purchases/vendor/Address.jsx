@@ -1,18 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CitySelect,
   CountrySelect,
   StateSelect,
 } from "react-country-state-city";
+import { Country, State } from "country-state-city";
 import "react-country-state-city/dist/react-country-state-city.css";
 
-import { EyeIcon } from "@heroicons/react/24/outline";
-
 const Address = ({ data, setData }) => {
-  const [billingCountryId, setBillingCountryId] = useState(0);
-  const [billingStateId, setBillingStateId] = useState(0);
-  const [shippingCountryId, setShippingCountryId] = useState(0);
-  const [shippingStateId, setShippingStateId] = useState(0);
+  const [billingCountry, setBillingCountry] = useState(null);
+  const [billingState, setBillingState] = useState(null);
+  const [shippingCountry, setShippingCountry] = useState(null);
+  const [shippingState, setShippingState] = useState(null);
+
+  // Load initial country/state for edit mode
+  useEffect(() => {
+    if (data?.billing?.country) {
+      const foundCountry = Country.getAllCountries().find(
+        (c) => c.name === data.billing.country
+      );
+      if (foundCountry) {
+        setBillingCountry(foundCountry);
+
+        const foundState = State.getStatesOfCountry(foundCountry.isoCode).find(
+          (s) => s.name === data.billing.state
+        );
+        if (foundState) setBillingState(foundState);
+      }
+    }
+
+    if (data?.shipping?.country) {
+      const foundCountry = Country.getAllCountries().find(
+        (c) => c.name === data.shipping.country
+      );
+      if (foundCountry) {
+        setShippingCountry(foundCountry);
+
+        const foundState = State.getStatesOfCountry(foundCountry.isoCode).find(
+          (s) => s.name === data.shipping.state
+        );
+        if (foundState) setShippingState(foundState);
+      }
+    }
+  }, [data]);
 
   const handleChange = (e, type) => {
     const { name, value } = e.target;
@@ -25,48 +55,38 @@ const Address = ({ data, setData }) => {
     }));
   };
 
-  // const copyBillingToShipping = () => {
-  //   setData((prev) => ({
-  //     ...prev,
-  //     shipping: { ...prev.billing },
-  //   }));
-  // };
+  const inputClass =
+    "w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150";
 
-  const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
-
-  const renderFields = (type, data, handleChangeFn) => (
+  const renderFields = (type, typeData, handleChangeFn) => (
     <>
       <div className="mb-3">
-        <label className="block text-sm font-medium mb-1">
-          Country / Region
-        </label>
+        <label className="block text-sm font-medium mb-1">Country / Region</label>
         <CountrySelect
           inputClassName={inputClass}
-          value={type === "billing" ? billingCountryId : shippingCountryId}
+          value={type === "billing" ? billingCountry : shippingCountry}
           onChange={(c) => {
             if (type === "billing") {
-              setBillingCountryId(c.id);
-              setBillingStateId(0);
+              setBillingCountry(c);
+              setBillingState(null);
             } else {
-              setShippingCountryId(c.id);
-              setShippingStateId(0);
+              setShippingCountry(c);
+              setShippingState(null);
             }
             handleChange({ target: { name: "country", value: c.name } }, type);
           }}
         />
       </div>
+
       <div className="mb-3">
         <label className="block text-sm font-medium mb-1">State</label>
         <StateSelect
           inputClassName={inputClass}
-          countryid={type === "billing" ? billingCountryId : shippingCountryId}
-          value={type === "billing" ? billingStateId : shippingStateId}
+          countryid={(type === "billing" ? billingCountry : shippingCountry)?.id}
+          value={type === "billing" ? billingState : shippingState}
           onChange={(s) => {
-            if (type === "billing") {
-              setBillingStateId(s.id);
-            } else {
-              setShippingStateId(s.id);
-            }
+            if (type === "billing") setBillingState(s);
+            else setShippingState(s);
             handleChange({ target: { name: "state", value: s.name } }, type);
           }}
         />
@@ -76,8 +96,8 @@ const Address = ({ data, setData }) => {
         <label className="block text-sm font-medium mb-1">City</label>
         <CitySelect
           inputClassName={inputClass}
-          countryid={type === "billing" ? billingCountryId : shippingCountryId}
-          stateid={type === "billing" ? billingStateId : shippingStateId}
+          countryid={(type === "billing" ? billingCountry : shippingCountry)?.id}
+          stateid={(type === "billing" ? billingState : shippingState)?.id}
           onChange={(city) =>
             handleChange({ target: { name: "city", value: city.name } }, type)
           }
@@ -87,19 +107,19 @@ const Address = ({ data, setData }) => {
       <div className="mb-3">
         <label className="block text-sm font-medium mb-1">Address</label>
         <textarea
-          name="street1"
-          placeholder="Street 1"
-          value={data.street1 || ""}
+          name="address"
+          placeholder="Full address"
+          value={typeData.address || ""}
           onChange={handleChangeFn}
           className={inputClass}
         />
       </div>
 
       <div className="mb-3">
-        <label className="block text-sm font-medium mb-1">Zip Code</label>
+        <label className="block text-sm font-medium mb-1">Pincode</label>
         <input
-          name="zip"
-          value={data.zip || ""}
+          name="pincode"
+          value={typeData.pincode || ""}
           onChange={handleChangeFn}
           className={inputClass}
         />
@@ -109,13 +129,14 @@ const Address = ({ data, setData }) => {
         <label className="block text-sm font-medium mb-1">Phone</label>
         <input
           name="phone"
-          value={data.phone || ""}
+          value={typeData.phone || ""}
           onChange={handleChangeFn}
           className={inputClass}
         />
       </div>
     </>
   );
+
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow">
       <div className="grid md:grid-cols-2 gap-10">
@@ -128,14 +149,7 @@ const Address = ({ data, setData }) => {
 
         <div>
           <h2 className="text-lg font-semibold mb-4 flex items-center justify-between">
-            Shipping Address{" "}
-            {/* <button
-              type="button"
-              onClick={copyBillingToShipping}
-              className="text-blue-600 text-sm hover:underline"
-            >
-              (↓ Copy billing address)
-            </button> */}
+            Shipping Address
           </h2>
           {renderFields("shipping", data.shipping || {}, (e) =>
             handleChange(e, "shipping")
