@@ -69,6 +69,7 @@ import NewItemForm from "./form/NewItemForm";
 import ItemDetails from "../components/inventory/ItemDetails";
 import EditItemForm from "../components/form/EditItemForm";
 import VendorForm from "./form/VendorForm";
+import VendorDetails from "../Pages/SupplyChain/Purchases/VendorDetail";
 
 const AllRoutes = () => {
   return (
@@ -123,6 +124,7 @@ const AllRoutes = () => {
             <Route path="/purchases/bills" element={<Bills />} />
             <Route path="/purchases/payments" element={<PaymentsMade />} />
             <Route path="/purchases/credits" element={<VendorCredits />} />
+            <Route path="/vendors/:vendorId" element={<VendorDetails />} />
 
             <Route path="/quality-control" element={<QualityControl />} />
             <Route path="/reporting" element={<Reporting />} />
