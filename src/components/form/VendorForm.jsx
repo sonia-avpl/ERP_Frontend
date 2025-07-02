@@ -7,24 +7,37 @@ import Address from "../purchases/vendor/Address";
 import ContactPerson from "../purchases/vendor/ContactPerson";
 import BankDetails from "../purchases/vendor/BankDetails";
 import { usePostFile } from "../../hooks/usePostFile";
+import { usePatch } from "../../hooks/usePatch";
 
-const VendorForm = ({ onClose }) => {
+const VendorForm = ({ onClose, mode = "create", existingData = null }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    companyName: "",
-    displayNameType: "",
-    email: "",
-    vendorPhoneNumber: "",
-    vendorMobileNumber: "",
+    firstName: existingData?.firstName || "",
+    lastName: existingData?.lastName || "",
+    companyName: existingData?.companyName || "",
+    displayNameType: existingData?.displayNameType || "",
+    email: existingData?.email || "",
+    vendorPhoneNumber: existingData?.vendorPhoneNumber || "",
+    vendorMobileNumber: existingData?.vendorMobileNumber || "",
   });
 
-  const [otherDetails, setOtherDetails] = useState({});
-  const [addressDetails, setAddressDetails] = useState({});
-  const [contactPersons, setContactPersons] = useState([]);
-  const [bankDetails, setBankDetails] = useState([]);
+  const [otherDetails, setOtherDetails] = useState(
+    existingData?.otherDetails || {}
+  );
+  const [addressDetails, setAddressDetails] = useState(
+    existingData?.address || {
+      billing: { country: "", state: "", city: "", pincode: "", address: "" },
+      shipping: { country: "", state: "", city: "", pincode: "", address: "" },
+    }
+  );
+
+  const [contactPersons, setContactPersons] = useState(
+    existingData?.contactPersons || []
+  );
+  const [bankDetails, setBankDetails] = useState(
+    existingData?.bankDetails || []
+  );
 
   const [activeTab, setActiveTab] = useState("other");
 
@@ -41,7 +54,16 @@ const VendorForm = ({ onClose }) => {
   };
 
   const token = localStorage.getItem("token");
-  const { postData, loading, error } = usePostFile(token);
+  const {
+    postData,
+    loading: postLoading,
+    error: postError,
+  } = usePostFile(token);
+  const {
+    patchData,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch(token);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -54,13 +76,19 @@ const VendorForm = ({ onClose }) => {
       bankDetails,
     };
 
-    console.log("Sending to backend:", vendorData);
-
     try {
-      const res = await postData("vendors/add", vendorData);
+      let res;
+      if (mode === "edit") {
+        // PATCH request to update vendor
+        res = await patchData(`vendors/${existingData._id}`, vendorData);
+      } else {
+        // POST request to create new vendor
+        res = await postData("vendors/add", vendorData);
+      }
+
       if (res) {
-        alert("Vendor saved successfully!");
-        navigate(-1);
+        alert(`Vendor ${mode === "edit" ? "updated" : "saved"} successfully!`);
+        onClose();
       }
     } catch (err) {
       console.error("Save failed:", err.message);
@@ -130,6 +158,7 @@ const VendorForm = ({ onClose }) => {
                 name="displayNameType"
                 value={formData.displayNameType}
                 onChange={handleChange}
+                className="w-full border border-gray-300 rounded p-2"
               >
                 <option value="">Select Display Name</option>
                 <option value="Company Name">Company Name</option>
@@ -240,19 +269,15 @@ const VendorForm = ({ onClose }) => {
           >
             Add Vendor
           </button>
-          {loading && <p className="text-blue-500 mt-2">Saving vendor...</p>}
+          {(postLoading || patchLoading) && (
+            <p className="text-blue-500 mt-2">Saving vendor...</p>
+          )}
 
-          {Array.isArray(error) ? (
-            error.map((err, i) => (
-              <p key={i} className="text-red-600 mt-2">
-                Error: {err.message}
-              </p>
-            ))
-          ) : error ? (
+          {(postError || patchError) && (
             <p className="text-red-600 mt-2">
-              Error: {typeof error === "string" ? error : error.message}
+              Error: {postError?.message || patchError?.message}
             </p>
-          ) : null}
+          )}
         </div>
       </div>
     </section>
