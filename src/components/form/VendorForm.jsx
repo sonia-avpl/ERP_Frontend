@@ -9,7 +9,7 @@ import BankDetails from "../purchases/vendor/BankDetails";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePatch } from "../../hooks/usePatch";
 
-const VendorForm = ({ onClose, mode = "create", existingData = null }) => {
+const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -81,6 +81,7 @@ const VendorForm = ({ onClose, mode = "create", existingData = null }) => {
       if (mode === "edit") {
         // PATCH request to update vendor
         res = await patchData(`vendors/${existingData._id}`, vendorData);
+        refetch()
       } else {
         // POST request to create new vendor
         res = await postData("vendors/add", vendorData);

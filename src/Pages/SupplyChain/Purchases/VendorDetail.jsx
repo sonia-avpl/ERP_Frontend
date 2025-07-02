@@ -8,7 +8,12 @@ const VendorDetails = () => {
   const navigate = useNavigate();
   const [showEditForm, setShowEditForm] = useState(false);
 
-  const { data: vendor, loading, error } = useGet(`/vendors/${vendorId}`);
+  const {
+    data: vendor,
+    loading,
+    refetch,
+    error,
+  } = useGet(`/vendors/${vendorId}`);
 
   if (loading)
     return (
@@ -234,6 +239,7 @@ const VendorDetails = () => {
           mode="edit"
           existingData={vendor}
           onClose={() => setShowEditForm(false)}
+          refetch={refetch}
         />
       )}
     </div>
