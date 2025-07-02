@@ -31,9 +31,9 @@ const UserList = ({
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Department
-              </th>
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Role
               </th>
@@ -69,12 +69,12 @@ const UserList = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {user.email}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {user.department}
-                  </td>
+                  </td> */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      className={`inline-flex text-xs leading-5 font-semibold rounded-full ${
                         !user.isApproved
                           ? "bg-gray-200 text-gray-500"
                           : "bg-blue-100 text-blue-800"
@@ -95,7 +95,7 @@ const UserList = ({
                           : "bg-red-100 text-red-600 hover:bg-red-200"
                       }`}
                     >
-                      {!user.isApproved ? "Enable" : "Disable"}
+                      {user.isApproved ? "Enable" : "Disable"}
                     </button>
                     <button
                       onClick={() => onEditUser(user)}

@@ -1,16 +1,15 @@
-import { useState } from "react";
+// import { useState } from "react";
 
-const OtherDetails = () => {
-  const [formData, setFormData] = useState({
-    pan: "",
-    currency: "",
-    paymentTerm: "",
-    priceList: "",
-    document: [],
-  });
+const OtherDetails = ({ data, setData }) => {
+  // const [formData, setFormData] = useState({
+  //   pan: "",
+  //   currency: "",
+  //   paymentTerm: "",
+  //   document: [],
+  // });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setData((prev) => ({ ...prev, [name]: value }));
   };
   const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
 
@@ -24,7 +23,7 @@ const OtherDetails = () => {
         <input
           type="text"
           name="pan"
-          value={formData.pan}
+          value={data.pan || ""}
           onChange={handleChange}
           className={inputClass}
         />
@@ -32,12 +31,12 @@ const OtherDetails = () => {
 
       {/* Currency */}
       <div>
-        <label className="block text-sm font-medium text-red-600 mb-1">
+        <label className="block text-sm font-medium mb-1">
           Currency
         </label>
         <select
           name="currency"
-          value={formData.currency}
+          value={data.currency || ""}
           onChange={handleChange}
           className={inputClass}
         >
@@ -54,7 +53,7 @@ const OtherDetails = () => {
         </label>
         <select
           name="paymentTerm"
-          value={formData.paymentTerm}
+          value={data.paymentTerm || ""}
           onChange={handleChange}
           className={inputClass}
         >
@@ -65,7 +64,7 @@ const OtherDetails = () => {
       </div>
 
       {/* Price List */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Price List
         </label>
@@ -79,7 +78,7 @@ const OtherDetails = () => {
           <option value=" price-list">PriceBook-3</option>
           <option value=" price-list">PriceBook-4</option>
         </select>
-      </div>
+      </div> */}
 
       {/* Document */}
       <div>
@@ -89,7 +88,7 @@ const OtherDetails = () => {
         <input
           type="file"
           name="document"
-          value={formData.document}
+          value={data.document || ""}
           onChange={handleChange}
           className={inputClass}
         />

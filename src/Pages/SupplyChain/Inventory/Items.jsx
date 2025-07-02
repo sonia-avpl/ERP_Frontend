@@ -2,12 +2,14 @@ import axios from "axios";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NewItemForm from "../../../components/form/NewItemForm";
 
 const Items = () => {
   const navigate = useNavigate();
   const [savedItems, setSavedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [showItemForm, setShowItemForm] = useState();
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -29,12 +31,13 @@ const Items = () => {
       <div className="flex items-center justify-between p-4 border-b">
         <div className="text-lg font-semibold">All Items</div>
         <button
-          onClick={() => navigate("/inventory/items/new")}
+          onClick={() => setShowItemForm(true)}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
         >
           <Plus className="w-4 h-4" />
           New
         </button>
+        {showItemForm && <NewItemForm onClose={() => setShowItemForm(false)} />}
       </div>
 
       {/* Table or empty state */}
@@ -56,7 +59,6 @@ const Items = () => {
                     setSelectedItems(
                       isChecked ? savedItems.map((item) => item._id) : []
                     );
-                    
                   }}
                   className="accent-blue-600 w-4 ml-[12px] mt-[8px] h-4 rounded cursor-pointer"
                 />

@@ -75,7 +75,9 @@ const BankSection = ({ data, setData }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Bank Name</label>
+                <label className="block text-sm font-medium mb-1">
+                  Bank Name
+                </label>
                 <input
                   type="text"
                   name="bankName"
@@ -86,8 +88,8 @@ const BankSection = ({ data, setData }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-red-600 mb-1">
-                  Account Number*
+                <label className="block text-sm font-medium mb-1">
+                  Account Number
                 </label>
                 <div className="relative">
                   <input
@@ -105,7 +107,7 @@ const BankSection = ({ data, setData }) => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-red-600 mb-1">
+                <label className="block text-sm font-medium mb-1">
                   Re-enter Account Number*
                 </label>
                 <input
@@ -118,9 +120,7 @@ const BankSection = ({ data, setData }) => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-red-600 mb-1">
-                  IFSC*
-                </label>
+                <label className="block text-sm font-medium mb-1">IFSC*</label>
                 <input
                   type="text"
                   name="ifsc"

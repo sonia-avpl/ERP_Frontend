@@ -22,8 +22,14 @@ const UserManagement = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, loading, refetch } = useGet(`auth/users`);
-  const Allusers = data?.users || [];
+  const { data, loading, refetch } = useGet(`/auth/users`);
+
+  const allUsers =
+    data?.data?.map((user) => ({
+      ...user,
+      department: user.department || "N/A",
+      role: user.role?.name || "N/A",
+    })) || [];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,7 +63,7 @@ const UserManagement = () => {
     }
   };
 
-  const filteredUsers = Allusers.filter((user) => {
+  const filteredUsers = allUsers.filter((user) => {
     const matchesDept =
       selectedDepartment === "All" || user.department === selectedDepartment;
     const matchesRole = selectedRole === "All" || user.role === selectedRole;
@@ -80,6 +86,7 @@ const UserManagement = () => {
       setCurrentPage(page);
     }
   };
+
   const filtersUI = (
     <>
       <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
@@ -110,72 +117,71 @@ const UserManagement = () => {
         </div>
       </div>
 
- <AnimatePresence>
-  {showFilters && (
-    <motion.div
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: 0.1, ease: "easeInOut" }}
-      className="overflow-hidden mb-4 bg-white p-3 rounded-md shadow-sm"
-    >
-      <div className="flex gap-4 flex-wrap text-xs">
-        <div className="flex items-center space-x-2">
-          <label htmlFor="departmentFilter" className="text-gray-700">
-            Department:
-          </label>
-          <select
-            id="departmentFilter"
-            value={selectedDepartment}
-            onChange={(e) => setSelectedDepartment(e.target.value)}
-            className="px-3 py-1 border border-gray-300 rounded-md"
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.1, ease: "easeInOut" }}
+            className="overflow-hidden mb-4 bg-white p-3 rounded-md shadow-sm"
           >
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="flex gap-4 flex-wrap text-xs">
+              <div className="flex items-center space-x-2">
+                <label htmlFor="departmentFilter" className="text-gray-700">
+                  Department:
+                </label>
+                <select
+                  id="departmentFilter"
+                  value={selectedDepartment}
+                  onChange={(e) => setSelectedDepartment(e.target.value)}
+                  className="px-3 py-1 border border-gray-300 rounded-md"
+                >
+                  {departments.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <div className="flex items-center space-x-2">
-          <label htmlFor="roleFilter" className="text-gray-700">
-            Role:
-          </label>
-          <select
-            id="roleFilter"
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="px-3 py-1 border border-gray-300 rounded-md"
-          >
-            {role.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div className="flex items-center space-x-2">
+                <label htmlFor="roleFilter" className="text-gray-700">
+                  Role:
+                </label>
+                <select
+                  id="roleFilter"
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  className="px-3 py-1 border border-gray-300 rounded-md"
+                >
+                  {role.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-        <label className="flex items-center gap-1">
-          <input
-            type="checkbox"
-            checked={showOnlyDisabled}
-            onChange={(e) => setShowOnlyDisabled(e.target.checked)}
-            className="h-4 w-4"
-          />
-          Disabled only
-        </label>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
+              <label className="flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  checked={showOnlyDisabled}
+                  onChange={(e) => setShowOnlyDisabled(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Disabled only
+              </label>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 
-if (loading) {
-  return <LoadinSpinner text="Loading users..." />;
-}
+  if (loading) {
+    return <LoadinSpinner text="Loading users..." />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 font-sans w-full">

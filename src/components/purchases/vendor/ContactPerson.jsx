@@ -1,29 +1,35 @@
-import { useState } from "react";
 import { X } from "lucide-react";
 
-const ContactPerson = () => {
-  const [contacts, setContacts] = useState([
-    { salutation: "", firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
-  ]);
-
+const ContactPerson = ({ data = [], setData }) => {
   const handleChange = (index, e) => {
     const { name, value } = e.target;
-    const updatedContacts = [...contacts];
+    const updatedContacts = [...data];
     updatedContacts[index][name] = value;
-    setContacts(updatedContacts);
+    setData(updatedContacts);
   };
 
   const addContact = () => {
-    setContacts([
-      ...contacts,
-      { salutation: "", firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
+    setData([
+      ...data,
+      { firstName: "", lastName: "", email: "", workPhone: "", mobile: "" },
     ]);
   };
 
   const removeContact = (index) => {
-    const updatedContacts = contacts.filter((_, i) => i !== index);
-    setContacts(updatedContacts);
+    const updatedContacts = data.filter((_, i) => i !== index);
+    setData(updatedContacts);
   };
+
+  const renderInput = (index, name, value) => (
+    <td className="border border-gray-300 px-2 py-1">
+      <input
+        name={name}
+        value={value || ""}
+        onChange={(e) => handleChange(index, e)}
+        className="w-full px-2 py-1 border border-gray-300 rounded"
+      />
+    </td>
+  );
 
   return (
     <div className="w-full mt-6">
@@ -31,7 +37,6 @@ const ContactPerson = () => {
         <table className="min-w-full border border-gray-300 text-sm text-left text-gray-800">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border border-gray-300 px-3 py-2">Salutation</th>
               <th className="border border-gray-300 px-3 py-2">First Name</th>
               <th className="border border-gray-300 px-3 py-2">Last Name</th>
               <th className="border border-gray-300 px-3 py-2">Email Address</th>
@@ -41,62 +46,13 @@ const ContactPerson = () => {
             </tr>
           </thead>
           <tbody>
-            {contacts.map((contact, index) => (
+            {data.map((contact, index) => (
               <tr key={index}>
-                <td className="border border-gray-300 px-2 py-1">
-                  <select
-                    name="salutation"
-                    value={contact.salutation}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  >
-                    <option value=""></option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Ms.">Ms.</option>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Dr.">Dr.</option>
-                  </select>
-                </td>
-                <td className="border border-gray-300 px-2 py-1">
-                  <input
-                    name="firstName"
-                    value={contact.firstName}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  />
-                </td>
-                <td className="border border-gray-300 px-2 py-1">
-                  <input
-                    name="lastName"
-                    value={contact.lastName}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  />
-                </td>
-                <td className="border border-gray-300 px-2 py-1">
-                  <input
-                    name="email"
-                    value={contact.email}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  />
-                </td>
-                <td className="border border-gray-300 px-2 py-1">
-                  <input
-                    name="workPhone"
-                    value={contact.workPhone}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  />
-                </td>
-                <td className="border border-gray-300 px-2 py-1">
-                  <input
-                    name="mobile"
-                    value={contact.mobile}
-                    onChange={(e) => handleChange(index, e)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded"
-                  />
-                </td>
+                {renderInput(index, "firstName", contact.firstName)}
+                {renderInput(index, "lastName", contact.lastName)}
+                {renderInput(index, "email", contact.email)}
+                {renderInput(index, "workPhone", contact.workPhone)}
+                {renderInput(index, "mobile", contact.mobile)}
                 <td className="border border-gray-300 px-2 py-1 text-center">
                   <button
                     onClick={() => removeContact(index)}
