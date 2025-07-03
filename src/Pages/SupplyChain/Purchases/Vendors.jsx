@@ -193,7 +193,7 @@ const Vendors = () => {
                   <td className="px-4 py-2">
                     Rs.{Math.floor(Math.random() * 700)}
                   </td>
-                  <td className="px-4 py-2 text-center space-x-2 ">
+                  <td className="px-4 py-2 text-center space-x-4 ">
                     <Link to={`/vendors/${vendor._id}`}>
                       <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
                         <HiOutlineEye className="h-4 w-4" />
