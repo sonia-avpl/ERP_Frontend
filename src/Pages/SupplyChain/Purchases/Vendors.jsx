@@ -69,7 +69,7 @@ const Vendors = () => {
                   </td>
                   <td className="px-4 py-2">{vendor.companyName}</td>
                   <td className="px-4 py-2 text-blue-600 underline">
-                    {vendor.contactPersons?.[0]?.email || "N/A"}
+                    {vendor.companyEmail || "N/A"}
                   </td>
                   <td className="px-4 py-2">
                     {vendor.vendorMobileNumber ||
