@@ -18,7 +18,9 @@ const Vendors = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 border-b bg-white rounded-t-xl shadow-md">
+      <div
+        className="flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4"
+      >
         <div className="text-lg font-semibold">Vendors</div>
         <button
           onClick={() => setShowVendorForm(true)}
@@ -30,7 +32,7 @@ const Vendors = () => {
         {showVendorForm && <VendorForm onClose={handleCloseForm} />}
       </div>
 
-      <div className="overflow-x-auto p-4 bg-white rounded-b-xl shadow-md mx-4 mt-0">
+      <div className="overflow-x-auto  my-10 bg-white rounded-b-xl shadow-md mx-4 mt-0">
         {loading ? (
           <div className="text-center text-gray-600 py-10">
             Loading vendors...
