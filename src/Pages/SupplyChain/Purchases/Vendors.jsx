@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
+  const [selectedVendors, setSelectedVendors] = useState([]);
 
   const { data, loading, refetch } = useGet("/vendors");
   // const vendors = data?. || [];
@@ -16,11 +17,26 @@ const Vendors = () => {
     refetch();
   };
 
+  const handleCheckboxChange = (vendorId) => {
+    setSelectedVendors((prevSelected) =>
+      prevSelected.includes(vendorId)
+        ? prevSelected.filter((id) => id !== vendorId)
+        : [...prevSelected, vendorId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedVendors.length === data?.data?.length) {
+      setSelectedVendors([]);
+    } else {
+      const allIds = data?.data?.map((vendor) => vendor._id) || [];
+      setSelectedVendors(allIds);
+    }
+  };
+
   return (
     <>
-      <div
-        className="flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4"
-      >
+      <div className="flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
         <div className="text-lg font-semibold">Vendors</div>
         <button
           onClick={() => setShowVendorForm(true)}
@@ -44,8 +60,16 @@ const Vendors = () => {
             <thead className="bg-gray-50 text-gray-600 text-xs uppercase">
               <tr>
                 <th className="px-4 py-3">
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    checked={
+                      data?.data?.length > 0 &&
+                      selectedVendors.length === data?.data?.length
+                    }
+                    onChange={handleSelectAll}
+                  />
                 </th>
+
                 <th className="px-4 py-3">Name</th>
                 <th className="px-4 py-3">Company Name</th>
                 <th className="px-4 py-3">Email</th>
@@ -62,8 +86,13 @@ const Vendors = () => {
                   className="border-t hover:bg-gray-100 transition"
                 >
                   <td className="px-4 py-2">
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={selectedVendors.includes(vendor._id)}
+                      onChange={() => handleCheckboxChange(vendor._id)}
+                    />
                   </td>
+
                   <td className="px-4 py-2 font-medium text-gray-800">
                     {vendor.firstName} {vendor.lastName}
                   </td>
