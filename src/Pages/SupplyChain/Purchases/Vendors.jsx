@@ -74,7 +74,7 @@ const Vendors = () => {
                 <th className="px-4 py-3">Company Name</th>
                 <th className="px-4 py-3">Email</th>
                 <th className="px-4 py-3">Phone</th>
-                <th className="px-4 py-3">Payables</th>
+                <th className="px-4 py-3">Payable</th>
                 <th className="px-4 py-3">Unused Credits</th>
                 <th className="px-4 py-3 text-center">Actions</th>
               </tr>
