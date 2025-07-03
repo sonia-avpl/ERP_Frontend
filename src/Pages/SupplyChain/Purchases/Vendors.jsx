@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
   const [selectedVendors, setSelectedVendors] = useState([]);
+  const [showActions, setShowActions] = useState(false);
 
   const { data, loading, refetch } = useGet("/vendors");
   // const vendors = data?. || [];
@@ -38,13 +39,58 @@ const Vendors = () => {
     <>
       <div className="flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
         <div className="text-lg font-semibold">Vendors</div>
-        <button
-          onClick={() => setShowVendorForm(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
-        >
-          <Plus className="w-4 h-4" />
-          New
-        </button>
+        <div className="flex justify-center items-center gap-4">
+          <button
+            onClick={() => setShowVendorForm(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            New
+          </button>
+          {selectedVendors.length > 0 && (
+            <div className="relative">
+              <button
+                className="border border-gray-300 hover:border-gray-400 px-4 py-2 rounded flex items-center gap-1 text-sm"
+                onClick={() => setShowActions((prev) => !prev)}
+              >
+                ⋮
+              </button>
+
+              {showActions && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded shadow-md z-10">
+                  <button
+                    onClick={() => {
+                      // example delete logic
+                      alert(`Delete vendors: ${selectedVendors.join(", ")}`);
+                      setShowActions(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => {
+                      alert("Exporting vendors...");
+                      setShowActions(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Export
+                  </button>
+                  <button
+                    onClick={() => {
+                      alert("Send email to selected vendors...");
+                      setShowActions(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    Email Selected
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         {showVendorForm && <VendorForm onClose={handleCloseForm} />}
       </div>
 
