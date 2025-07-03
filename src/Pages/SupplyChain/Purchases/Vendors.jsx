@@ -7,8 +7,7 @@ import toast from "react-hot-toast";
 import { useDelete } from "../../../hooks/useDelete";
 import { baseUrl } from "../../../utills/enum";
 
-import { IoEyeOutline } from "react-icons/io5";
-import { HiOutlineTrash } from "react-icons/hi2";
+import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi2";
 
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
@@ -194,10 +193,10 @@ const Vendors = () => {
                   <td className="px-4 py-2">
                     Rs.{Math.floor(Math.random() * 700)}
                   </td>
-                  <td className="px-4 py-2 text-center space-x-2">
+                  <td className="px-4 py-2 text-center space-x-2 ">
                     <Link to={`/vendors/${vendor._id}`}>
                       <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
-                        <IoEyeOutline className="h-4 w-4" />
+                        <HiOutlineEye className="h-4 w-4" />
                       </button>
                     </Link>
                     <button
