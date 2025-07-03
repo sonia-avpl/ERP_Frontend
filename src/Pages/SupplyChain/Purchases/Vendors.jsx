@@ -19,8 +19,7 @@ const Vendors = () => {
   return (
     <>
       <div
-        className="flex items-center justify-between border-b bg-white rounded-t-xl  my-10
-mx-4"
+        className="flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4"
       >
         <div className="text-lg font-semibold">Vendors</div>
         <button
