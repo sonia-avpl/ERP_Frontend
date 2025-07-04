@@ -124,24 +124,25 @@ const Address = ({ data, setData }) => {
         />
       </div>
 
-      <div className="mb-3">
-        <label className="block text-sm font-medium mb-1">Pincode</label>
-        <input
-          name="pincode"
-          value={typeData.pincode || ""}
-          onChange={handleChangeFn}
-          className={inputClass}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label className="block text-sm font-medium mb-1">Phone</label>
-        <input
-          name="phone"
-          value={typeData.phone || ""}
-          onChange={handleChangeFn}
-          className={inputClass}
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Pincode</label>
+          <input
+            name="pincode"
+            value={typeData.pincode || ""}
+            onChange={handleChangeFn}
+            className={inputClass}
+          />
+        </div>
+        <div className="mb-3">
+          <label className="block text-sm font-medium mb-1">Phone</label>
+          <input
+            name="phone"
+            value={typeData.phone || ""}
+            onChange={handleChangeFn}
+            className={inputClass}
+          />
+        </div>
       </div>
     </>
   );
