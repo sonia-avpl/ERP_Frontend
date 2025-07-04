@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VendorForm from "../../../components/form/VendorForm";
 import { useGet } from "../../../hooks/useGet";
 import { Link } from "react-router-dom";
@@ -14,8 +14,23 @@ const Vendors = () => {
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [showActions, setShowActions] = useState(false);
 
-  const { data, loading, refetch } = useGet("/vendors");
   const { deleteData } = useDelete();
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(() => {
+    const saved = localStorage.getItem("itemsPerPage");
+    return saved ? Number(saved) : 10;
+  });
+  const { data, loading, refetch } = useGet(
+    `/vendors?page=${currentPage}&limit=${itemsPerPage}`
+  );
+
+  const vendors = data?.data || [];
+
+  useEffect(() => {
+    localStorage.setItem("itemsPerPage", itemsPerPage);
+  }, [itemsPerPage]);
 
   const handleDelete = async (ids) => {
     const toDelete = Array.isArray(ids) ? ids : [ids];
@@ -127,6 +142,28 @@ const Vendors = () => {
       </div>
 
       <div className="overflow-x-auto my-10 bg-white rounded-b-xl shadow-md mx-4 mt-0">
+        <div className="flex justify-between items-center px-4 mb-2">
+          <div className="flex items-center gap-2">
+            <label htmlFor="perPage" className="text-sm text-gray-700">
+              Items per page:
+            </label>
+            <select
+              id="perPage"
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1); // Reset to first page on change
+              }}
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+
         <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden">
           <thead className="bg-gray-50 text-gray-600 text-xs uppercase sticky top-0 z-1">
             <tr>
@@ -163,9 +200,9 @@ const Vendors = () => {
                 </td>
               </tr>
             ) : (
-              data?.data?.map((vendor, index) => (
+              vendors?.map((vendor) => (
                 <tr
-                  key={index}
+                  key={vendor._id}
                   className="border-t hover:bg-gray-100 transition"
                 >
                   <td className="px-4 py-2">
@@ -211,6 +248,49 @@ const Vendors = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-between items-center px-4 py-3 bg-white border-t">
+          <p className="text-sm text-gray-600">
+            Page {currentPage} of {Math.ceil((data?.total || 0) / itemsPerPage)}
+          </p>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            {[...Array(Math.ceil((data?.total || 0) / itemsPerPage))].map(
+              (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 border rounded ${
+                    currentPage === i + 1 ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(
+                    prev + 1,
+                    Math.ceil((data?.total || 0) / itemsPerPage)
+                  )
+                )
+              }
+              disabled={
+                currentPage === Math.ceil((data?.total || 0) / itemsPerPage)
+              }
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
