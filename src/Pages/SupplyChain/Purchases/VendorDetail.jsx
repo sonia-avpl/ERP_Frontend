@@ -183,7 +183,7 @@ const VendorDetails = () => {
                   <strong>Document:</strong>{" "}
                   {otherDetails?.document ? (
                     <a
-                      href={`/${otherDetails.document}`}
+                      href={`${otherDetails.document}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-green-800 underline"
