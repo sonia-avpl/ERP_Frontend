@@ -99,8 +99,8 @@ const Vendors = () => {
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
-        <div className="text-lg font-semibold">Vendors</div>
-        <div className="flex justify-center items-center gap-4">
+        <div className="text-lg font-semibold m-4">Vendors</div>
+        <div className="flex justify-center items-center gap-4 m-4">
           <button
             onClick={() => setShowVendorForm(true)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
