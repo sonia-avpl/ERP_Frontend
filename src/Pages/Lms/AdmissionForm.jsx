@@ -168,8 +168,6 @@ const AdmissionForm = () => {
 
   const handleEducationChange = (index, field, value) => {
     const updatedEducation = [...formData.education];
-
-    // Special handling for subjects (when it's a multi-select array)
     if (field === "subjects") {
       // 'value' for a multiple select is an array of selected options
       updatedEducation[index][field] = value;

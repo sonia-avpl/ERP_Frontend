@@ -1,21 +1,33 @@
-// import { useState } from "react";
-
 const OtherDetails = ({ data, setData }) => {
-  // const [formData, setFormData] = useState({
-  //   pan: "",
-  //   currency: "",
-  //   paymentTerm: "",
-  //   document: [],
-  // });
-  const handleChange = (e) => {
+  const handleOtherDetailsChange = (e) => {
     const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
+    setData((prev) => ({
+      ...prev,
+      otherDetails: {
+        ...prev.otherDetails,
+        [name]: value,
+      },
+    }));
   };
-  const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
+
+  const handleDocumentChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    console.log("file",file)
+    setData((prev) => ({
+      ...prev,
+      otherDetails: {
+        ...prev.otherDetails,
+        document: file,
+      },
+    }));
+  };
+
+  const inputClass =
+    "w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150";
 
   return (
     <div className="w-full mx-auto p-6 space-y-6">
-      {/* PAN */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           PAN
@@ -23,9 +35,9 @@ const OtherDetails = ({ data, setData }) => {
         <input
           type="text"
           name="pan"
-          value={data.pan || ""}
-          onChange={handleChange}
-          className={inputClass}
+          value={data.otherDetails.pan}
+          onChange={handleOtherDetailsChange}
+          className="w-full border border-gray-300 rounded p-2"
         />
       </div>
       <div>
@@ -35,89 +47,61 @@ const OtherDetails = ({ data, setData }) => {
         <input
           type="text"
           name="gstNo"
-          value={data.gstNo || ""}
-          onChange={handleChange}
-          className={inputClass}
+          value={data.otherDetails.gstNo}
+          onChange={handleOtherDetailsChange}
+          className="w-full border border-gray-300 rounded p-2"
         />
       </div>
-
-      {/* Currency */}
       <div>
         <label className="block text-sm font-medium mb-1">Currency</label>
         <select
           name="currency"
-          value={data.currency || ""}
-          onChange={handleChange}
+          value={data?.otherDetails.currency || ""}
+          onChange={handleOtherDetailsChange}
           className={inputClass}
         >
           <option value="">Select a currency</option>
-          <option value="currency">$</option>
-          <option value="currency">₹</option>
+          <option value="$">$</option>
+          <option value="₹">₹</option>
         </select>
       </div>
-
-      {/* Payment Term */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Payment Term
         </label>
         <select
           name="paymentTerm"
-          value={data.paymentTerm || ""}
-          onChange={handleChange}
+          value={data?.otherDetails.paymentTerm || ""}
+          onChange={handleOtherDetailsChange}
           className={inputClass}
         >
           <option value="">Payment Term</option>
-          <option value="currency">Due on Receipt</option>
-          <option value="currency">Lorem ipsum dolor sit </option>
+          <option value="Due on Receipt">Due on Receipt</option>
+          <option value="Lorem ipsum dolor sit">Lorem ipsum dolor sit</option>
         </select>
       </div>
-
-      {/* Price List */}
-      {/* <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Price List
-        </label>
-        <select
-          name="priceList"
-          value={formData.priceList}
-          onChange={handleChange}
-          className={inputClass}
-        >
-          <option value="">List</option>
-          <option value=" price-list">PriceBook-3</option>
-          <option value=" price-list">PriceBook-4</option>
-        </select>
-      </div> */}
-
-      {/* Document */}
-      {/* Document Upload */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Document
         </label>
-
-        {data.document && typeof data.document === "string" && (
-          <div className="mb-2 text-sm">
-            <a
-              href={`/${data.document}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
-            >
-              View Current Document
-            </a>
-          </div>
-        )}
-
-        {/* File Upload Input */}
+        {data?.otherDetails.document &&
+          typeof data?.otherDetails.document === "string" && (
+            <div className="mb-2 text-sm">
+              <a
+                href={`${data?.otherDetails.document}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                View Current Document
+              </a>
+            </div>
+          )}
         <input
           type="file"
           name="document"
-          onChange={(e) =>
-            setData((prev) => ({ ...prev, document: e.target.files?.[0] }))
-          }
-          className={inputClass}
+          onChange={handleDocumentChange}
+          className="w-full border border-gray-300 rounded p-2"
         />
       </div>
     </div>

@@ -8,29 +8,49 @@ import ContactPerson from "../purchases/vendor/ContactPerson";
 import BankDetails from "../purchases/vendor/BankDetails";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePatch } from "../../hooks/usePatch";
+import { usePost } from "../../hooks/usePost";
+import { FileModules } from "../../utills/enum";
 
-const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) => {
+const VendorForm = ({
+  onClose,
+  mode = "create",
+  existingData = null,
+  refetch,
+}) => {
   const navigate = useNavigate();
-
+  const { uploadImageOnSWithModule } = usePost();
   const [formData, setFormData] = useState({
     firstName: existingData?.firstName || "",
     lastName: existingData?.lastName || "",
+    companyEmail: existingData?.companyEmail || "",
     companyName: existingData?.companyName || "",
     displayNameType: existingData?.displayNameType || "",
-    email: existingData?.email || "",
     vendorPhoneNumber: existingData?.vendorPhoneNumber || "",
     vendorMobileNumber: existingData?.vendorMobileNumber || "",
+    otherDetails: {
+      gstNo: existingData?.otherDetails?.gstNo || "",
+      pan: existingData?.otherDetails?.pan || "",
+      paymentTerm: existingData?.otherDetails?.paymentTerm || "",
+      currency: existingData?.otherDetails?.currency || "",
+      document: existingData?.otherDetails?.document || null,
+    },
+    address: {
+      billing: {
+        country: existingData?.address?.billing?.country || "",
+        state: existingData?.address?.billing?.state || "",
+        city: existingData?.address?.billing?.city || "",
+        pincode: existingData?.address?.billing?.pincode || "",
+        address: existingData?.address?.billing?.address || "",
+      },
+      shipping: {
+        country: existingData?.address?.shipping.country || "",
+        state: existingData?.address?.shipping.state || "",
+        city: existingData?.address?.shipping.city || "",
+        pincode: existingData?.address?.shipping.pincode || "",
+        address: existingData?.address?.shipping.address || "",
+      },
+    },
   });
-
-  const [otherDetails, setOtherDetails] = useState(
-    existingData?.otherDetails || {}
-  );
-  const [addressDetails, setAddressDetails] = useState(
-    existingData?.address || {
-      billing: { country: "", state: "", city: "", pincode: "", address: "" },
-      shipping: { country: "", state: "", city: "", pincode: "", address: "" },
-    }
-  );
 
   const [contactPersons, setContactPersons] = useState(
     existingData?.contactPersons || []
@@ -38,7 +58,6 @@ const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) 
   const [bankDetails, setBankDetails] = useState(
     existingData?.bankDetails || []
   );
-
   const [activeTab, setActiveTab] = useState("other");
 
   const tabs = [
@@ -70,29 +89,31 @@ const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) 
 
     const vendorData = {
       ...formData,
-      otherDetails,
-      address: addressDetails,
       contactPersons,
       bankDetails,
     };
-
-    try {
-      let res;
-      if (mode === "edit") {
-        // PATCH request to update vendor
-        res = await patchData(`vendors/${existingData._id}`, vendorData);
-        refetch()
-      } else {
-        // POST request to create new vendor
-        res = await postData("vendors/add", vendorData);
+    console.log("formData", formData);
+    const file = formData.otherDetails.document;
+    delete vendorData.otherDetails.document;
+    if (existingData) {
+      let res = await patchData(`vendors/${existingData._id}`,vendorData);
+      console.log("resd",res)
+      if (file) {
+        await uploadImageOnSWithModule(
+          [file],
+          res._id,
+          FileModules.Vendor
+        );
       }
-
-      if (res) {
-        alert(`Vendor ${mode === "edit" ? "updated" : "saved"} successfully!`);
-        onClose();
+    } else {
+      let res = await postData(`vendors/add`, vendorData);
+      if (file) {
+        await uploadImageOnSWithModule(
+          [file],
+          res.data._id,
+          FileModules.Vendor
+        );
       }
-    } catch (err) {
-      console.error("Save failed:", err.message);
     }
   };
 
@@ -170,15 +191,15 @@ const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) 
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Email
+                Company Email
               </label>
               <div className="flex items-center border border-gray-300 rounded p-2">
                 <Mail className="w-4 h-4 text-gray-400 mr-2" />
                 <input
                   type="email"
-                  name="email"
+                  name="companyEmail"
                   placeholder="example@domain.com"
-                  value={formData.email}
+                  value={formData.companyEmail}
                   onChange={handleChange}
                   className="w-full outline-none"
                 />
@@ -221,7 +242,6 @@ const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) 
             </div>
           </div>
 
-          {/* ---------- Tabs & Content ---------- */}
           <div className="px-6 pb-6">
             {/* Tabs */}
             <div className="flex border-b mb-6 space-x-6">
@@ -240,14 +260,13 @@ const VendorForm = ({ onClose, mode = "create", existingData = null , refetch}) 
               ))}
             </div>
 
-            {/* Conditional Tab Content */}
             <div style={{ display: activeTab === "other" ? "block" : "none" }}>
-              <OtherDetails data={otherDetails} setData={setOtherDetails} />
+              <OtherDetails data={formData} setData={setFormData} />
             </div>
             <div
               style={{ display: activeTab === "address" ? "block" : "none" }}
             >
-              <Address data={addressDetails} setData={setAddressDetails} />
+              <Address data={formData} setData={setFormData} />
             </div>
             <div
               style={{ display: activeTab === "contact" ? "block" : "none" }}
