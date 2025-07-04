@@ -120,6 +120,46 @@ const VendorForm = ({
         );
       }
     }
+
+    // Reset form
+    setFormData({
+      firstName: "",
+      lastName: "",
+      companyEmail: "",
+      companyName: "",
+      displayNameType: "",
+      vendorPhoneNumber: "",
+      vendorMobileNumber: "",
+      otherDetails: {
+        gstNo: "",
+        pan: "",
+        paymentTerm: "",
+        currency: "",
+        document: null,
+      },
+      address: {
+        billing: {
+          country: "",
+          state: "",
+          city: "",
+          pincode: "",
+          address: "",
+        },
+        shipping: {
+          country: "",
+          state: "",
+          city: "",
+          pincode: "",
+          address: "",
+        },
+      },
+    });
+    setContactPersons([]);
+    setBankDetails([]);
+    setActiveTab("other");
+
+    refetch();
+    onClose(); // Close form
   };
 
   return (
