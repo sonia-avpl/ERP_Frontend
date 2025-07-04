@@ -154,11 +154,12 @@ const VendorForm = ({
         },
       },
     });
+    
     setContactPersons([]);
     setBankDetails([]);
     setActiveTab("other");
 
-    refetch();
+    // refetch();
     onClose(); // Close form
   };
 
