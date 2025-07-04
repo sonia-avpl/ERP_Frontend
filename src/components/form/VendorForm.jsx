@@ -8,8 +8,13 @@ import ContactPerson from "../purchases/vendor/ContactPerson";
 import BankDetails from "../purchases/vendor/BankDetails";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePatch } from "../../hooks/usePatch";
+
+import { useDelete } from "../../hooks/useDelete";
+import { baseUrl } from "../../utills/enum";
+
 import { usePost } from "../../hooks/usePost";
 import { FileModules } from "../../utills/enum";
+
 
 const VendorForm = ({
   onClose,
@@ -24,6 +29,7 @@ const VendorForm = ({
     lastName: existingData?.lastName || "",
     companyEmail: existingData?.companyEmail || "",
     companyName: existingData?.companyName || "",
+    companyEmail: existingData?.companyEmail || "",
     displayNameType: existingData?.displayNameType || "",
     vendorPhoneNumber: existingData?.vendorPhoneNumber || "",
     vendorMobileNumber: existingData?.vendorMobileNumber || "",
@@ -84,6 +90,12 @@ const VendorForm = ({
     error: patchError,
   } = usePatch(token);
 
+  const {
+    deleteData,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDelete(token);
+
   const handleSave = async (e) => {
     e.preventDefault();
 
@@ -92,6 +104,18 @@ const VendorForm = ({
       contactPersons,
       bankDetails,
     };
+
+
+    try {
+      let res;
+      if (mode === "edit") {
+        // PATCH request to update vendor
+        res = await patchData(`vendors/${existingData._id}`, vendorData);
+        refetch();
+      } else {
+        // POST request to create new vendor
+        res = await postData("vendors/add", vendorData);
+
     console.log("formData", formData);
     const file = formData.otherDetails.document;
     delete vendorData.otherDetails.document;
@@ -104,6 +128,7 @@ const VendorForm = ({
           res._id,
           FileModules.Vendor
         );
+
       }
     } else {
       let res = await postData(`vendors/add`, vendorData);
@@ -282,20 +307,46 @@ const VendorForm = ({
           </div>
         </div>
 
-        <div className="md:col-span-2 m-4 text-end">
+        <div className="md:col-span-2 m-4 text-end space-x-2">
+          {mode === "edit" && (
+            <button
+              onClick={async () => {
+                const confirmed = window.confirm(
+                  "Are you sure you want to delete this vendor?"
+                );
+                if (!confirmed) return;
+
+                try {
+                  await deleteData(`${baseUrl}/vendors/${existingData._id}`);
+                  alert("Vendor deleted successfully");
+                  navigate("/purchases/vendors");
+                } catch (err) {
+                  console.error("Delete failed:", err.message);
+                }
+              }}
+              className="px-4 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition-colors duration-300"
+            >
+              Delete Vendor
+            </button>
+          )}
+
           <button
             onClick={handleSave}
             className="px-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-colors duration-300 disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
-            Add Vendor
+            {mode === "edit" ? "Update Vendor" : "Add Vendor"}
           </button>
-          {(postLoading || patchLoading) && (
-            <p className="text-blue-500 mt-2">Saving vendor...</p>
+
+          {(postLoading || patchLoading || deleteLoading) && (
+            <p className="text-blue-500 mt-2">Processing...</p>
           )}
 
-          {(postError || patchError) && (
+          {(postError || patchError || deleteError) && (
             <p className="text-red-600 mt-2">
-              Error: {postError?.message || patchError?.message}
+              Error:{" "}
+              {postError?.message ||
+                patchError?.message ||
+                deleteError?.message}
             </p>
           )}
         </div>
