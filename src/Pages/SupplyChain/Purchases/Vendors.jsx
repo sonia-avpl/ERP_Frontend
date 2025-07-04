@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDelete } from "../../../hooks/useDelete";
 import { baseUrl } from "../../../utills/enum";
+import { useCallback } from "react";
+import { debounce } from "lodash";
 
 import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi2";
 
@@ -13,6 +15,7 @@ const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [showActions, setShowActions] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { deleteData } = useDelete();
 
@@ -23,7 +26,7 @@ const Vendors = () => {
     return saved ? Number(saved) : 10;
   });
   const { data, loading, refetch } = useGet(
-    `/vendors?page=${currentPage}&limit=${itemsPerPage}`
+    `/vendors?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}`
   );
 
   const vendors = data?.data || [];
@@ -91,6 +94,20 @@ const Vendors = () => {
     }
   };
 
+  // debounce search method 
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setSearchTerm(value);
+      setCurrentPage(1);
+    }, 500),
+    []
+  );
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const currentPageVendorIds = vendors.map((vendor) => vendor._id);
   const allSelectedOnPage = currentPageVendorIds.every((id) =>
     selectedVendors.includes(id)
@@ -99,54 +116,64 @@ const Vendors = () => {
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
-        <div className="text-lg font-semibold m-4">Vendors</div>
-        <div className="flex justify-center items-center gap-4 m-4">
-          <button
-            onClick={() => setShowVendorForm(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
-          >
-            <Plus className="w-4 h-4" />
-            New
-          </button>
-          {selectedVendors.length > 0 && (
-            <div className="relative">
-              <button
-                className="border border-gray-300 hover:border-gray-400 px-4 py-2 rounded flex items-center gap-1 text-sm"
-                onClick={() => setShowActions((prev) => !prev)}
-              >
-                ⋮
-              </button>
+        <div className="w-full flex justify-center items-center m-4">
+          <div className="text-lg font-semibold w-1/6">Vendors</div>
+          <div className="w-4/6 rounded">
+            <input
+              type="text"
+              placeholder="Search vendors..."
+              onChange={(e) => debouncedSearch(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-1 text-sm w-full"
+            />
+          </div>
+          <div className="flex justify-center items-center w-1/6">
+            <button
+              onClick={() => setShowVendorForm(true)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex gap-1 text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              New
+            </button>
+            {selectedVendors.length > 0 && (
+              <div className="relative">
+                <button
+                  className="border border-gray-300 hover:border-gray-400 px-4 py-2 rounded flex items-center gap-1 text-sm"
+                  onClick={() => setShowActions((prev) => !prev)}
+                >
+                  ⋮
+                </button>
 
-              {showActions && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-110 overflow-hidden">
-                  <button
-                    onClick={() => handleDelete(selectedVendors)}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition"
-                  >
-                    Delete Selected
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert("Mark as active");
-                      setShowActions(false);
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                  >
-                    Mark as active
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert("Mark as inactive");
-                      setShowActions(false);
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                  >
-                    Mark as inactive
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+                {showActions && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-110 overflow-hidden">
+                    <button
+                      onClick={() => handleDelete(selectedVendors)}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition"
+                    >
+                      Delete Selected
+                    </button>
+                    <button
+                      onClick={() => {
+                        alert("Mark as active");
+                        setShowActions(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      Mark as active
+                    </button>
+                    <button
+                      onClick={() => {
+                        alert("Mark as inactive");
+                        setShowActions(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
+                    >
+                      Mark as inactive
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
         {showVendorForm && <VendorForm onClose={handleCloseForm} />}
       </div>
