@@ -20,7 +20,7 @@ const Vendors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [vendorStatusFilter, setVendorStatusFilter] = useState("all");
 
-  const { deleteData } = useDelete();
+  // const { deleteData } = useDelete();
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,37 +46,37 @@ const Vendors = () => {
     localStorage.setItem("itemsPerPage", itemsPerPage);
   }, [itemsPerPage]);
 
-  const handleDelete = async (ids) => {
-    const toDelete = Array.isArray(ids) ? ids : [ids];
+  // const handleDelete = async (ids) => {
+  //   const toDelete = Array.isArray(ids) ? ids : [ids];
 
-    if (toDelete.length === 0) {
-      toast.error("Please select at least one vendor to delete.");
-      return;
-    }
+  //   if (toDelete.length === 0) {
+  //     toast.error("Please select at least one vendor to delete.");
+  //     return;
+  //   }
 
-    const confirm = window.confirm(
-      `Are you sure you want to delete ${
-        toDelete.length > 1 ? `${toDelete.length} vendors` : "this vendor"
-      }?`
-    );
-    if (!confirm) return;
+  //   const confirm = window.confirm(
+  //     `Are you sure you want to delete ${
+  //       toDelete.length > 1 ? `${toDelete.length} vendors` : "this vendor"
+  //     }?`
+  //   );
+  //   if (!confirm) return;
 
-    try {
-      await Promise.all(
-        toDelete.map((vendorId) => deleteData(`${baseUrl}/vendors/${vendorId}`))
-      );
+  //   try {
+  //     await Promise.all(
+  //       toDelete.map((vendorId) => deleteData(`${baseUrl}/vendors/${vendorId}`))
+  //     );
 
-      toast.success(
-        `Vendor${toDelete.length > 1 ? "s" : ""} deleted successfully`
-      );
+  //     toast.success(
+  //       `Vendor${toDelete.length > 1 ? "s" : ""} deleted successfully`
+  //     );
 
-      setSelectedVendors((prev) => prev.filter((id) => !toDelete.includes(id)));
-      refetch();
-    } catch (err) {
-      toast.error("Failed to delete vendor(s)");
-      console.error(err);
-    }
-  };
+  //     setSelectedVendors((prev) => prev.filter((id) => !toDelete.includes(id)));
+  //     refetch();
+  //   } catch (err) {
+  //     toast.error("Failed to delete vendor(s)");
+  //     console.error(err);
+  //   }
+  // };
 
   const handleCloseForm = () => {
     setShowVendorForm(false);
@@ -377,12 +377,12 @@ const Vendors = () => {
                         <HiOutlineEye className="h-4 w-4" />
                       </button>
                     </Link>
-                    <button
+                    {/* <button
                       onClick={() => handleDelete(vendor._id)}
                       className="ml-2 text-red-500 hover:text-red-700 text-sm"
                     >
                       <HiOutlineTrash className="h-4 w-4" />
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))
