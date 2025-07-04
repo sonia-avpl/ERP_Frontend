@@ -78,13 +78,23 @@ const Vendors = () => {
   };
 
   const handleSelectAll = () => {
-    if (selectedVendors.length === data?.data?.length) {
-      setSelectedVendors([]);
+    const currentPageVendorIds = vendors.map((vendor) => vendor._id);
+
+    if (currentPageVendorIds.every((id) => selectedVendors.includes(id))) {
+      setSelectedVendors((prevSelected) =>
+        prevSelected.filter((id) => !currentPageVendorIds.includes(id))
+      );
     } else {
-      const allIds = data?.data?.map((vendor) => vendor._id) || [];
-      setSelectedVendors(allIds);
+      setSelectedVendors((prevSelected) => [
+        ...new Set([...prevSelected, ...currentPageVendorIds]),
+      ]);
     }
   };
+
+  const currentPageVendorIds = vendors.map((vendor) => vendor._id);
+  const allSelectedOnPage = currentPageVendorIds.every((id) =>
+    selectedVendors.includes(id)
+  );
 
   return (
     <>
@@ -170,10 +180,7 @@ const Vendors = () => {
               <th className="px-4 py-3">
                 <input
                   type="checkbox"
-                  checked={
-                    data?.data?.length > 0 &&
-                    selectedVendors.length === data?.data?.length
-                  }
+                  checked={allSelectedOnPage}
                   onChange={handleSelectAll}
                 />
               </th>
