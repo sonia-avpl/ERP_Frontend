@@ -39,6 +39,7 @@ const Vendors = () => {
   );
 
   const vendors = data?.data || [];
+  const counts = data?.counts || { all: 0, active: 0, inactive: 0 };
 
   useEffect(() => {
     localStorage.setItem("itemsPerPage", itemsPerPage);
@@ -129,7 +130,7 @@ const Vendors = () => {
     const value = e.target.value;
 
     if (["all", "active", "inactive"].includes(value)) {
-      setVendorStatusFilter(value); 
+      setVendorStatusFilter(value);
       setCurrentPage(1);
       return;
     }
@@ -165,7 +166,58 @@ const Vendors = () => {
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
+      <div className="flex justify-around gap-4 px-4 py-4 mb-4">
+        <div
+          onClick={() => {
+            setVendorStatusFilter("all");
+            setCurrentPage(1);
+          }}
+          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+            vendorStatusFilter === "all"
+              ? "bg-blue-100 border-blue-400"
+              : "bg-white"
+          }`}
+        >
+          <h4 className="text-lg font-semibold">All Vendors</h4>
+          <p className="text-2xl text-gray-800 font-bold">{counts.all}</p>
+        </div>
+
+        <div
+          onClick={() => {
+            setVendorStatusFilter("active");
+            setCurrentPage(1);
+          }}
+          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+            vendorStatusFilter === "active"
+              ? "bg-green-100 border-green-400"
+              : "bg-white"
+          }`}
+        >
+          <h4 className="text-lg font-semibold text-green-700">
+            Active Vendors
+          </h4>
+          <p className="text-2xl text-gray-800 font-bold">{counts.active}</p>
+        </div>
+
+        <div
+          onClick={() => {
+            setVendorStatusFilter("inactive");
+            setCurrentPage(1);
+          }}
+          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+            vendorStatusFilter === "inactive"
+              ? "bg-red-100 border-red-400"
+              : "bg-white"
+          }`}
+        >
+          <h4 className="text-lg font-semibold text-red-700">
+            Inactive Vendors
+          </h4>
+          <p className="text-2xl text-gray-800 font-bold">{counts.inactive}</p>
+        </div>
+      </div>
+
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-xl my-6 mx-4">
         <div className="w-full flex justify-center items-center m-4">
           <select
             value={vendorStatusFilter}
