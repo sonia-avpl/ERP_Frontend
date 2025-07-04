@@ -151,7 +151,7 @@ const Address = ({ data, setData }) => {
       <div className="grid md:grid-cols-2 gap-10">
         <div>
           <h2 className="text-lg font-semibold mb-4">Billing Address</h2>
-          {renderFields("billing", data.billing || {}, (e) =>
+          {renderFields("billing", data.address?.billing || {}, (e) =>
             handleChange(e, "billing")
           )}
         </div>
@@ -160,7 +160,7 @@ const Address = ({ data, setData }) => {
           <h2 className="text-lg font-semibold mb-4 flex items-center justify-between">
             Shipping Address
           </h2>
-          {renderFields("shipping", data.shipping || {}, (e) =>
+          {renderFields("shipping", data.address?.shipping || {}, (e) =>
             handleChange(e, "shipping")
           )}
         </div>

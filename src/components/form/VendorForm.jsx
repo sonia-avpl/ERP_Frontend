@@ -28,7 +28,6 @@ const VendorForm = ({
     lastName: existingData?.lastName || "",
     companyEmail: existingData?.companyEmail || "",
     companyName: existingData?.companyName || "",
-    companyEmail: existingData?.companyEmail || "",
     displayNameType: existingData?.displayNameType || "",
     vendorPhoneNumber: existingData?.vendorPhoneNumber || "",
     vendorMobileNumber: existingData?.vendorMobileNumber || "",
@@ -103,39 +102,23 @@ const VendorForm = ({
       contactPersons,
       bankDetails,
     };
-    try {
-      let res;
-      if (mode === "edit") {
-        // PATCH request to update vendor
-        res = await patchData(`vendors/${existingData._id}`, vendorData);
-        refetch();
-      } else {
-        // POST request to create new vendor
-        res = await postData("vendors/add", vendorData);
+    const file = formData.otherDetails.document;
+    delete vendorData.otherDetails.document;
+    if (existingData) {
+      let res = await patchData(`vendors/${existingData._id}`, vendorData);
+      console.log("resd", res);
+      if (file) {
+        await uploadImageOnSWithModule([file], res._id, FileModules.Vendor);
       }
-
-      console.log("formData", formData);
-      const file = formData.otherDetails.document;
-      delete vendorData.otherDetails.document;
-
-      if (existingData) {
-        let res = await patchData(`vendors/${existingData._id}`, vendorData);
-        console.log("resd", res);
-        if (file) {
-          await uploadImageOnSWithModule([file], res._id, FileModules.Vendor);
-        }
-      } else {
-        let res = await postData(`vendors/add`, vendorData);
-        if (file) {
-          await uploadImageOnSWithModule(
-            [file],
-            res.data._id,
-            FileModules.Vendor
-          );
-        }
+    } else {
+      let res = await postData(`vendors/add`, vendorData);
+      if (file) {
+        await uploadImageOnSWithModule(
+          [file],
+          res.data._id,
+          FileModules.Vendor
+        );
       }
-    } catch (error) {
-      console.error("Error saving vendor:", error);
     }
   };
 
