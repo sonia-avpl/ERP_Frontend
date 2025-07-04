@@ -256,8 +256,8 @@ const Vendors = () => {
             <option value="active">Active Vendors</option>
             <option value="inactive">Inactive Vendors</option>
             <option disabled>──────────</option>
-            <option value="mark-active">Mark Selected as Active</option>
-            <option value="mark-inactive">Mark Selected as Inactive</option>
+            <option value="mark-active">Mark as Active</option>
+            <option value="mark-inactive">Mark as Inactive</option>
           </select>
 
           <div className="w-4/6 rounded">
