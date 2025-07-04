@@ -15,7 +15,6 @@ import { baseUrl } from "../../utills/enum";
 import { usePost } from "../../hooks/usePost";
 import { FileModules } from "../../utills/enum";
 
-
 const VendorForm = ({
   onClose,
   mode = "create",
@@ -104,8 +103,6 @@ const VendorForm = ({
       contactPersons,
       bankDetails,
     };
-
-
     try {
       let res;
       if (mode === "edit") {
@@ -115,30 +112,30 @@ const VendorForm = ({
       } else {
         // POST request to create new vendor
         res = await postData("vendors/add", vendorData);
-
-    console.log("formData", formData);
-    const file = formData.otherDetails.document;
-    delete vendorData.otherDetails.document;
-    if (existingData) {
-      let res = await patchData(`vendors/${existingData._id}`,vendorData);
-      console.log("resd",res)
-      if (file) {
-        await uploadImageOnSWithModule(
-          [file],
-          res._id,
-          FileModules.Vendor
-        );
-
       }
-    } else {
-      let res = await postData(`vendors/add`, vendorData);
-      if (file) {
-        await uploadImageOnSWithModule(
-          [file],
-          res.data._id,
-          FileModules.Vendor
-        );
+
+      console.log("formData", formData);
+      const file = formData.otherDetails.document;
+      delete vendorData.otherDetails.document;
+
+      if (existingData) {
+        let res = await patchData(`vendors/${existingData._id}`, vendorData);
+        console.log("resd", res);
+        if (file) {
+          await uploadImageOnSWithModule([file], res._id, FileModules.Vendor);
+        }
+      } else {
+        let res = await postData(`vendors/add`, vendorData);
+        if (file) {
+          await uploadImageOnSWithModule(
+            [file],
+            res.data._id,
+            FileModules.Vendor
+          );
+        }
       }
+    } catch (error) {
+      console.error("Error saving vendor:", error);
     }
   };
 
