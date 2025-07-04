@@ -8,13 +8,14 @@ import { useDelete } from "../../../hooks/useDelete";
 import { baseUrl } from "../../../utills/enum";
 import { useCallback } from "react";
 import { debounce } from "lodash";
+import { usePatchFile } from "../../../hooks/usePatchFile";
 
 import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi2";
 
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
   const [selectedVendors, setSelectedVendors] = useState([]);
-  const [showActions, setShowActions] = useState(false);
+  // const [showActions, setShowActions] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [vendorStatusFilter, setVendorStatusFilter] = useState("all");
 
@@ -26,8 +27,15 @@ const Vendors = () => {
     const saved = localStorage.getItem("itemsPerPage");
     return saved ? Number(saved) : 10;
   });
+  const statusParam =
+    vendorStatusFilter === "active"
+      ? "true"
+      : vendorStatusFilter === "inactive"
+      ? "false"
+      : "";
+
   const { data, loading, refetch } = useGet(
-    `/vendors?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}&status=${vendorStatusFilter}`
+    `/vendors?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}&status=${statusParam}`
   );
 
   const vendors = data?.data || [];
@@ -114,21 +122,62 @@ const Vendors = () => {
     selectedVendors.includes(id)
   );
 
+  // handle status
+  const { patchData } = usePatchFile();
+
+  const handleStatusUpdate = async (e) => {
+    const value = e.target.value;
+
+    if (["all", "active", "inactive"].includes(value)) {
+      setVendorStatusFilter(value); 
+      setCurrentPage(1);
+      return;
+    }
+
+    if (value === "mark-active" || value === "mark-inactive") {
+      const statusBool = value === "mark-active";
+      if (selectedVendors.length === 0) {
+        toast.error("Please select at least one vendor");
+        return;
+      }
+
+      try {
+        await Promise.all(
+          selectedVendors.map((id) =>
+            patchData(`${baseUrl}/vendors/${id}/status`, {
+              status: statusBool,
+            })
+          )
+        );
+        // toast.success(
+        //   `Marked ${selectedVendors.length} vendor(s) as ${
+        //     statusBool ? "active" : "inactive"
+        //   }`
+        // );
+        setSelectedVendors([]);
+        refetch();
+      } catch (err) {
+        console.error("Status update failed", err);
+      }
+    }
+    setVendorStatusFilter("all");
+  };
+
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
         <div className="w-full flex justify-center items-center m-4">
           <select
             value={vendorStatusFilter}
-            onChange={(e) => {
-              setVendorStatusFilter(e.target.value);
-              setCurrentPage(1); // reset pagination when filter changes
-            }}
+            onChange={handleStatusUpdate}
             className="w-1/6 text-sm border border-gray-300 rounded px-3 py-2 mr-10"
           >
             <option value="all">All Vendors</option>
-            <option value="active">Mark as Active</option>
-            <option value="inactive">Mark as Inactive</option>
+            <option value="active">Active Vendors</option>
+            <option value="inactive">Inactive Vendors</option>
+            <option disabled>──────────</option>
+            <option value="mark-active">Mark Selected as Active</option>
+            <option value="mark-inactive">Mark Selected as Inactive</option>
           </select>
 
           <div className="w-4/6 rounded">
@@ -147,7 +196,7 @@ const Vendors = () => {
               <Plus className="w-4 h-4" />
               New
             </button>
-            {selectedVendors.length > 0 && (
+            {/* {selectedVendors.length > 0 && (
               <div className="relative">
                 <button
                   className="border border-gray-300 hover:border-gray-400 px-4 py-2 rounded flex items-center gap-1 text-sm"
@@ -185,7 +234,7 @@ const Vendors = () => {
                   </div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
         </div>
         {showVendorForm && <VendorForm onClose={handleCloseForm} />}
@@ -250,7 +299,11 @@ const Vendors = () => {
               vendors?.map((vendor) => (
                 <tr
                   key={vendor._id}
-                  className="border-t hover:bg-gray-100 transition"
+                  className={`border-t transition ${
+                    vendor.status === false
+                      ? "bg-red-100 text-gray-500"
+                      : "hover:bg-gray-100"
+                  }`}
                 >
                   <td className="px-4 py-2">
                     <input
