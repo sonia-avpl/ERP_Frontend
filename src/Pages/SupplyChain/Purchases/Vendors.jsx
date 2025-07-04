@@ -16,6 +16,7 @@ const Vendors = () => {
   const [selectedVendors, setSelectedVendors] = useState([]);
   const [showActions, setShowActions] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [vendorStatusFilter, setVendorStatusFilter] = useState("all");
 
   const { deleteData } = useDelete();
 
@@ -26,7 +27,7 @@ const Vendors = () => {
     return saved ? Number(saved) : 10;
   });
   const { data, loading, refetch } = useGet(
-    `/vendors?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}`
+    `/vendors?page=${currentPage}&limit=${itemsPerPage}&search=${searchTerm}&status=${vendorStatusFilter}`
   );
 
   const vendors = data?.data || [];
@@ -94,7 +95,7 @@ const Vendors = () => {
     }
   };
 
-  // debounce search method 
+  // debounce search method
   const debouncedSearch = useCallback(
     debounce((value) => {
       setSearchTerm(value);
@@ -117,13 +118,25 @@ const Vendors = () => {
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-t-xl my-6 mx-4">
         <div className="w-full flex justify-center items-center m-4">
-          <div className="text-lg font-semibold w-1/6">Vendors</div>
+          <select
+            value={vendorStatusFilter}
+            onChange={(e) => {
+              setVendorStatusFilter(e.target.value);
+              setCurrentPage(1); // reset pagination when filter changes
+            }}
+            className="w-1/6 text-sm border border-gray-300 rounded px-3 py-2 mr-10"
+          >
+            <option value="all">All Vendors</option>
+            <option value="active">Mark as Active</option>
+            <option value="inactive">Mark as Inactive</option>
+          </select>
+
           <div className="w-4/6 rounded">
             <input
               type="text"
               placeholder="Search vendors..."
               onChange={(e) => debouncedSearch(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-1 text-sm w-full"
+              className="border border-gray-300 rounded px-3 py-2 text-sm w-full"
             />
           </div>
           <div className="flex justify-center items-center w-1/6">
