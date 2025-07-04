@@ -2,10 +2,17 @@ import { EyeOff } from "lucide-react";
 
 const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
 
-const BankSection = ({ data, setData }) => {
-  const banks = data;
-  const showForm = banks.length > 0;
+const initialBankObject = {
+  accountHolderName: "",
+  bankName: "",
+  accountNumber: "",
+  ifsc: "",
+};
 
+const BankSection = ({ data, setData }) => {
+  const banks = data || [];
+  const showForm = banks.length > 0;
+  console.log(banks)
   const handleChange = (index, e) => {
     const { name, value } = e.target;
     const updated = [...banks];
@@ -14,16 +21,7 @@ const BankSection = ({ data, setData }) => {
   };
 
   const addBank = () => {
-    setData([
-      ...banks,
-      {
-        accountHolder: "",
-        bankName: "",
-        accountNumber: "",
-        reAccountNumber: "",
-        ifsc: "",
-      },
-    ]);
+    setData([...banks, { ...initialBankObject }]);
   };
 
   const removeBank = (index) => {
@@ -52,7 +50,6 @@ const BankSection = ({ data, setData }) => {
               key={index}
               className="relative grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-4 border rounded"
             >
-              {/* Remove Button */}
               <button
                 type="button"
                 onClick={() => removeBank(index)}
@@ -67,8 +64,8 @@ const BankSection = ({ data, setData }) => {
                 </label>
                 <input
                   type="text"
-                  name="accountHolder"
-                  value={bank.accountHolder}
+                  name="accountHolderName"
+                  value={bank.accountHolderName || ""}
                   onChange={(e) => handleChange(index, e)}
                   className={inputClass}
                 />
@@ -81,7 +78,7 @@ const BankSection = ({ data, setData }) => {
                 <input
                   type="text"
                   name="bankName"
-                  value={bank.bankName}
+                  value={bank.bankName || ""}
                   onChange={(e) => handleChange(index, e)}
                   className={inputClass}
                 />
@@ -95,7 +92,7 @@ const BankSection = ({ data, setData }) => {
                   <input
                     type="password"
                     name="accountNumber"
-                    value={bank.accountNumber}
+                    value={bank.accountNumber || ""}
                     onChange={(e) => handleChange(index, e)}
                     className={inputClass}
                   />
@@ -106,25 +103,25 @@ const BankSection = ({ data, setData }) => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium mb-1">
                   Re-enter Account Number*
                 </label>
                 <input
                   type="password"
                   name="reAccountNumber"
-                  value={bank.reAccountNumber}
+                  value={bank.reAccountNumber || ""}
                   onChange={(e) => handleChange(index, e)}
                   className={inputClass}
                 />
-              </div>
+              </div> */}
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium mb-1">IFSC*</label>
                 <input
                   type="text"
                   name="ifsc"
-                  value={bank.ifsc}
+                  value={bank.ifsc || ""}
                   onChange={(e) => handleChange(index, e)}
                   className={inputClass}
                 />

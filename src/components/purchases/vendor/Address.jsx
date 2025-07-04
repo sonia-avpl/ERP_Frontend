@@ -48,9 +48,12 @@ const Address = ({ data, setData }) => {
     const { name, value } = e.target;
     setData((prev) => ({
       ...prev,
-      [type]: {
-        ...prev[type],
-        [name]: value,
+      address: {
+        ...prev.address,
+        [type]: {
+          ...prev.address[type],
+          [name]: value,
+        },
       },
     }));
   };
@@ -61,7 +64,9 @@ const Address = ({ data, setData }) => {
   const renderFields = (type, typeData, handleChangeFn) => (
     <>
       <div className="mb-3">
-        <label className="block text-sm font-medium mb-1">Country / Region</label>
+        <label className="block text-sm font-medium mb-1">
+          Country / Region
+        </label>
         <CountrySelect
           inputClassName={inputClass}
           value={type === "billing" ? billingCountry : shippingCountry}
@@ -82,7 +87,9 @@ const Address = ({ data, setData }) => {
         <label className="block text-sm font-medium mb-1">State</label>
         <StateSelect
           inputClassName={inputClass}
-          countryid={(type === "billing" ? billingCountry : shippingCountry)?.id}
+          countryid={
+            (type === "billing" ? billingCountry : shippingCountry)?.id
+          }
           value={type === "billing" ? billingState : shippingState}
           onChange={(s) => {
             if (type === "billing") setBillingState(s);
@@ -96,7 +103,9 @@ const Address = ({ data, setData }) => {
         <label className="block text-sm font-medium mb-1">City</label>
         <CitySelect
           inputClassName={inputClass}
-          countryid={(type === "billing" ? billingCountry : shippingCountry)?.id}
+          countryid={
+            (type === "billing" ? billingCountry : shippingCountry)?.id
+          }
           stateid={(type === "billing" ? billingState : shippingState)?.id}
           onChange={(city) =>
             handleChange({ target: { name: "city", value: city.name } }, type)

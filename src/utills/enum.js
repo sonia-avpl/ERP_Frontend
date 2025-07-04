@@ -48,6 +48,7 @@ export const subjectOptions = [
 export const FileModules = {
   Profile: "profile",
   Inventory: "inventory",
+  Vendor:'vendor',
   Category: "category",
   CanditateSignature: "canditateSignature",
   ParentSignature: "parentSignature",
