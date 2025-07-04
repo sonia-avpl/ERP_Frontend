@@ -11,6 +11,7 @@ import { debounce } from "lodash";
 import { usePatchFile } from "../../../hooks/usePatchFile";
 
 import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi2";
+import { Users, UserCheck, UserX } from "lucide-react";
 
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
@@ -166,54 +167,81 @@ const Vendors = () => {
 
   return (
     <>
-      <div className="flex justify-around gap-4 px-4 py-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6 mb-6">
+        {/* All Vendors */}
         <div
           onClick={() => {
             setVendorStatusFilter("all");
             setCurrentPage(1);
           }}
-          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+          className={`cursor-pointer p-6 rounded-2xl border-2 text-center transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
             vendorStatusFilter === "all"
-              ? "bg-blue-100 border-blue-400"
-              : "bg-white"
+              ? "bg-blue-100 border-blue-400 ring-2 ring-blue-300"
+              : "bg-white border-gray-200"
           }`}
         >
-          <h4 className="text-lg font-semibold">All Vendors</h4>
-          <p className="text-2xl text-gray-800 font-bold">{counts.all}</p>
+          <div className="flex items-center justify-center mb-2">
+            <Users className="h-6 w-6 text-blue-600 mr-2" />
+            <span className="text-sm bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">
+              All
+            </span>
+          </div>
+          <h4 className="text-base font-semibold text-gray-700 mb-1">
+            All Vendors
+          </h4>
+          <p className="text-3xl font-bold text-gray-900">{counts?.all ?? 0}</p>
         </div>
 
+        {/* Active Vendors */}
         <div
           onClick={() => {
             setVendorStatusFilter("active");
             setCurrentPage(1);
           }}
-          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+          className={`cursor-pointer p-6 rounded-2xl border-2 text-center transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
             vendorStatusFilter === "active"
-              ? "bg-green-100 border-green-400"
-              : "bg-white"
+              ? "bg-green-100 border-green-400 ring-2 ring-green-300"
+              : "bg-white border-gray-200"
           }`}
         >
-          <h4 className="text-lg font-semibold text-green-700">
+          <div className="flex items-center justify-center mb-2">
+            <UserCheck className="h-6 w-6 text-green-600 mr-2" />
+            <span className="text-sm bg-green-200 text-green-800 px-2 py-0.5 rounded-full">
+              Active
+            </span>
+          </div>
+          <h4 className="text-base font-semibold text-green-700 mb-1">
             Active Vendors
           </h4>
-          <p className="text-2xl text-gray-800 font-bold">{counts.active}</p>
+          <p className="text-3xl font-bold text-gray-900">
+            {counts?.active ?? 0}
+          </p>
         </div>
 
+        {/* Inactive Vendors */}
         <div
           onClick={() => {
             setVendorStatusFilter("inactive");
             setCurrentPage(1);
           }}
-          className={`cursor-pointer flex-1 p-4 border rounded-xl shadow hover:shadow-md text-center transition ${
+          className={`cursor-pointer p-6 rounded-2xl border-2 text-center transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
             vendorStatusFilter === "inactive"
-              ? "bg-red-100 border-red-400"
-              : "bg-white"
+              ? "bg-red-100 border-red-400 ring-2 ring-red-300"
+              : "bg-white border-gray-200"
           }`}
         >
-          <h4 className="text-lg font-semibold text-red-700">
+          <div className="flex items-center justify-center mb-2">
+            <UserX className="h-6 w-6 text-red-600 mr-2" />
+            <span className="text-sm bg-red-200 text-red-800 px-2 py-0.5 rounded-full">
+              Inactive
+            </span>
+          </div>
+          <h4 className="text-base font-semibold text-red-700 mb-1">
             Inactive Vendors
           </h4>
-          <p className="text-2xl text-gray-800 font-bold">{counts.inactive}</p>
+          <p className="text-3xl font-bold text-gray-900">
+            {counts?.inactive ?? 0}
+          </p>
         </div>
       </div>
 
@@ -248,45 +276,6 @@ const Vendors = () => {
               <Plus className="w-4 h-4" />
               New
             </button>
-            {/* {selectedVendors.length > 0 && (
-              <div className="relative">
-                <button
-                  className="border border-gray-300 hover:border-gray-400 px-4 py-2 rounded flex items-center gap-1 text-sm"
-                  onClick={() => setShowActions((prev) => !prev)}
-                >
-                  ⋮
-                </button>
-
-                {showActions && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-xl shadow-lg z-110 overflow-hidden">
-                    <button
-                      onClick={() => handleDelete(selectedVendors)}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition"
-                    >
-                      Delete Selected
-                    </button>
-                    <button
-                      onClick={() => {
-                        alert("Mark as active");
-                        setShowActions(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                    >
-                      Mark as active
-                    </button>
-                    <button
-                      onClick={() => {
-                        alert("Mark as inactive");
-                        setShowActions(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-                    >
-                      Mark as inactive
-                    </button>
-                  </div>
-                )}
-              </div>
-            )} */}
           </div>
         </div>
         {showVendorForm && <VendorForm onClose={handleCloseForm} />}
