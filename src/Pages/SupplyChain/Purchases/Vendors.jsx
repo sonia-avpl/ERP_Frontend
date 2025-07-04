@@ -4,7 +4,7 @@ import VendorForm from "../../../components/form/VendorForm";
 import { useGet } from "../../../hooks/useGet";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useDelete } from "../../../hooks/useDelete";
+// import { useDelete } from "../../../hooks/useDelete";
 import { baseUrl } from "../../../utills/enum";
 import { useCallback } from "react";
 import { debounce } from "lodash";
