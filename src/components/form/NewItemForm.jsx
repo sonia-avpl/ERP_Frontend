@@ -3,9 +3,15 @@ import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { FaRegImage } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { usePost } from "../../hooks/usePost";
+import { usePostFile } from "../../hooks/usePostFile";
+import { FileModules } from "../../utills/enum";
+// import { useAuth } from "../../components/context/AuthContext";
+import toast from "react-hot-toast";
 
 const NewItemForm = ({ onClose }) => {
   const navigate = useNavigate();
+  const { uploadImageOnSWithModule } = usePost();
   const [formData, setFormData] = useState({
     name: "",
     sku: "",
@@ -29,12 +35,19 @@ const NewItemForm = ({ onClose }) => {
       reorderPoint: "",
     },
   });
-
   const [dragActive, setDragActive] = useState(false);
-
   const [salesEnabled, setSalesEnabled] = useState(true);
   const [purchaseEnabled, setPurchaseEnabled] = useState(true);
   const inputRef = useRef(null);
+
+  const token = localStorage.getItem("token");
+  const {
+    postData,
+    loading: postLoading,
+    error: postError,
+  } = usePostFile(token);
+
+  console.log("Post data ", postData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,21 +130,32 @@ const NewItemForm = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?._id;
 
-      console.log("Saved to backend:", response.data);
-      alert("Item saved successfully!");
-      navigate(-1); // Navigate back
-    } catch (error) {
-      console.error("API error:", error);
-      const message =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
-      alert(message);
+      if (!userId) {
+        toast.error("User ID not found. Please login again.");
+        return;
+      }
+
+      const payload = {
+        ...formData,
+        createdBy: userId, 
+      };
+
+      const result = await postData("inventory/add", payload);
+
+      if (formData.images?.length) {
+        await uploadImageOnSWithModule(
+          formData.images,
+          result._id || result.data?._id,
+          FileModules.Inventory
+        );
+      }
+
+      navigate("/inventory");
+    } catch (err) {
+      console.error("Error saving item:", err);
     }
   };
 
@@ -194,6 +218,7 @@ const NewItemForm = ({ onClose }) => {
                   <option value="kg">Kilogram (kg)</option>
                   <option value="pcs">Pieces (pcs)</option>
                   <option value="ltr">Litre (ltr)</option>
+                  <option value="roll">Roll</option>
                 </select>
               </div>
             </div>
