@@ -12,11 +12,9 @@ const NewItemForm = ({ onClose }) => {
     unit: "",
     images: [],
     sellingPrice: "",
-    salesAccount: "Sales",
-    salesDescription: "",
+    salesLocation: "",
     costPrice: "",
-    purchaseAccount: "Cost of Goods Sold",
-    purchaseDescription: "",
+    purchaseLocation: "",
     preferredVendor: "",
     trackInventory: false,
     inventoryAccount: "",
@@ -282,28 +280,13 @@ const NewItemForm = ({ onClose }) => {
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Account <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      name="salesAccount"
-                      value={formData.salesAccount}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
-                    >
-                      <option value="Sales">Sales</option>
-                      <option value="Other Income">Other Income</option>
-                    </select>
-                  </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
+                      Location
                     </label>
                     <textarea
-                      name="salesDescription"
-                      value={formData.salesDescription}
+                      name="salesLocation"
+                      value={formData.salesLocation}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -352,28 +335,11 @@ const NewItemForm = ({ onClose }) => {
 
                   <div className="mb-3">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Account <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      name="purchaseAccount"
-                      value={formData.purchaseAccount}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
-                    >
-                      <option value="Cost of Goods Sold">
-                        Cost of Goods Sold
-                      </option>
-                      <option value="Expenses">Expenses</option>
-                    </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
+                      Location
                     </label>
                     <textarea
-                      name="purchaseDescription"
-                      value={formData.purchaseDescription}
+                      name="purchaseLocation"
+                      value={formData.purchaseLocation}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -457,7 +423,6 @@ const NewItemForm = ({ onClose }) => {
                     <option value="">Select the valuation method</option>
                     <option value="FIFO">FIFO</option>
                     <option value="LIFO">LIFO</option>
-                    <option value="Average Cost">Average Cost</option>
                   </select>
                 </div>
 
