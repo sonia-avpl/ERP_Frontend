@@ -24,3 +24,18 @@ export const polytechnicLocations = [
   "Govt. Polytechnic, Dhampur, Bijnor",
 ];
 
+export const ItiCourses = [
+  "Fitter",
+  "Electrician",
+  "Welder",
+  "Computer Operator and Programming Assistant",
+  "Fashion Design and Technology",
+  "Drone Pilot (Junior)",
+  "Drone Technician",
+];
+export const polytechnicCourses = [
+  "Diploma in Computer Science and Engineering",
+  "Diploma in IT technology",
+  "Diploma in Fashion Design and Technology",
+  "Diploma in Apparel Design and Fashion Technology",
+];
