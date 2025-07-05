@@ -1,8 +1,9 @@
-import { ItiCourses, polytechnicCourses } from "../../utills/enum";
+import { ItiCourses, polytechnicCourses } from "../../utills/helper";
+
 
 const Courses = ({ formData, handleCourseToggle, courseType }) => {
   const courses = courseType === "iti" ? ItiCourses : polytechnicCourses;
-  console.log("courseType", courseType);
+
   return (
     <section className="mb-5">
       <h2 className="lg:text-xl font-semibold text-green-700 mb-2">

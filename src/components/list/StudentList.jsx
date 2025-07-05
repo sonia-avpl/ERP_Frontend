@@ -5,7 +5,7 @@ import { useState } from "react";
 import FeeCollectionModal from "../modals/principal/FeeCollectionModal";
 import { usePatch } from "../../hooks/usePatch";
 import { useGet } from "../../hooks/useGet";
-import { handleDownload } from "../../utills/functions";
+import DropDown from "../lms/DropDown";
 
 const StudentList = ({
   loading,
@@ -17,6 +17,7 @@ const StudentList = ({
   refetch,
 }) => {
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [confirmFeeId, setConfirmFeeId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -54,12 +55,11 @@ const StudentList = ({
     <motion.div className="overflow-x-auto bg-white rounded-xl shadow-lg p-6 w-full">
       <div className="mb-4 flex flex-wrap justify-between items-center transition-all duration-300 ease-in-out">
         <div>{filtersUI}</div>
-        <button
-          onClick={() => handleDownload(selectedStudents)}
-          className="mt-2 md:mt-0 px-4 py-1 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-700 hover:text-white"
-        >
-          Download
-        </button>
+        <DropDown
+          dropdownOpen={dropdownOpen}
+          setDropdownOpen={setDropdownOpen}
+          selectedStudents={selectedStudents}
+        />
       </div>
 
       <AnimatePresence mode="wait">

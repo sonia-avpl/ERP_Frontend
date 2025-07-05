@@ -7,7 +7,7 @@ import Courses from "../../components/lms/Courses";
 import { getTodayDate } from "../../utills/functions";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePost } from "../../hooks/usePost";
-import { baseUrl, FileModules } from "../../utills/enum";
+import { FileModules } from "../../utills/enum";
 import { itiLocations, polytechnicLocations } from "../../utills/helper";
 import ApiService from "../../services/axiosInstance";
 
@@ -21,17 +21,20 @@ const AdmissionForm = () => {
     applicationReceivedOn: getTodayDate(),
     registrationNo: "",
     totalFees: "",
+    govtOrPvt: "",
     courseName: "",
-    tuitionFeePerMonth: "",
+    yearlyFee: "",
     name: "",
     fatherName: "",
     motherName: "",
     dob: "",
+    age: "",
     gender: "",
     fatherOccupation: "",
     category: "",
     nationality: "",
     permanentAddress: "",
+    presentAddress: "",
     mobile: "",
     parentMobile: "",
     email: "",
@@ -90,41 +93,44 @@ const AdmissionForm = () => {
   const [candidateSignaturePreview, setCandidateSignaturePreview] =
     useState(null);
   const [parentSignaturePreview, setParentSignaturePreview] = useState(null);
-  useEffect(() => {
-    const fetchCourseFeeDetails = async () => {
-      const selectedCourse = formData.courseName;
-      const selectedCategory = formData.category;
+useEffect(() => {
+  const fetchCourseFeeDetails = async () => {
+    const selectedCourse = formData.courseName;
+    const selectedCategory = formData.category;
+    const selectedGovtOrPvt = formData.govtOrPvt;
 
-      if (!selectedCourse || !selectedCategory) return;
+    if (!selectedCourse || !selectedCategory || !selectedGovtOrPvt) return;
 
-      try {
-        const res = await ApiService.get(
-          `admission/fee-details?category=${selectedCategory}&courseName=${selectedCourse}`
-        );
-        const { totalFee, cautionFee, courseDuration, tuitionFeePerMonth } =
-          res.data;
-        console.log("res", res.data);
-        setFormData((prev) => ({
-          ...prev,
-          totalFees: totalFee || "",
-          cautionFee: cautionFee || "",
-          courseDuration: courseDuration || "",
-          tuitionFeePerMonth: tuitionFeePerMonth || "",
-        }));
-      } catch (error) {
-        console.error("Failed to fetch course fee details:", error);
-        setFormData((prev) => ({
-          ...prev,
-          totalFees: "",
-          cautionFee: "",
-          courseDuration: "",
-          tuitionFeePerMonth: "",
-        }));
-      }
-    };
+    try {
+      const res = await ApiService.get(
+        `admission/fee-details?category=${selectedCategory}&courseName=${selectedCourse}&govtOrPvt=${selectedGovtOrPvt}`
+      );
 
-    fetchCourseFeeDetails();
-  }, [formData.courseName, formData.category]);
+      const { totalFee, cautionFee, courseDuration, yearlyFee } = res.data;
+      console.log("res", res.data);
+
+      setFormData((prev) => ({
+        ...prev,
+        totalFees: totalFee || "",
+        cautionFee: cautionFee || "",
+        courseDuration: courseDuration || "",
+        yearlyFee: yearlyFee || "",
+      }));
+    } catch (error) {
+      console.error("Failed to fetch course fee details:", error);
+      setFormData((prev) => ({
+        ...prev,
+        totalFees: "",
+        cautionFee: "",
+        courseDuration: "",
+        yearlyFee: "",
+      }));
+    }
+  };
+
+  fetchCourseFeeDetails();
+}, [formData.courseName, formData.category, formData.govtOrPvt]);
+
 
   const handleSignatureChange = (e, declarationType) => {
     const file = e.target.files[0];
@@ -169,17 +175,15 @@ const AdmissionForm = () => {
   const handleEducationChange = (index, field, value) => {
     const updatedEducation = [...formData.education];
     if (field === "subjects") {
-      // 'value' for a multiple select is an array of selected options
       updatedEducation[index][field] = value;
     } else {
-      updatedEducation[index][field] = value; // Update the current field
+      updatedEducation[index][field] = value;
     }
 
-    // Logic for mutual exclusivity between Percentage and CGPA
     if (field === "cgpa" && value !== "") {
-      updatedEducation[index].percentage = ""; // Clear percentage if CGPA is being filled
+      updatedEducation[index].percentage = "";
     } else if (field === "percentage" && value !== "") {
-      updatedEducation[index].cgpa = ""; // Clear CGPA if percentage is being filled
+      updatedEducation[index].cgpa = "";
     }
 
     setFormData((prev) => ({ ...prev, education: updatedEducation }));
@@ -196,8 +200,7 @@ const AdmissionForm = () => {
     e.preventDefault();
     const payload = { ...formData };
     payload.collegeLocation = collegeLocation;
-    payload.courseType=courseType
-    console.log("payload", payload);
+    payload.courseType = courseType;
     const result = await postData(`admission/add`, payload);
     if (result?.success) {
       if (uploads.candidateImage) {
@@ -297,7 +300,7 @@ const AdmissionForm = () => {
                 courseType={courseType}
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:text-base text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 lg:text-base text-xs">
                 <div>
                   <label
                     htmlFor="category"
@@ -310,13 +313,32 @@ const AdmissionForm = () => {
                     id="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="input w-full p-2"
+                    className="input w-full p-2 text-sm"
                   >
                     <option value="">Select Category</option>
                     <option>General</option>
                     <option>OBC</option>
                     <option>SC</option>
                     <option>ST</option>
+                  </select>
+                </div>
+                   <div>
+                  <label
+                    htmlFor="category"
+                    className="block text-gray-700  font-medium mb-1"
+                  >
+                    Govt./Private
+                  </label>
+                  <select
+                    name="govtOrPvt"
+                    id="govtOrPvt"
+                    value={formData.govtOrPvt}
+                    onChange={handleChange}
+                    className="input w-full p-2 text-sm"
+                  >
+                    <option value="">Select Govt./Private</option>
+                    <option>Government</option>
+                    <option>Private</option>
                   </select>
                 </div>
                 <div>
@@ -332,13 +354,13 @@ const AdmissionForm = () => {
                     id="applicationReceivedOn"
                     value={formData.applicationReceivedOn}
                     onChange={handleChange}
-                    className="input w-full p-2 "
+                    className="input w-full p-2 text-sm"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="registrationNo"
-                    className="block text-gray-700  font-medium mb-1"
+                    className="block text-gray-700 font-medium mb-1"
                   >
                     Registration No.
                   </label>
@@ -349,28 +371,32 @@ const AdmissionForm = () => {
                     value={formData.registrationNo}
                     onChange={handleChange}
                     placeholder="e.g., REG12345"
-                    className="input w-full  p-2"
+                    className="input w-full  p-2 text-sm"
                   />
                 </div>
-
-                <div className="">
-                  <label
-                    htmlFor="totalFees"
-                    className="block text-gray-700 font-medium mb-1"
-                  >
-                    Total Fees (Rs)
+             
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Yearly fee
                   </label>
                   <input
-                    type="number"
-                    name="totalFees"
-                    id="totalFees"
-                    value={formData.totalFees}
-                    onChange={handleChange}
+                    type="text"
                     readOnly
+                    value={formData.yearlyFee || 0}
                     className="input w-full p-2 bg-gray-100 cursor-not-allowed"
                   />
                 </div>
-
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">
+                    Course Duration
+                  </label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={formData.courseDuration}
+                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
+                  />
+                </div>
                 <div>
                   <label className="block text-gray-700 font-medium mb-1">
                     Caution Fee (Rs)
@@ -384,25 +410,19 @@ const AdmissionForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Course Duration
+                  <label
+                    htmlFor="totalFees"
+                    className="block text-gray-700 font-medium mb-1"
+                  >
+                    Total Fees (Rs)
                   </label>
                   <input
-                    type="text"
+                    type="number"
+                    name="totalFees"
+                    id="totalFees"
+                    value={formData.totalFees || 0}
+                    onChange={handleChange}
                     readOnly
-                    value={formData.courseDuration}
-                    className="input w-full p-2 bg-gray-100 cursor-not-allowed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">
-                    Tuition Fee/Month (40Rs)
-                  </label>
-                  <input
-                    type="text"
-                    readOnly
-                    value={formData.tuitionFeePerMonth}
                     className="input w-full p-2 bg-gray-100 cursor-not-allowed"
                   />
                 </div>
