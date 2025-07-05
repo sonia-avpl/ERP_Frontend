@@ -5,27 +5,30 @@ import { FaRegImage } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const NewItemForm = ({ onClose }) => {
-  const itemFormData = {
-    type: "Goods",
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
     name: "",
     sku: "",
     unit: "",
     images: [],
-    sellingPrice: "",
-    salesLocation: "",
-    costPrice: "",
-    purchaseLocation: "",
-    preferredVendor: "",
-    trackInventory: false,
-    inventoryAccount: "",
-    valuationMethod: "",
-    openingStock: "",
-    openingStockRate: "",
-    reorderPoint: "",
-  };
-
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(itemFormData);
+    salesInformation: {
+      sellingPrice: "",
+      location: ""
+    },
+    purchaseInformation: {
+      purchasePrice: "",
+      location:"",
+      preferredVendor: "",
+    },
+    createdBy: "",
+    trackInventory:{
+      inventoryAccount:"",
+      inventoryValidationMethod:"",
+      openingStock:"",
+      openingStockRatePerUnit: "",
+      reorderPoint:""
+    }
+  });
 
   const [dragActive, setDragActive] = useState(false);
 
