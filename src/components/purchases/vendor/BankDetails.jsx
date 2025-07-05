@@ -1,4 +1,5 @@
-import { EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const inputClass = `w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150`;
 
@@ -10,9 +11,17 @@ const initialBankObject = {
 };
 
 const BankSection = ({ data, setData }) => {
+  const [visiblePasswords, setVisiblePasswords] = useState({});
+  const togglePasswordVisibility = (index) => {
+    setVisiblePasswords((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   const banks = data || [];
   const showForm = banks.length > 0;
-  console.log(banks)
+  console.log(banks);
   const handleChange = (index, e) => {
     const { name, value } = e.target;
     const updated = [...banks];
@@ -90,16 +99,23 @@ const BankSection = ({ data, setData }) => {
                 </label>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={visiblePasswords[index] ? "text" : "password"}
                     name="accountNumber"
                     value={bank.accountNumber || ""}
                     onChange={(e) => handleChange(index, e)}
                     className={inputClass}
                   />
-                  <EyeOff
-                    className="absolute right-3 top-2.5 text-gray-400"
-                    size={18}
-                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(index)}
+                    className="absolute right-3 top-2.5 text-gray-400 focus:outline-none"
+                  >
+                    {visiblePasswords[index] ? (
+                      <Eye size={18} />
+                    ) : (
+                      <EyeOff size={18} />
+                    )}
+                  </button>
                 </div>
               </div>
 

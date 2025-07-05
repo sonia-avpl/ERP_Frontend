@@ -17,6 +17,7 @@
     "country-state-city": "^3.2.1",
     "framer-motion": "^12.18.1",
     "heroicons": "^2.2.0",
+    "lodash": "^4.17.21",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.513.0",
