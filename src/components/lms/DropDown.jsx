@@ -50,7 +50,7 @@ const DropDown = ({dropdownOpen,setDropdownOpen,selectedStudents}) => {
               Download Student Form
             </button>
             <button
-              onClick={()=>handleBulkDownloadFeeReceipt(selectedStudents)}
+            
               className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-slate-50 hover:text-slate-700 transition-colors duration-150 ease-in-out rounded-md"
               role="menuitem"
             >
