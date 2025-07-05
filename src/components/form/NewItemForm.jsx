@@ -13,21 +13,21 @@ const NewItemForm = ({ onClose }) => {
     images: [],
     salesInformation: {
       sellingPrice: "",
-      location: ""
+      location: "",
     },
     purchaseInformation: {
       purchasePrice: "",
-      location:"",
+      location: "",
       preferredVendor: "",
     },
     createdBy: "",
-    trackInventory:{
-      inventoryAccount:"",
-      inventoryValidationMethod:"",
-      openingStock:"",
+    trackInventory: {
+      inventoryAccount: "",
+      inventoryValidationMethod: "",
+      openingStock: "",
       openingStockRatePerUnit: "",
-      reorderPoint:""
-    }
+      reorderPoint: "",
+    },
   });
 
   const [dragActive, setDragActive] = useState(false);
@@ -37,12 +37,24 @@ const NewItemForm = ({ onClose }) => {
   const inputRef = useRef(null);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    const keys = name.split(".");
+    if (keys.length === 1) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setFormData((prev) => {
+        const updated = { ...prev };
+        let current = updated;
+        for (let i = 0; i < keys.length - 1; i++) {
+          current[keys[i]] = { ...current[keys[i]] };
+          current = current[keys[i]];
+        }
+        current[keys[keys.length - 1]] = value;
+        return updated;
+      });
+    }
   };
+
   const handleFiles = (files) => {
     const selected = Array.from(files);
     setFormData((prev) => ({
@@ -275,8 +287,8 @@ const NewItemForm = ({ onClose }) => {
                       </span>
                       <input
                         type="number"
-                        name="sellingPrice"
-                        value={formData.sellingPrice}
+                        name="salesInformation.sellingPrice"
+                        value={formData.salesInformation.sellingPrice}
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-r-md p-2"
                       />
@@ -288,8 +300,8 @@ const NewItemForm = ({ onClose }) => {
                       Location
                     </label>
                     <textarea
-                      name="salesLocation"
-                      value={formData.salesLocation}
+                      name="salesInformation.location"
+                      value={formData.salesInformation.location}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -328,8 +340,8 @@ const NewItemForm = ({ onClose }) => {
                       </span>
                       <input
                         type="number"
-                        name="costPrice"
-                        value={formData.costPrice}
+                        name="purchaseInformation.purchasePrice"
+                        value={formData.purchaseInformation.purchasePrice}
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-r-md p-2"
                       />
@@ -341,8 +353,8 @@ const NewItemForm = ({ onClose }) => {
                       Location
                     </label>
                     <textarea
-                      name="purchaseLocation"
-                      value={formData.purchaseLocation}
+                      name="purchaseInformation.location"
+                      value={formData.purchaseInformation.location}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -353,8 +365,8 @@ const NewItemForm = ({ onClose }) => {
                       Preferred Vendor
                     </label>
                     <select
-                      name="preferredVendor"
-                      value={formData.preferredVendor}
+                      name="purchaseInformation.preferredVendor"
+                      value={formData.purchaseInformation.preferredVendor}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     >
@@ -400,8 +412,8 @@ const NewItemForm = ({ onClose }) => {
                     Inventory Account <span className="text-red-600">*</span>
                   </label>
                   <select
-                    name="inventoryAccount"
-                    value={formData.inventoryAccount}
+                    name="trackInventory.inventoryAccount"
+                    value={formData.trackInventory.inventoryAccount}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   >
@@ -418,8 +430,8 @@ const NewItemForm = ({ onClose }) => {
                     <span className="text-red-600">*</span>
                   </label>
                   <select
-                    name="valuationMethod"
-                    value={formData.valuationMethod}
+                    name="trackInventory.inventoryValidationMethod"
+                    value={formData.trackInventory.inventoryValidationMethod}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   >
@@ -436,8 +448,8 @@ const NewItemForm = ({ onClose }) => {
                   </label>
                   <input
                     type="number"
-                    name="openingStock"
-                    value={formData.openingStock}
+                    name="trackInventory.openingStock"
+                    value={formData.trackInventory.openingStock}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
@@ -450,8 +462,8 @@ const NewItemForm = ({ onClose }) => {
                   </label>
                   <input
                     type="number"
-                    name="openingStockRate"
-                    value={formData.openingStockRate}
+                    name="trackInventory.openingStockRatePerUnit"
+                    value={formData.trackInventory.openingStockRatePerUnit}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
@@ -464,8 +476,8 @@ const NewItemForm = ({ onClose }) => {
                   </label>
                   <input
                     type="number"
-                    name="reorderPoint"
-                    value={formData.reorderPoint}
+                    name="trackInventory.reorderPoint"
+                    value={formData.trackInventory.reorderPoint}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
