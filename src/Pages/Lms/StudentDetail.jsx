@@ -28,7 +28,7 @@ import LoadinSpinner from "../../components/common/LoadinSpinner";
 import { useState } from "react";
 import { EditStudentModalWrapper } from "../../components/modals/principal/EditStudentModalWrapper";
 import { PencilIcon } from "lucide-react";
-import GroupedPayment from "../../components/lms/groupedPayments";
+import GroupedPayment from "../../components/lms/GroupedPayments";
 
 const StudentDetail = () => {
   const { id } = useParams();
@@ -117,22 +117,21 @@ const StudentDetail = () => {
               <span className="font-medium">Applied:</span>{" "}
               {formatDate(student.applicationReceivedOn)}
             </p>
-           
-              <div className="text-xs text-gray-500 flex items-center mt-1">
-                <AcademicCapIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0 " />
-                <span className="font-medium">{student.courseName}</span>
-              </div>
 
-              <div className="text-xs text-gray-500 flex items-center mt-1 ">
-                <MapPinIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
-                <span className="font-medium">{student.collegeLocation}</span>
-              </div>
+            <div className="text-xs text-gray-500 flex items-center mt-1">
+              <AcademicCapIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0 " />
+              <span className="font-medium">{student.courseName}</span>
+            </div>
 
-              <div className="text-xs text-gray-500 flex items-center mt-1 ">
-                <ClockIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
-                <span className="font-medium">{student.courseDuration}</span>
-              </div>
-           
+            <div className="text-xs text-gray-500 flex items-center mt-1 ">
+              <MapPinIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
+              <span className="font-medium">{student.collegeLocation}</span>
+            </div>
+
+            <div className="text-xs text-gray-500 flex items-center mt-1 ">
+              <ClockIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
+              <span className="font-medium">{student.courseDuration}</span>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2 mt-4 md:mt-0 flex-shrink-0 w-full md:w-auto">
@@ -263,8 +262,6 @@ const StudentDetail = () => {
               <GroupedPayment feeTransaction={feeTransaction} />
             </div>
 
-        
-
             <div className="border border-gray-200 rounded-lg p-6 bg-white">
               <SectionHeader icon={SparklesIcon} title="Education History" />
               <div className="overflow-x-auto">
@@ -389,7 +386,6 @@ const StudentDetail = () => {
                     </div>
                   </div>
                   <div className="flex items-start text-gray-700 py-1">
-                    
                     <TrophyIcon
                       className={`h-5 w-5 ${
                         student.isSportPerson
