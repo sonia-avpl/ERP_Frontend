@@ -1,29 +1,58 @@
 import { Plus } from "lucide-react";
 import NewItemForm from "../../../components/form/NewItemForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCallback } from "react";
+import { debounce } from "lodash";
 import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
-  const { data, loading } = useGet(`/inventory`);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data, loading } = useGet(`/inventory?&search=${searchTerm}`);
   const itemData = data?.data || [];
   console.log("data : ", data);
 
+  // debounce search method
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setSearchTerm(value);
+    }, 500),
+    []
+  );
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   return (
     <>
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b">
-        <div className="text-lg font-semibold">All Items</div>
-        <button
-          onClick={() => setShowItemForm(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
-        >
-          <Plus className="w-4 h-4" />
-          New
-        </button>
-        {showItemForm && <NewItemForm onClose={() => setShowItemForm(false)} />}
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-xl my-6 mx-4">
+        <div className="w-1/6 text-sm border-gray-300 rounded px-3 py-2 mr-10">
+          All Items
+        </div>
+
+        <div className="w-4/6 rounded">
+          <input
+            type="text"
+            placeholder="Search vendors..."
+            onChange={(e) => debouncedSearch(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2 text-sm w-full"
+          />
+        </div>
+
+        <div className="flex justify-center items-center w-1/6">
+          <button
+            onClick={() => setShowItemForm(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-1 text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            New
+          </button>
+        </div>
       </div>
+      {showItemForm && <NewItemForm onClose={() => setShowItemForm(false)} />}
       <div className="overflow-x-auto my-6 bg-white rounded-xl shadow-md mx-4">
         <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden ">
           <thead className="bg-gray-50 text-gray-600 text-xs uppercase sticky top-0 z-1">
