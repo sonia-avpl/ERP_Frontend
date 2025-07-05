@@ -1,29 +1,9 @@
-import axios from "axios";
 import { Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import NewItemForm from "../../../components/form/NewItemForm";
+import { useState } from "react";
 
 const Items = () => {
-  const navigate = useNavigate();
-  const [savedItems, setSavedItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
   const [showItemForm, setShowItemForm] = useState();
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/items");
-        console.log("Fetched items:", response.data);
-        setSavedItems(response.data);
-      } catch (error) {
-        console.error("Error fetching items:", error);
-      }
-    };
-
-    fetchItems();
-  }, []);
 
   return (
     <>
@@ -38,95 +18,6 @@ const Items = () => {
           New
         </button>
         {showItemForm && <NewItemForm onClose={() => setShowItemForm(false)} />}
-      </div>
-
-      {/* Table or empty state */}
-      <div className="overflow-x-auto mt-8 mx-4">
-        {savedItems.length === 0 ? (
-          <div className="text-center text-gray-600 py-10">
-            No items saved yet.
-          </div>
-        ) : (
-          <table className="min-w-full border-collapse">
-            <thead className="bg-gray-100 text-left text-sm font-medium text-gray-500">
-              <tr>
-                <input
-                  type="checkbox"
-                  checked={selectAll}
-                  onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    setSelectAll(isChecked);
-                    setSelectedItems(
-                      isChecked ? savedItems.map((item) => item._id) : []
-                    );
-                  }}
-                  className="accent-blue-600 w-4 ml-[12px] mt-[8px] h-4 rounded cursor-pointer"
-                />
-                <th className="px-3 py-2">NAME</th>
-                <th className="px-3 py-2">SKU</th>
-                <th className="px-3 py-2">TYPE</th>
-                <th className="px-3 py-2">DESCRIPTION</th>
-                <th className="px-3 py-2 text-right">RATE</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm divide-y divide-gray-200">
-              {savedItems.map((item, idx) => (
-                <tr
-                  key={idx}
-                  className={`hover:bg-gray-50 ${
-                    selectedItems.includes(item._id) ? "bg-blue-50" : ""
-                  }`}
-                >
-                  <td className="px-3 py-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.includes(item._id)}
-                      onChange={(e) => {
-                        const isChecked = e.target.checked;
-                        setSelectedItems((prev) =>
-                          isChecked
-                            ? [...prev, item._id]
-                            : prev.filter((id) => id !== item._id)
-                        );
-                      }}
-                      className="accent-blue-600 w-4 h-4 rounded cursor-pointer"
-                    />
-                  </td>
-                  <td className="px-3 py-2 flex items-center gap-2">
-                    {item.images?.[0] ? (
-                      <img
-                        src={item.images[0]}
-                        alt="Item Thumbnail"
-                        className="w-6 h-6 object-cover rounded border"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 bg-gray-200 flex items-center justify-center text-xs text-gray-500 rounded">
-                        🖼️
-                      </div>
-                    )}
-                    <span className="text-indigo-600 hover:underline whitespace-nowrap">
-                      <button
-                        onClick={() => navigate(`/inventory/items/${item._id}`)}
-                      >
-                        {item.name || "Untitled Item"}
-                      </button>
-                    </span>
-                  </td>
-                  <td className="px-3 py-2">{item.sku}</td>
-                  <td className="px-3 py-2">{item.type}</td>
-                  <td className="px-3 py-2 truncate max-w-xs">
-                    {item.salesDescription || item.purchaseDescription || "—"}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    {item.sellingPrice
-                      ? `₹${parseFloat(item.sellingPrice).toFixed(2)}`
-                      : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
       </div>
     </>
   );
