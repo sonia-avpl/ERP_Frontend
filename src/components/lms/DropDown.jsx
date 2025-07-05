@@ -1,13 +1,5 @@
-import { handleBulkDownloadFeeReceipt, handleDownload } from "../../utills/functions";
-import jsPDF from "jspdf";
-import { toWords } from "number-to-words";
-import logo from "../../../public/logo/logo.png"; 
-const DropDown = ({dropdownOpen,setDropdownOpen,selectedStudents}) => {
-
-
-
-
-
+import { handleDownload } from "../../utills/functions";
+const DropDown = ({ dropdownOpen, setDropdownOpen, selectedStudents }) => {
   return (
     <div className="relative inline-block text-left">
       <button
@@ -33,7 +25,6 @@ const DropDown = ({dropdownOpen,setDropdownOpen,selectedStudents}) => {
         </svg>
       </button>
 
-      
       {dropdownOpen && (
         <div
           className="absolute z-20 mt-2 w-44 origin-top-right rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none animate-fade-in-down"
@@ -50,7 +41,6 @@ const DropDown = ({dropdownOpen,setDropdownOpen,selectedStudents}) => {
               Download Student Form
             </button>
             <button
-            
               className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-slate-50 hover:text-slate-700 transition-colors duration-150 ease-in-out rounded-md"
               role="menuitem"
             >
