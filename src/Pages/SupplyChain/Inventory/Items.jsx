@@ -105,7 +105,7 @@ const Items = () => {
               ))
             )}
           </tbody>
-        </table>
+        </table>      
       </div>
     </>
   );
