@@ -12,6 +12,7 @@ import { usePatchFile } from "../../../hooks/usePatchFile";
 
 import { HiOutlineEye, HiOutlineTrash } from "react-icons/hi2";
 import { Users, UserCheck, UserX } from "lucide-react";
+import LoadinSpinner from "../../../components/common/LoadinSpinner";
 
 const Vendors = () => {
   const [showVendorForm, setShowVendorForm] = useState(false);
@@ -327,7 +328,7 @@ const Vendors = () => {
             {loading ? (
               <tr>
                 <td colSpan="8" className="text-center py-10 text-gray-600">
-                  Loading vendors...
+                  <LoadinSpinner />
                 </td>
               </tr>
             ) : data?.data?.length === 0 ? (

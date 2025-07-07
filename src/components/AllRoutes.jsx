@@ -66,10 +66,9 @@ import PrototypeManagement from "../Pages/DroneR&DSystem/PrototypeManagement";
 import ComponentDesign from "../Pages/DroneR&DSystem/ComponentDesign";
 
 import NewItemForm from "./form/NewItemForm";
-import ItemDetails from "../components/inventory/ItemDetails";
-import EditItemForm from "../components/form/EditItemForm";
 import VendorForm from "./form/VendorForm";
 import VendorDetails from "../Pages/SupplyChain/Purchases/VendorDetail";
+import ItemsDetails from "../Pages/SupplyChain/Inventory/ItemsDetails";
 
 const AllRoutes = () => {
   return (
@@ -93,7 +92,8 @@ const AllRoutes = () => {
             {/* Inventory Routes */}
             <Route path="/inventory/items" element={<Items />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
-            <Route path="/inventory/items/:id" element={<ItemDetails />} />
+            {/* <Route path="/inventory/items/:id" element={<ItemDetails />} /> */}
+            <Route path="/inventory/:itemId" element={<ItemsDetails />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route
               path="/inventory/adjustments"
@@ -133,7 +133,7 @@ const AllRoutes = () => {
               element={<ReportingSupplyChain />}
             />
 
-            <Route path="/inventory" element={<Inventory />} />
+            {/* <Route path="/inventory" element={<Inventory />} /> */}
 
             <Route path="/reporting" element={<Reporting />} />
             <Route path="/settings" element={<Setting />} />
@@ -146,12 +146,9 @@ const AllRoutes = () => {
             <Route path="/sku-management" element={<SkuManagement />} />
             <Route path="/procurement" element={<Procurement />} />
             <Route path="/grn-processing" element={<GRNProcessing />} />
-            <Route path="/inventory/items" element={<Items />} />
-            <Route path="/inventory/items/:id" element={<ItemDetails />} />
-            <Route
-              path="/inventory/items/:id/edit"
-              element={<EditItemForm />}
-            />
+            {/* <Route path="/inventory/items" element={<Items />} /> */}
+            
+            {/* <Route path="/inventory/:itemId" element={<EditItemForm />} /> */}
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route path="/inventory/vendors/new" element={<VendorForm />} />

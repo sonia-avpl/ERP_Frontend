@@ -73,7 +73,11 @@ const Sidebar = ({ userRole }) => {
                   !isSidebarExpanded && "hidden md:block"
                 }`}
               >
-                ERP
+                <img
+                  src="/public/logo/logo.png"
+                  alt="erp-logo"
+                  className="w-16 h-16"
+                />
               </div>
               <div className="flex flex-col h-full justify-between">
                 <div>
