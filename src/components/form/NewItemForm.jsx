@@ -1,4 +1,3 @@
-import axios from "axios";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { FaRegImage } from "react-icons/fa";
@@ -6,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { usePost } from "../../hooks/usePost";
 import { usePostFile } from "../../hooks/usePostFile";
 import { FileModules } from "../../utills/enum";
-// import { useAuth } from "../../components/context/AuthContext";
-import toast from "react-hot-toast";
+import { useGet } from "../../hooks/useGet";
 
 const NewItemForm = ({ onClose }) => {
   const navigate = useNavigate();
@@ -18,11 +16,11 @@ const NewItemForm = ({ onClose }) => {
     unit: "",
     images: [],
     salesInformation: {
-      sellingPrice: "",
+      sellingPrice: 0,
       location: "",
     },
     purchaseInformation: {
-      purchasePrice: "",
+      purchasePrice: 0,
       location: "",
       preferredVendor: "",
     },
@@ -30,9 +28,9 @@ const NewItemForm = ({ onClose }) => {
     trackInventory: {
       inventoryAccount: "",
       inventoryValidationMethod: "",
-      openingStock: "",
-      openingStockRatePerUnit: "",
-      reorderPoint: "",
+      openingStock: 0,
+      openingStockRatePerUnit: 0,
+      reorderPoint: 0,
     },
   });
   const [dragActive, setDragActive] = useState(false);
@@ -40,33 +38,24 @@ const NewItemForm = ({ onClose }) => {
   const [purchaseEnabled, setPurchaseEnabled] = useState(true);
   const inputRef = useRef(null);
 
-  const token = localStorage.getItem("token");
-  const {
-    postData,
-    loading: postLoading,
-    error: postError,
-  } = usePostFile(token);
-
-  console.log("Post data ", postData);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const keys = name.split(".");
-    if (keys.length === 1) {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name.includes(".")) {
+      const [section, field] = name.split(".");
+      setFormData((prev) => ({
+        ...prev,
+        [section]: { ...prev[section], [field]: value },
+      }));
     } else {
-      setFormData((prev) => {
-        const updated = { ...prev };
-        let current = updated;
-        for (let i = 0; i < keys.length - 1; i++) {
-          current[keys[i]] = { ...current[keys[i]] };
-          current = current[keys[i]];
-        }
-        current[keys[keys.length - 1]] = value;
-        return updated;
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
+  const { data: vendorRes } = useGet("/vendors");
+  const vendors = vendorRes?.data || [];
+  const token = localStorage.getItem("token");
+  const { postData } = usePostFile(token);
+
+  // console.log("Post data ", postData);
 
   const handleFiles = (files) => {
     const selected = Array.from(files);
@@ -128,32 +117,28 @@ const NewItemForm = ({ onClose }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const userId = user?._id;
 
-      if (!userId) {
-        toast.error("User ID not found. Please login again.");
-        return;
-      }
-
       const payload = {
         ...formData,
-        createdBy: userId, 
+        createdBy: userId,
       };
-
+      const file = formData.images;
       const result = await postData("inventory/add", payload);
-
-      if (formData.images?.length) {
+      if (!result) {
+        console.log("Form submission failed.");
+        return;
+      }
+      if (file) {
         await uploadImageOnSWithModule(
-          formData.images,
-          result._id || result.data?._id,
+          file,
+          result?.data?._id,
           FileModules.Inventory
         );
       }
-
-      navigate("/inventory");
+      navigate(-1);
     } catch (err) {
       console.error("Error saving item:", err);
     }
@@ -391,13 +376,16 @@ const NewItemForm = ({ onClose }) => {
                     </label>
                     <select
                       name="purchaseInformation.preferredVendor"
-                      value={formData.purchaseInformation.preferredVendor}
                       onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      value={formData.purchaseInformation.preferredVendor}
+                      className="w-full border border-gray-300 rounded-r-md p-2"
                     >
                       <option value="">Select Vendor</option>
-                      <option value="Vendor A">Vendor A</option>
-                      <option value="Vendor B">Vendor B</option>
+                      {vendors?.map((v) => (
+                        <option key={v._id} value={v._id}>
+                          {v?.firstName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -436,16 +424,13 @@ const NewItemForm = ({ onClose }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Inventory Account <span className="text-red-600">*</span>
                   </label>
-                  <select
+                  <input
                     name="trackInventory.inventoryAccount"
+                    placeholder="Inventory Account"
                     value={formData.trackInventory.inventoryAccount}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2"
-                  >
-                    <option value="">Select an account</option>
-                    <option value="Inventory Asset">Inventory Asset</option>
-                    <option value="Stock on Hand">Stock on Hand</option>
-                  </select>
+                    className="w-full border border-gray-300 rounded-r-md p-2"
+                  />
                 </div>
 
                 {/* Inventory Valuation Method */}
@@ -454,16 +439,13 @@ const NewItemForm = ({ onClose }) => {
                     Inventory Valuation Method{" "}
                     <span className="text-red-600">*</span>
                   </label>
-                  <select
+                  <input
                     name="trackInventory.inventoryValidationMethod"
+                    placeholder="Validation Method"
                     value={formData.trackInventory.inventoryValidationMethod}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
-                  >
-                    <option value="">Select the valuation method</option>
-                    <option value="FIFO">FIFO</option>
-                    <option value="LIFO">LIFO</option>
-                  </select>
+                  />
                 </div>
 
                 {/* Opening Stock */}
@@ -472,8 +454,9 @@ const NewItemForm = ({ onClose }) => {
                     Opening Stock
                   </label>
                   <input
-                    type="number"
                     name="trackInventory.openingStock"
+                    type="number"
+                    placeholder="Opening Stock"
                     value={formData.trackInventory.openingStock}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
@@ -486,8 +469,9 @@ const NewItemForm = ({ onClose }) => {
                     Opening Stock Rate per Unit
                   </label>
                   <input
-                    type="number"
                     name="trackInventory.openingStockRatePerUnit"
+                    type="number"
+                    placeholder="Rate Per Unit"
                     value={formData.trackInventory.openingStockRatePerUnit}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
@@ -500,8 +484,9 @@ const NewItemForm = ({ onClose }) => {
                     Reorder Point
                   </label>
                   <input
-                    type="number"
                     name="trackInventory.reorderPoint"
+                    type="number"
+                    placeholder="Reorder Point"
                     value={formData.trackInventory.reorderPoint}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
