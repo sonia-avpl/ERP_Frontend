@@ -50,7 +50,7 @@ const NewItemForm = ({ onClose }) => {
       setFormData({ ...formData, [name]: value });
     }
   };
-  const { data: vendorRes } = useGet("/vendors");
+  const { data: vendorRes, loading, error } = useGet("/vendors");
   const vendors = vendorRes?.data || [];
   const token = localStorage.getItem("token");
   const { postData } = usePostFile(token);
@@ -125,20 +125,48 @@ const NewItemForm = ({ onClose }) => {
         ...formData,
         createdBy: userId,
       };
+
       const file = formData.images;
+
       const result = await postData("inventory/add", payload);
       if (!result) {
         console.log("Form submission failed.");
         return;
       }
-      if (file) {
+
+      if (file?.length) {
         await uploadImageOnSWithModule(
           file,
           result?.data?._id,
           FileModules.Inventory
         );
       }
-      navigate(-1);
+
+      setFormData({
+        name: "",
+        sku: "",
+        unit: "",
+        images: [],
+        salesInformation: {
+          sellingPrice: 0,
+          location: "",
+        },
+        purchaseInformation: {
+          purchasePrice: 0,
+          location: "",
+          preferredVendor: "",
+        },
+        createdBy: "",
+        trackInventory: {
+          inventoryAccount: "",
+          inventoryValidationMethod: "",
+          openingStock: 0,
+          openingStockRatePerUnit: 0,
+          reorderPoint: 0,
+        },
+      });
+
+      navigate("/inventory");
     } catch (err) {
       console.error("Error saving item:", err);
     }
@@ -195,15 +223,16 @@ const NewItemForm = ({ onClose }) => {
                 </label>
                 <select
                   name="unit"
-                  value={formData.unit}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md p-2"
+                  value={formData.unit}
+                  className="w-full border border-gray-300 rounded-r-md p-2"
                 >
-                  <option value="">Select or type to add</option>
-                  <option value="kg">Kilogram (kg)</option>
-                  <option value="pcs">Pieces (pcs)</option>
-                  <option value="ltr">Litre (ltr)</option>
-                  <option value="roll">Roll</option>
+                  <option value="">Select Unit</option>
+                  {["box", "packet", "meter", "roll", "pair", "ltr", "nos"].map(
+                    (u, i) => (
+                      <option key={i}>{u}</option>
+                    )
+                  )}
                 </select>
               </div>
             </div>
@@ -424,13 +453,17 @@ const NewItemForm = ({ onClose }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Inventory Account <span className="text-red-600">*</span>
                   </label>
-                  <input
+                  <select
                     name="trackInventory.inventoryAccount"
-                    placeholder="Inventory Account"
-                    value={formData.trackInventory.inventoryAccount}
                     onChange={handleChange}
+                    value={formData.trackInventory.inventoryAccount}
                     className="w-full border border-gray-300 rounded-r-md p-2"
-                  />
+                  >
+                    <option value="">Select Inventory Account</option>
+                    {["stock on hand", "inventory asset"].map((inv, index) => (
+                      <option key={index}>{inv}</option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Inventory Valuation Method */}
@@ -439,13 +472,17 @@ const NewItemForm = ({ onClose }) => {
                     Inventory Valuation Method{" "}
                     <span className="text-red-600">*</span>
                   </label>
-                  <input
+                  <select
                     name="trackInventory.inventoryValidationMethod"
-                    placeholder="Validation Method"
-                    value={formData.trackInventory.inventoryValidationMethod}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2"
-                  />
+                    value={formData.trackInventory.inventoryValidationMethod}
+                    className="w-full border border-gray-300 rounded-r-md p-2"
+                  >
+                    <option value="">Select Inventory Validation</option>
+                    {["FIFO", "LIFO", "average cost"].map((val, index) => (
+                      <option key={index}>{val}</option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Opening Stock */}
@@ -511,6 +548,13 @@ const NewItemForm = ({ onClose }) => {
           >
             Save
           </button>
+
+          {loading && (
+            <p className="text-sm text-gray-500">Loading vendors...</p>
+          )}
+          {error && (
+            <p className="text-sm text-red-500">Failed to load vendors</p>
+          )}
         </div>
       </div>
     </section>
