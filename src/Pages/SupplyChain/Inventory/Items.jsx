@@ -6,12 +6,22 @@ import { debounce } from "lodash";
 import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
 import LoadinSpinner from "../../../components/common/LoadinSpinner";
+import { Link } from "react-router-dom";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, loading } = useGet(`/inventory?&search=${searchTerm}`);
-  const itemData = data?.data || [];
+  const {
+    data: res,
+    loading,
+    refetch,
+  } = useGet(`/inventory?search=${searchTerm}`);
+  // console.log("Raw response from API:", res);
+
+  const itemData = res?.data || [];
+
+  // console.log("Extracted itemData:", itemData);
+
   // debounce search method
   const debouncedSearch = useCallback(
     debounce((value) => {
@@ -20,6 +30,7 @@ const Items = () => {
     []
   );
   useEffect(() => {
+    refetch();
     return () => {
       debouncedSearch.cancel();
     };
@@ -71,7 +82,7 @@ const Items = () => {
                   <LoadinSpinner />
                 </td>
               </tr>
-            ) : data?.data.length === 0 ? (
+            ) : itemData.length === 0 ? (
               <tr>
                 <td colSpan="8" className="text-center py-10 text-gray-600">
                   No items yet.
@@ -96,15 +107,17 @@ const Items = () => {
                     {item?.purchaseInformation?.purchasePrice || "N/A"}
                   </td>
                   <td className="px-4 py-2 text-center space-x-4">
-                    <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
-                      <HiOutlineEye className="h-4 w-4" />
-                    </button>
+                    <Link to={`/inventory/${item._id}`}>
+                      <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
+                        <HiOutlineEye className="h-4 w-4" />
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               ))
             )}
           </tbody>
-        </table>      
+        </table>
       </div>
     </>
   );
