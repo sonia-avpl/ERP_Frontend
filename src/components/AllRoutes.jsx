@@ -133,7 +133,7 @@ const AllRoutes = () => {
               element={<ReportingSupplyChain />}
             />
 
-            <Route path="/inventory" element={<Inventory />} />
+            {/* <Route path="/inventory" element={<Inventory />} /> */}
 
             <Route path="/reporting" element={<Reporting />} />
             <Route path="/settings" element={<Setting />} />
