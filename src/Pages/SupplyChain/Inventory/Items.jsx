@@ -5,14 +5,13 @@ import { useCallback } from "react";
 import { debounce } from "lodash";
 import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
+import LoadinSpinner from "../../../components/common/LoadinSpinner";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
   const [searchTerm, setSearchTerm] = useState("");
   const { data, loading } = useGet(`/inventory?&search=${searchTerm}`);
   const itemData = data?.data || [];
-  console.log("data : ", data);
-
   // debounce search method
   const debouncedSearch = useCallback(
     debounce((value) => {
@@ -69,7 +68,7 @@ const Items = () => {
             {loading ? (
               <tr>
                 <td colSpan="8" className="text-center py-10 text-gray-600">
-                  Loading vendors...
+                  <LoadinSpinner />
                 </td>
               </tr>
             ) : data?.data.length === 0 ? (
