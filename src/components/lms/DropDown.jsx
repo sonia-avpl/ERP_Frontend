@@ -9,7 +9,7 @@ import handleDownloadFeeReceipt from "../pdf/handleDownloadFeeReceipt";
 
 const DropDown = ({ dropdownOpen, setDropdownOpen, selectedStudents }) => {
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left lg:mt-0 mt-5">
       <button
         type="button"
         className="inline-flex justify-center items-center gap-x-1.5 rounded-md bg-gradient-to-r from-slate-600 to-slate-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:from-slate-700 hover:to-slate-800"
