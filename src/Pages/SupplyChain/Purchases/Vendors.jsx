@@ -319,8 +319,8 @@ const Vendors = () => {
               <th className="px-4 py-3">Company Name</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Phone</th>
-              <th className="px-4 py-3">Payable</th>
-              <th className="px-4 py-3">Unused Credits</th>
+              {/* <th className="px-4 py-3">Payable</th> */}
+              <th className="px-4 py-3">Date</th>
               <th className="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
@@ -367,11 +367,17 @@ const Vendors = () => {
                       "N/A"}
                   </td>
                   <td className="px-4 py-2">
-                    Rs.{Math.floor(Math.random() * 1000)}
+                    {vendor.createdAt
+                      ? new Date(vendor.createdAt).toLocaleDateString("USA", {
+                          month: "long",
+                          year: "numeric",
+                          day: "2-digit",
+                        })
+                      : "N/A"}
                   </td>
-                  <td className="px-4 py-2">
+                  {/* <td className="px-4 py-2">
                     Rs.{Math.floor(Math.random() * 700)}
-                  </td>
+                  </td> */}
                   <td className="px-4 py-2 text-center space-x-4 ">
                     <Link to={`/vendors/${vendor._id}`}>
                       <button className="ml-2 text-blue-500 hover:text-blue-700 text-sm">
