@@ -1,47 +1,62 @@
-import axios from "axios";
 import { X } from "lucide-react";
 import { useRef, useState } from "react";
 import { FaRegImage } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { usePost } from "../../hooks/usePost";
+import { usePostFile } from "../../hooks/usePostFile";
+import { FileModules } from "../../utills/enum";
+import { useGet } from "../../hooks/useGet";
 
 const NewItemForm = ({ onClose }) => {
-  const itemFormData = {
-    type: "Goods",
+  const navigate = useNavigate();
+  const { uploadImageOnSWithModule } = usePost();
+  const [formData, setFormData] = useState({
     name: "",
     sku: "",
     unit: "",
     images: [],
-    sellingPrice: "",
-    salesAccount: "Sales",
-    salesDescription: "",
-    costPrice: "",
-    purchaseAccount: "Cost of Goods Sold",
-    purchaseDescription: "",
-    preferredVendor: "",
-    trackInventory: false,
-    inventoryAccount: "",
-    valuationMethod: "",
-    openingStock: "",
-    openingStockRate: "",
-    reorderPoint: "",
-  };
-
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState(itemFormData);
-
+    salesInformation: {
+      sellingPrice: 0,
+      location: "",
+    },
+    purchaseInformation: {
+      purchasePrice: 0,
+      location: "",
+      preferredVendor: "",
+    },
+    createdBy: "",
+    trackInventory: {
+      inventoryAccount: "",
+      inventoryValidationMethod: "",
+      openingStock: 0,
+      openingStockRatePerUnit: 0,
+      reorderPoint: 0,
+    },
+  });
   const [dragActive, setDragActive] = useState(false);
-
   const [salesEnabled, setSalesEnabled] = useState(true);
   const [purchaseEnabled, setPurchaseEnabled] = useState(true);
   const inputRef = useRef(null);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    if (name.includes(".")) {
+      const [section, field] = name.split(".");
+      setFormData((prev) => ({
+        ...prev,
+        [section]: { ...prev[section], [field]: value },
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
+  const { data: vendorRes, loading, error } = useGet("/vendors");
+  const vendors = vendorRes?.data || [];
+  const token = localStorage.getItem("token");
+  const { postData } = usePostFile(token);
+
+  // console.log("Post data ", postData);
+
   const handleFiles = (files) => {
     const selected = Array.from(files);
     setFormData((prev) => ({
@@ -102,23 +117,58 @@ const NewItemForm = ({ onClose }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post("", formData, {
-        headers: {
-          "Content-Type": "application/json",
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userId = user?._id;
+
+      const payload = {
+        ...formData,
+        createdBy: userId,
+      };
+
+      const file = formData.images;
+
+      const result = await postData("inventory/add", payload);
+      if (!result) {
+        console.log("Form submission failed.");
+        return;
+      }
+
+      if (file?.length) {
+        await uploadImageOnSWithModule(
+          file,
+          result?.data?._id,
+          FileModules.Inventory
+        );
+      }
+
+      setFormData({
+        name: "",
+        sku: "",
+        unit: "",
+        images: [],
+        salesInformation: {
+          sellingPrice: 0,
+          location: "",
+        },
+        purchaseInformation: {
+          purchasePrice: 0,
+          location: "",
+          preferredVendor: "",
+        },
+        createdBy: "",
+        trackInventory: {
+          inventoryAccount: "",
+          inventoryValidationMethod: "",
+          openingStock: 0,
+          openingStockRatePerUnit: 0,
+          reorderPoint: 0,
         },
       });
 
-      console.log("Saved to backend:", response.data);
-      alert("Item saved successfully!");
-      navigate(-1); // Navigate back
-    } catch (error) {
-      console.error("API error:", error);
-      const message =
-        error.response?.data?.message ||
-        "Something went wrong. Please try again.";
-      alert(message);
+      navigate("/inventory");
+    } catch (err) {
+      console.error("Error saving item:", err);
     }
   };
 
@@ -173,14 +223,16 @@ const NewItemForm = ({ onClose }) => {
                 </label>
                 <select
                   name="unit"
-                  value={formData.unit}
                   onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-md p-2"
+                  value={formData.unit}
+                  className="w-full border border-gray-300 rounded-r-md p-2"
                 >
-                  <option value="">Select or type to add</option>
-                  <option value="kg">Kilogram (kg)</option>
-                  <option value="pcs">Pieces (pcs)</option>
-                  <option value="ltr">Litre (ltr)</option>
+                  <option value="">Select Unit</option>
+                  {["box", "packet", "meter", "roll", "pair", "ltr", "nos"].map(
+                    (u, i) => (
+                      <option key={i}>{u}</option>
+                    )
+                  )}
                 </select>
               </div>
             </div>
@@ -274,36 +326,21 @@ const NewItemForm = ({ onClose }) => {
                       </span>
                       <input
                         type="number"
-                        name="sellingPrice"
-                        value={formData.sellingPrice}
+                        name="salesInformation.sellingPrice"
+                        value={formData.salesInformation.sellingPrice}
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-r-md p-2"
                       />
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Account <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      name="salesAccount"
-                      value={formData.salesAccount}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
-                    >
-                      <option value="Sales">Sales</option>
-                      <option value="Other Income">Other Income</option>
-                    </select>
-                  </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
+                      Location
                     </label>
                     <textarea
-                      name="salesDescription"
-                      value={formData.salesDescription}
+                      name="salesInformation.location"
+                      value={formData.salesInformation.location}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -342,8 +379,8 @@ const NewItemForm = ({ onClose }) => {
                       </span>
                       <input
                         type="number"
-                        name="costPrice"
-                        value={formData.costPrice}
+                        name="purchaseInformation.purchasePrice"
+                        value={formData.purchaseInformation.purchasePrice}
                         onChange={handleChange}
                         className="w-full border border-gray-300 rounded-r-md p-2"
                       />
@@ -352,28 +389,11 @@ const NewItemForm = ({ onClose }) => {
 
                   <div className="mb-3">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Account <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      name="purchaseAccount"
-                      value={formData.purchaseAccount}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
-                    >
-                      <option value="Cost of Goods Sold">
-                        Cost of Goods Sold
-                      </option>
-                      <option value="Expenses">Expenses</option>
-                    </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Description
+                      Location
                     </label>
                     <textarea
-                      name="purchaseDescription"
-                      value={formData.purchaseDescription}
+                      name="purchaseInformation.location"
+                      value={formData.purchaseInformation.location}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded-md p-2"
                     />
@@ -384,14 +404,17 @@ const NewItemForm = ({ onClose }) => {
                       Preferred Vendor
                     </label>
                     <select
-                      name="preferredVendor"
-                      value={formData.preferredVendor}
+                      name="purchaseInformation.preferredVendor"
                       onChange={handleChange}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      value={formData.purchaseInformation.preferredVendor}
+                      className="w-full border border-gray-300 rounded-r-md p-2"
                     >
                       <option value="">Select Vendor</option>
-                      <option value="Vendor A">Vendor A</option>
-                      <option value="Vendor B">Vendor B</option>
+                      {vendors?.map((v) => (
+                        <option key={v._id} value={v._id}>
+                          {v?.firstName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -431,14 +454,15 @@ const NewItemForm = ({ onClose }) => {
                     Inventory Account <span className="text-red-600">*</span>
                   </label>
                   <select
-                    name="inventoryAccount"
-                    value={formData.inventoryAccount}
+                    name="trackInventory.inventoryAccount"
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2"
+                    value={formData.trackInventory.inventoryAccount}
+                    className="w-full border border-gray-300 rounded-r-md p-2"
                   >
-                    <option value="">Select an account</option>
-                    <option value="Inventory Asset">Inventory Asset</option>
-                    <option value="Stock on Hand">Stock on Hand</option>
+                    <option value="">Select Inventory Account</option>
+                    {["stock on hand", "inventory asset"].map((inv, index) => (
+                      <option key={index}>{inv}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -449,15 +473,15 @@ const NewItemForm = ({ onClose }) => {
                     <span className="text-red-600">*</span>
                   </label>
                   <select
-                    name="valuationMethod"
-                    value={formData.valuationMethod}
+                    name="trackInventory.inventoryValidationMethod"
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2"
+                    value={formData.trackInventory.inventoryValidationMethod}
+                    className="w-full border border-gray-300 rounded-r-md p-2"
                   >
-                    <option value="">Select the valuation method</option>
-                    <option value="FIFO">FIFO</option>
-                    <option value="LIFO">LIFO</option>
-                    <option value="Average Cost">Average Cost</option>
+                    <option value="">Select Inventory Validation</option>
+                    {["FIFO", "LIFO", "average cost"].map((val, index) => (
+                      <option key={index}>{val}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -467,9 +491,10 @@ const NewItemForm = ({ onClose }) => {
                     Opening Stock
                   </label>
                   <input
+                    name="trackInventory.openingStock"
                     type="number"
-                    name="openingStock"
-                    value={formData.openingStock}
+                    placeholder="Opening Stock"
+                    value={formData.trackInventory.openingStock}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
@@ -481,9 +506,10 @@ const NewItemForm = ({ onClose }) => {
                     Opening Stock Rate per Unit
                   </label>
                   <input
+                    name="trackInventory.openingStockRatePerUnit"
                     type="number"
-                    name="openingStockRate"
-                    value={formData.openingStockRate}
+                    placeholder="Rate Per Unit"
+                    value={formData.trackInventory.openingStockRatePerUnit}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
@@ -495,9 +521,10 @@ const NewItemForm = ({ onClose }) => {
                     Reorder Point
                   </label>
                   <input
+                    name="trackInventory.reorderPoint"
                     type="number"
-                    name="reorderPoint"
-                    value={formData.reorderPoint}
+                    placeholder="Reorder Point"
+                    value={formData.trackInventory.reorderPoint}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-md p-2"
                   />
@@ -521,6 +548,13 @@ const NewItemForm = ({ onClose }) => {
           >
             Save
           </button>
+
+          {loading && (
+            <p className="text-sm text-gray-500">Loading vendors...</p>
+          )}
+          {error && (
+            <p className="text-sm text-red-500">Failed to load vendors</p>
+          )}
         </div>
       </div>
     </section>
