@@ -166,7 +166,7 @@ const NewItemForm = ({ onClose }) => {
         },
       });
 
-      navigate("/inventory");
+      onClose();
     } catch (err) {
       console.error("Error saving item:", err);
     }
@@ -548,13 +548,6 @@ const NewItemForm = ({ onClose }) => {
           >
             Save
           </button>
-
-          {loading && (
-            <p className="text-sm text-gray-500">Loading vendors...</p>
-          )}
-          {error && (
-            <p className="text-sm text-red-500">Failed to load vendors</p>
-          )}
         </div>
       </div>
     </section>
