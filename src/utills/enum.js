@@ -1,4 +1,6 @@
-export const baseUrl = "http://localhost:6002/api";
+//export const baseUrl = "http://localhost:6002/api";
+export const baseUrl = "http://15.206.127.191:6002/api/";
+
 // export const baseUrl="https://erp-backend-1-tho0.onrender.com/api"
 
 export const componentTypes = [
@@ -18,7 +20,6 @@ export const componentTypes = [
   "Sensor",
   "Telemetry Module",
 ];
-
 
 export const subjectOptions = [
   "Hindi",
