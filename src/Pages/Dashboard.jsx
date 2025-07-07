@@ -1,3 +1,4 @@
+import { useGet } from "../hooks/useGet";
 import AdminDashboard from "./AdminDashboard";
 import DroneDashboard from "./DroneR&DSystem/DroneDashboard";
 import SupplyChain from "./DroneR&DSystem/SupplyChain/SupplyChain";
@@ -5,8 +6,10 @@ import HrDashboard from "./HrSystem/HrDashboard";
 import PrincipalDashboard from "./Lms/PrincipalDashboard";
 
 const Dashboard = () => {
-  // const userRole = JSON.parse(localStorage.getItem("user"));
-  const userRole = "Principal";
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { data } = useGet(`auth/role/${user?.role}`);
+
+  const userRole = data.roleName;
 
   return (
     <div>

@@ -1,10 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
-import { baseUrl } from "../../utills/enum";
-
+import { useGet } from "../../hooks/useGet";
 
 const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -18,55 +15,31 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
+  const { data, isLoading, error } = useGet(user?.role ? `auth/role/${user.role}` : null);
+  const [roleName, setRoleName] = useState(() => localStorage.getItem("roleName"));
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // const fetchUserData = async () => {
-  //   const token = JSON.parse(localStorage.getItem("token"));
 
-  //   if (!token) {
-  //     console.warn("No token found, skipping user fetch.");
-  //     setUser(null);
-  //     setLoading(false);
-  //     return;
-  //   }
+  useEffect(() => {
+    if (data?.roleName) {
+      setRoleName(data.roleName);
+      setLoading(false);
+    } else if (!isLoading && !data) {
+      setLoading(false);
+    }
+  }, [data, isLoading]);
 
-  //   try {
-  //     const response = await axios.get(`${baseUrl}/auth/me`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`, // ✅ CORRECT
-  //       },
-  //     });
-
-  //     if (response?.data) {
-  //       setUser(response.data);
-  //       localStorage.setItem("user", JSON.stringify(response.data));
-  //       setError(null);
-  //     } else {
-  //       throw new Error("Invalid response");
-  //     }
-  //   } catch (err) {
-  //     console.error("Fetch user failed:", err.response?.data || err.message);
-  //     setError("Session expired or invalid.");
-  //     setUser(null);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  // Handle logout
   const logout = () => {
     setUser(null);
-    setError(null);
+    setRoleName(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("roleName");
   };
-  useEffect(() => {
-    // fetchUserData();
-  }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, loading, error, logout }}
-    >
+    <AuthContext.Provider value={{ user, roleName, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

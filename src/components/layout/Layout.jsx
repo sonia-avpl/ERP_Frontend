@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { useRef } from "react";
 import UserProfileCard from "../card/UserProfileCard";
 import { getTitle } from "../../utills/functions";
+import { useGet } from "../../hooks/useGet";
 
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const path = location.pathname;
-  console.log("user",user)
+  const {data}=useGet(`auth/role/${user.role}`)
+
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef();
 
@@ -28,7 +30,7 @@ const Layout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
 
-      {user && <Sidebar userRole="Admin" />}
+      {user && <Sidebar userRole={data.roleName} />}
       <main className="flex-1 overflow-y-auto h-full">
         <header className="bg-white shadow-sm border-b">
           <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-4 gap-4 lg:gap-0">
@@ -47,7 +49,7 @@ const Layout = () => {
                   </div>
                 </button>
 
-                {open && <UserProfileCard setOpen={setOpen} userRole={"Admin"}/>}
+                {open && <UserProfileCard setOpen={setOpen} userRole={data.roleName}/>}
               </div>
             </div>
           </div>
