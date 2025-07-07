@@ -11,7 +11,7 @@ const Layout = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const path = location.pathname;
-
+  console.log("user",user)
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef();
 

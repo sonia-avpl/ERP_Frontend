@@ -1,29 +1,11 @@
 import { handleDownload } from "../../utills/functions";
-import { jsPDF } from "jspdf";
 
-const handleDownloadFeeReceipt = () => {
-  const doc = new jsPDF();
+import handleDownloadFeeReceipt from "../pdf/handleDownloadFeeReceipt";
 
-    
-  doc.setFontSize(16);
-  doc.text("Fee Receipt", 20, 20);
-  doc.setFontSize(12);
-  doc.text("Student Name: John Doe", 20, 40);
-  doc.text("Amount Paid: ₹2000", 20, 50);
-  doc.text("Date: 05 July 2025", 20, 60);
 
-  // Generate Blob and trigger download
-  const pdfBlob = doc.output("blob");
-  const blobUrl = URL.createObjectURL(pdfBlob);
 
-  const link = document.createElement("a");
-  link.href = blobUrl;
-  link.download = "fee-receipt.pdf";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(blobUrl);
-};
+
+
 
 const DropDown = ({ dropdownOpen, setDropdownOpen, selectedStudents }) => {
   return (
@@ -66,7 +48,7 @@ const DropDown = ({ dropdownOpen, setDropdownOpen, selectedStudents }) => {
               Download Student Form
             </button>
             <button
-              onClick={handleDownloadFeeReceipt}
+              onClick={() => handleDownloadFeeReceipt(selectedStudents)}
               className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-slate-50 hover:text-slate-700 transition-colors duration-150 ease-in-out rounded-md"
               role="menuitem"
             >
