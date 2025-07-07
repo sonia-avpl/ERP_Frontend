@@ -166,7 +166,7 @@ const NewItemForm = ({ onClose }) => {
         },
       });
 
-      navigate("/inventory");
+      onClose();
     } catch (err) {
       console.error("Error saving item:", err);
     }
