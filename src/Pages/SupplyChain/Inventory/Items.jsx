@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
+  const [selectedItems, setSelectedItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const {
     data: res,
@@ -35,6 +36,33 @@ const Items = () => {
       debouncedSearch.cancel();
     };
   }, [debouncedSearch]);
+
+  const handleCheckboxChange = (itemsId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(itemsId)
+        ? prevSelected.filter((id) => id !== itemsId)
+        : [...prevSelected, itemsId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    const currentPageVendorIds = itemData.map((item) => item._id);
+
+    if (currentPageVendorIds.every((id) => selectedItems.includes(id))) {
+      setSelectedItems((prevSelected) =>
+        prevSelected.filter((id) => !currentPageVendorIds.includes(id))
+      );
+    } else {
+      setSelectedItems((prevSelected) => [
+        ...new Set([...prevSelected, ...currentPageVendorIds]),
+      ]);
+    }
+  };
+
+  const currentPageVendorIds = itemData.map((item) => item._id);
+  const allSelectedOnPage = currentPageVendorIds.every((id) =>
+    selectedItems.includes(id)
+  );
 
   return (
     <>
@@ -67,6 +95,13 @@ const Items = () => {
         <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden ">
           <thead className="bg-gray-50 text-gray-600 text-xs uppercase sticky top-0 z-1">
             <tr>
+              <th className="px-4 py-3">
+                <input
+                  type="checkbox"
+                  checked={allSelectedOnPage}
+                  onChange={handleSelectAll}
+                />
+              </th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">SKU</th>
               <th className="px-4 py-3">Created By</th>
@@ -91,6 +126,13 @@ const Items = () => {
             ) : (
               itemData?.map((item) => (
                 <tr key={item._id}>
+                  <td className="px-4 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item._id)}
+                      onChange={() => handleCheckboxChange(item._id)}
+                    />
+                  </td>
                   <td className="px-4 py-2 font-medium text-gray-800">
                     {item.name}
                   </td>
