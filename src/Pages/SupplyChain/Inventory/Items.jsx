@@ -6,32 +6,29 @@ import { debounce } from "lodash";
 import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
 import LoadinSpinner from "../../../components/common/LoadinSpinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const limit = 10;
   const {
     data: res,
     loading,
     refetch,
-  } = useGet(`/inventory?page=${page}&limit=${limit}&search=${searchTerm}`);
+  } = useGet(`/inventory?page=${page}&limit=10&search=${debouncedSearchTerm}`);
 
   const itemData = res?.data || [];
   const totalPages = res?.totalPages || 1;
 
   const debouncedSearch = useCallback(
-    debounce((value) => {
-      setPage(1);
-      setSearchTerm(value);
-    }, 500),
+    debounce((value) => setDebouncedSearchTerm(value), 500),
     []
   );
   useEffect(() => {
-    refetch();
     return () => debouncedSearch.cancel();
   }, [debouncedSearch]);
 
@@ -62,11 +59,24 @@ const Items = () => {
     selectedItems.includes(id)
   );
 
+  const handleSelectChange = (e) => {
+    const value = e.target.value;
+    if (value === "archive") {
+      navigate("/inventory/archive");
+    }
+  };
+
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-xl my-6 mx-4">
         <div className="w-1/6 text-sm border-gray-300 rounded px-3 py-2 mr-10">
-          All Items
+          <select
+            onChange={handleSelectChange}
+            className="text-sm border border-gray-300 rounded px-3 py-2 mr-10"
+          >
+            <option value="all">All Items</option>
+            <option value="archive">Add to archive</option>
+          </select>
         </div>
 
         <div className="w-4/6 rounded">
