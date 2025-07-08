@@ -9,7 +9,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-dom'],
-          utilities: ['xlsx-populate', 'html2canvas', 'purify-es'],
+          utilities: ['xlsx-populate', 'html2canvas'],
         },
       },
     },
