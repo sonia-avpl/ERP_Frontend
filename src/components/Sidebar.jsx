@@ -74,7 +74,7 @@ const Sidebar = ({ userRole }) => {
                 }`}
               >
                 <img
-                  src="/public/logo/logo.png"
+                  src="/logo/logo.png"
                   alt="erp-logo"
                   className="w-10/12"
                 />
