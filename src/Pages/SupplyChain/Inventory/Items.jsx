@@ -12,29 +12,27 @@ const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
   const [selectedItems, setSelectedItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 10;
   const {
     data: res,
     loading,
     refetch,
-  } = useGet(`/inventory?search=${searchTerm}`);
-  // console.log("Raw response from API:", res);
+  } = useGet(`/inventory?page=${page}&limit=${limit}&search=${searchTerm}`);
 
   const itemData = res?.data || [];
+  const totalPages = res?.totalPages || 1;
 
-  // console.log("Extracted itemData:", itemData);
-
-  // debounce search method
   const debouncedSearch = useCallback(
     debounce((value) => {
+      setPage(1);
       setSearchTerm(value);
     }, 500),
     []
   );
   useEffect(() => {
     refetch();
-    return () => {
-      debouncedSearch.cancel();
-    };
+    return () => debouncedSearch.cancel();
   }, [debouncedSearch]);
 
   const handleCheckboxChange = (itemsId) => {
@@ -160,6 +158,49 @@ const Items = () => {
             )}
           </tbody>
         </table>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-end px-4 py-3 bg-white rounded-b-xl shadow md:px-6">
+            {/* Previous */}
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className="px-3 py-1.5 rounded border text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            {/* Page numbers */}
+            <div className="inline-flex gap-1">
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`px-3 py-1.5 rounded text-sm border
+              ${
+                pageNum === page
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-gray-50"
+              }
+            `}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Next */}
+            <button
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-3 py-1.5 rounded border text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
