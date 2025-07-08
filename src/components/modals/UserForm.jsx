@@ -50,9 +50,6 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
     if (!user.email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(user.email))
       newErrors.email = "Invalid email.";
-    // if (!user.phone.trim()) newErrors.phone = "Phone number is required.";
-    // else if (!/^\d{10}$/.test(user.phone))
-    //   newErrors.phone = "Phone must be 10 digits.";
     if (!user.address.trim()) newErrors.address = "Address is required.";
     if (!user.department) newErrors.department = "Department is required.";
     if (!user.role) newErrors.role = "Role is required.";

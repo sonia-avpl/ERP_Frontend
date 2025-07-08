@@ -15,14 +15,18 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
-  const { data, isLoading, error } = useGet(user?.role ? `auth/role/${user.role}` : null);
-  const [roleName, setRoleName] = useState(() => localStorage.getItem("roleName"));
+  const { data, isLoading, error } = useGet(
+    user?.role ? `auth/role/${user.role}` : null
+  );
+  const [roleName, setRoleName] = useState(() =>
+    localStorage.getItem("roleName")
+  );
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     if (data?.roleName) {
       setRoleName(data.roleName);
+      localStorage.setItem("roleName", data.roleName);
       setLoading(false);
     } else if (!isLoading && !data) {
       setLoading(false);
