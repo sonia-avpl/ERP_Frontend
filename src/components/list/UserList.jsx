@@ -69,9 +69,7 @@ const UserList = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {user.email}
                   </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {user.department}
-                  </td> */}
+                 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -95,7 +93,7 @@ const UserList = ({
                           : "bg-red-100 text-red-600 hover:bg-red-200"
                       }`}
                     >
-                      {user.isApproved ? "Enable" : "Disable"}
+                      {user.isApproved ? "Disable" : "Enable"}
                     </button>
                     <button
                       onClick={() => onEditUser(user)}

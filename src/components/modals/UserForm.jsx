@@ -30,7 +30,6 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
         email: "",
         phone: "",
         address: "",
-        department: departments[0],
         role: role[0],
       }
     );
@@ -172,17 +171,7 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
               <p className="text-red-500 text-xs mt-1">{errors.address}</p>
             )}
             <div className="grid md:grid-cols-2 gap-4 pt-5">
-              <SelectField
-                label="Department"
-                id="department"
-                name="department"
-                value={user.department}
-                onChange={handleChange}
-                options={departments}
-              />
-              {errors.department && (
-                <p className="text-red-500 text-xs mt-1">{errors.department}</p>
-              )}
+             
               <SelectField
                 label="Role"
                 id="role"

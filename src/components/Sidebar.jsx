@@ -69,14 +69,14 @@ const Sidebar = ({ userRole }) => {
             <div className="space-y-6 px-2">
               {/* MAIN */}
               <div
-                className={`text-xl font-semibold mb-6 px-4 py-2 ${
+                className={`text-xl font-semibold px-4 ${
                   !isSidebarExpanded && "hidden md:block"
                 }`}
               >
                 <img
                   src="/public/logo/logo.png"
                   alt="erp-logo"
-                  className="w-16 h-16"
+                  className="w-10/12"
                 />
               </div>
               <div className="flex flex-col h-full justify-between">
