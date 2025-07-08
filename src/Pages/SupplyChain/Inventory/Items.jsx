@@ -7,6 +7,7 @@ import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
 import LoadinSpinner from "../../../components/common/LoadinSpinner";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
@@ -19,7 +20,7 @@ const Items = () => {
     data: res,
     loading,
     refetch,
-  } = useGet(`/inventory?page=${page}&limit=10&search=${debouncedSearchTerm}`);
+  } = useGet(`/inventory?page=${page}&limit=${limit}&search=${debouncedSearchTerm}`);
 
   const itemData = res?.data || [];
   const totalPages = res?.totalPages || 1;
@@ -61,9 +62,12 @@ const Items = () => {
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
-    if (value === "archive") {
-      navigate("/inventory/archive");
+    if(value === "archive") {
+      if(selectedItems.length === 0){
+        toast.error("Please select at least one item to archive.")
+      }
     }
+    
   };
 
   return (
