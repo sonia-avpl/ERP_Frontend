@@ -1,9 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useGet } from "../../../hooks/useGet";
+import NewItemForm from "../../../components/form/NewItemForm";
+import { useState } from "react";
 
 const ItemsDetails = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
+  const [showEditForm, setShowEditForm] = useState(false);
   const {
     data: item,
     loading,
@@ -29,6 +32,7 @@ const ItemsDetails = () => {
     return (
       <div className="text-center py-10 text-gray-500">Vendor not found.</div>
     );
+
 
   return (
     <section className="bg-slate-50 py-8">
@@ -62,6 +66,12 @@ const ItemsDetails = () => {
                 className="px-4 py-2 text-sm bg-indigo-200 text-indigo-900 rounded-lg hover:bg-indigo-300 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300"
               >
                 ← Back
+              </button>
+              <button
+                onClick={() => setShowEditForm(true)}
+                className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              >
+                Edit Item
               </button>
             </div>
 
@@ -147,6 +157,15 @@ const ItemsDetails = () => {
           </div>
         </div>
       </div>
+
+      {showEditForm && (
+        <NewItemForm
+          mode="edit"
+          existingData={item}
+          onClose={() => setShowEditForm(false)}
+          refetch={refetch()}
+        />
+      )}
     </section>
   );
 };
