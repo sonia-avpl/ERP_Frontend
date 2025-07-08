@@ -13,26 +13,25 @@ const ItemsDetails = () => {
     error,
     refetch,
   } = useGet(`/inventory/${itemId}`);
-  console.log("Items data : ", item);
-  console.log("itemId: ", itemId);
+  // console.log("Items data : ", item);
+  // console.log("itemId: ", itemId);
 
   if (loading)
     return (
       <div className="text-center py-10 text-gray-600">
-        Loading vendor data...
+        Loading items data...
       </div>
     );
   if (error)
     return (
       <div className="text-center py-10 text-red-600">
-        Failed to load vendor details.
+        Failed to load item details.
       </div>
     );
   if (!item)
     return (
-      <div className="text-center py-10 text-gray-500">Vendor not found.</div>
+      <div className="text-center py-10 text-gray-500">Item not found.</div>
     );
-
 
   return (
     <section className="bg-slate-50 py-8">
@@ -40,18 +39,21 @@ const ItemsDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* IMAGE PREVIEW */}
           <figure className="order-first lg:order-last flex justify-center lg:justify-end">
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow max-w-xs w-full">
-              <img
-                src={item.images}
-                alt="img"
-                loading="lazy"
-                className="w-full aspect-w-16 aspect-h-9 object-cover"
-                srcSet={`${item.images}?w=400 400w, ${item.images}?w=800 800w`}
-                sizes="(max-width: 1024px) 100vw, 400px"
-              />
-              <figcaption className="p-4 text-center text-sm text-gray-600">
-                <span className="font-semibold">{item.name}</span>
-              </figcaption>
+            <div className=" bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow max-w-xs w-full">
+              {item.images?.length > 0 ? (
+                <div>
+                  {item.images.map((imgUrl, idx) => (
+                    <img
+                      key={idx}
+                      src={imgUrl}
+                      alt={`preview-${idx}`}
+                      className=" h-40 object-cover rounded-lg"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-gray-500">No images available</p>
+              )}
             </div>
           </figure>
 
@@ -61,18 +63,6 @@ const ItemsDetails = () => {
               <h1 className="text-3xl font-bold text-indigo-600">
                 Items Overview
               </h1>
-              <button
-                onClick={() => navigate(-1)}
-                className="px-4 py-2 text-sm bg-indigo-200 text-indigo-900 rounded-lg hover:bg-indigo-300 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300"
-              >
-                ← Back
-              </button>
-              <button
-                onClick={() => setShowEditForm(true)}
-                className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
-              >
-                Edit Item
-              </button>
             </div>
 
             {/** Items Info **/}
@@ -156,6 +146,22 @@ const ItemsDetails = () => {
             </div>
           </div>
         </div>
+        {/* button */}
+        <div className="flex justify-end gap-4">
+          {" "}
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 text-sm bg-indigo-200 text-indigo-900 rounded-lg hover:bg-indigo-300 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          >
+            ← Back
+          </button>
+          <button
+            onClick={() => setShowEditForm(true)}
+            className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+          >
+            Edit Item
+          </button>
+        </div>
       </div>
 
       {showEditForm && (
@@ -163,7 +169,7 @@ const ItemsDetails = () => {
           mode="edit"
           existingData={item}
           onClose={() => setShowEditForm(false)}
-          refetch={refetch()}
+          refetch={refetch}
         />
       )}
     </section>
