@@ -5,6 +5,7 @@ import { LogOut } from "lucide-react";
 import { useAuth } from "./context/AuthContext";
 import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
 import SidebarDropdown from "./SidebarDropDown";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const Sidebar = ({ userRole }) => {
   const [sidebarWidth, setSidebarWidth] = useState(260);
@@ -18,6 +19,7 @@ const Sidebar = ({ userRole }) => {
   const [openPrincipalPanelDropdown, setOpenPrincipalPanelDropdown] =
     useState(false);
   const [openRndModuleDropdown, setOpenRndModuleDropdown] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // toggle function for the inventory drop down
   // const toggleDropdown = (name) => {
@@ -46,30 +48,47 @@ const Sidebar = ({ userRole }) => {
   return (
     <div className="flex text-sm">
       <button
-        className="md:hidden fixed top-2 left-4 z-50 rounded shadow"
-        onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+        className="fixed top-4 left-4 z-50 md:hidden"
+        onClick={() => setIsMobileOpen((p) => !p)}
       >
-        <Bars3Icon className="h-6 w-6 " />
+        <Bars3Icon className="h-6 w-6" />
       </button>
 
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
       <div
-        className={`bg-white h-screen relative overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out ${
-          isSidebarExpanded ? "w-64 pt-16" : "w-16"
-        } md:pt-0`}
+        className={`bg-white h-screen fixed inset-y-0 left-0 z-40 overflow-y-auto transition-transform duration-300 ease-in-out ${
+          isSidebarExpanded ? "w-64" : "w-16"
+        } md:relative md:translate-x-0 ${
+          isMobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
         style={{
           width: isSidebarExpanded ? sidebarWidth : 64,
         }}
       >
-        <div className="flex flex-col justify-between h-full px-2 py-4">
+        <div className="flex flex-col justify-between h-full px-2">
           <div>
             <div className="space-y-6 px-2">
-              
               <div
                 className={`text-xl font-semibold px-4 ${
                   !isSidebarExpanded && "hidden md:block"
                 }`}
               >
-                <img src="/logo/logo.png" alt="erp-logo" className="w-12" />
+                <div className="flex justify-end p-4 md:hidden">
+                  <button onClick={() => setIsMobileOpen(false)}>
+                    <XMarkIcon className="h-6 w-6 text-gray-700 hover:text-gray-900" />
+                    <span className="sr-only">Close sidebar</span>
+                  </button>
+                </div>
+
+                <div className="px-4 mb-4">
+                  <img src="/logo/logo.png" alt="Logo" className="w-12" />
+                </div>
               </div>
               <div className="flex flex-col h-full justify-between">
                 <div>
@@ -95,6 +114,8 @@ const Sidebar = ({ userRole }) => {
                               navigate={navigate}
                               location={location}
                               // basePath="/supply-chain"
+                              isMobileOpen={isMobileOpen}
+                              setIsMobileOpen={setIsMobileOpen}
                             />
                           );
                         }
@@ -112,6 +133,8 @@ const Sidebar = ({ userRole }) => {
                               navigate={navigate}
                               location={location}
                               // basePath="/supply-chain"
+                              isMobileOpen={isMobileOpen}
+                              setIsMobileOpen={setIsMobileOpen}
                             />
                           );
                         }
@@ -129,6 +152,8 @@ const Sidebar = ({ userRole }) => {
                               navigate={navigate}
                               location={location}
                               // basePath="/supply-chain"
+                              isMobileOpen={isMobileOpen}
+                              setIsMobileOpen={setIsMobileOpen}
                             />
                           );
                         }
