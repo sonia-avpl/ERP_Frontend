@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { LogOut } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
 import SidebarDropdown from "./SidebarDropDown";
@@ -59,23 +59,25 @@ const Sidebar = ({ userRole }) => {
 
       <div
         className={`
-          fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
-          overflow-y-auto shadow-md
-          ${sidebarWidth}
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-          bg-slate-100
-          md:relative md:translate-x-0 md:block
-        `}
+    fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
+    overflow-visible md:overflow-visible shadow-md
+    ${sidebarWidth}
+    ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+    bg-slate-100
+    md:relative md:translate-x-0 md:block
+  `}
       >
         <div className="flex flex-col h-full px-2 py-4 text-gray-700">
           <div className="flex items-center justify-center h-16">
-            <img
-              src="/logo/logo.png"
-              alt="Logo"
-              className={`transition-all duration-300 ease-in-out object-contain
+            <Link to="/">
+              <img
+                src="/logo/logo.png"
+                alt="Logo"
+                className={`transition-all duration-300 ease-in-out object-contain
       ${isSidebarExpanded ? "h-10 w-auto" : "h-10 w-10"}
     `}
-            />
+              />
+            </Link>
           </div>
 
           <div className="absolute top-4 right-1 hidden md:block">
@@ -85,9 +87,9 @@ const Sidebar = ({ userRole }) => {
               aria-label="Toggle sidebar"
             >
               {isSidebarExpanded ? (
-                <IoIosArrowBack className="h-5 w-5" />
+                <IoIosArrowBack className="h-5 w-5 text-gray-400" />
               ) : (
-                <IoIosArrowForward className="h-5 w-5" />
+                <IoIosArrowForward className="h-5 w-5 text-gray-400" />
               )}
             </button>
           </div>
