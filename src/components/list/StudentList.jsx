@@ -27,8 +27,8 @@ const StudentList = ({
   const { data: fees } = useGet(`fees/getFeeDetails`);
   const [selectedIds, setSelectedIds] = useState([]);
 
-  const mergedList = admissionList.map((student) => {
-    const fee = fees?.find((f) => f.admissionForm._id === student._id);
+  const mergedList = admissionList?.map((student) => {
+    const fee = fees?.find((f) => f.admissionForm?._id === student._id);
     return {
       ...student,
       feeId: fee?._id,

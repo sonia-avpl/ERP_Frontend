@@ -10,6 +10,7 @@ import { usePost } from "../../hooks/usePost";
 import { FileModules } from "../../utills/enum";
 import { itiLocations, polytechnicLocations } from "../../utills/helper";
 import ApiService from "../../services/axiosInstance";
+import { useAuth } from "../../components/context/AuthContext";
 
 const AdmissionForm = () => {
   const { postData, loading } = usePostFile();
@@ -17,6 +18,9 @@ const AdmissionForm = () => {
   const [courseType, setCourseType] = useState("");
   const [collegeLocation, setCollegeLocation] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const { user } = useAuth();
+  console.log("use", user);
+
   const [formData, setFormData] = useState({
     applicationReceivedOn: getTodayDate(),
     registrationNo: "",
@@ -93,44 +97,46 @@ const AdmissionForm = () => {
   const [candidateSignaturePreview, setCandidateSignaturePreview] =
     useState(null);
   const [parentSignaturePreview, setParentSignaturePreview] = useState(null);
-useEffect(() => {
-  const fetchCourseFeeDetails = async () => {
-    const selectedCourse = formData.courseName;
-    const selectedCategory = formData.category;
-    const selectedGovtOrPvt = formData.govtOrPvt;
+  useEffect(() => {
+    const fetchCourseFeeDetails = async () => {
+      const selectedCourse = formData.courseName;
+      const selectedCategory = formData.category;
+      const selectedGovtOrPvt = formData.govtOrPvt;
 
-    if (!selectedCourse || !selectedCategory || !selectedGovtOrPvt) return;
+      if (!selectedCourse || !selectedGovtOrPvt) return;
 
-    try {
-      const res = await ApiService.get(
-        `admission/fee-details?category=${selectedCategory}&courseName=${selectedCourse}&govtOrPvt=${selectedGovtOrPvt}`
-      );
+      try {
+        let query = `admission/fee-details?courseName=${selectedCourse}&govtOrPvt=${selectedGovtOrPvt}`;
 
-      const { totalFee, cautionFee, courseDuration, yearlyFee } = res.data;
-      console.log("res", res.data);
+        // Only include category if Govt is selected
+        if (selectedGovtOrPvt === "Government" && selectedCategory) {
+          query += `&category=${selectedCategory}`;
+        }
 
-      setFormData((prev) => ({
-        ...prev,
-        totalFees: totalFee || "",
-        cautionFee: cautionFee || "",
-        courseDuration: courseDuration || "",
-        yearlyFee: yearlyFee || "",
-      }));
-    } catch (error) {
-      console.error("Failed to fetch course fee details:", error);
-      setFormData((prev) => ({
-        ...prev,
-        totalFees: "",
-        cautionFee: "",
-        courseDuration: "",
-        yearlyFee: "",
-      }));
-    }
-  };
+        const res = await ApiService.get(query);
+        const { totalFee, cautionFee, courseDuration, yearlyFee } = res.data;
 
-  fetchCourseFeeDetails();
-}, [formData.courseName, formData.category, formData.govtOrPvt]);
+        setFormData((prev) => ({
+          ...prev,
+          totalFees: totalFee || "",
+          cautionFee: cautionFee || "",
+          courseDuration: courseDuration || "",
+          yearlyFee: yearlyFee || "",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch course fee details:", error);
+        setFormData((prev) => ({
+          ...prev,
+          totalFees: "",
+          cautionFee: "",
+          courseDuration: "",
+          yearlyFee: "",
+        }));
+      }
+    };
 
+    fetchCourseFeeDetails();
+  }, [formData.courseName, formData.category, formData.govtOrPvt]);
 
   const handleSignatureChange = (e, declarationType) => {
     const file = e.target.files[0];
@@ -165,10 +171,19 @@ useEffect(() => {
         },
       }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
+      setFormData((prev) => {
+        const updatedData = {
+          ...prev,
+          [name]: type === "checkbox" ? checked : value,
+        };
+
+        // Reset category if user selects "Private"
+        if (name === "govtOrPvt" && value === "Private") {
+          updatedData.category = "";
+        }
+
+        return updatedData;
+      });
     }
   };
 
@@ -199,8 +214,10 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = { ...formData };
+    payload.createdBy = user?._id;
     payload.collegeLocation = collegeLocation;
     payload.courseType = courseType;
+    console.log("payload", payload);
     const result = await postData(`admission/add`, payload);
     if (result?.success) {
       if (uploads.candidateImage) {
@@ -306,27 +323,6 @@ useEffect(() => {
                     htmlFor="category"
                     className="block text-gray-700  font-medium mb-1"
                   >
-                    Category
-                  </label>
-                  <select
-                    name="category"
-                    id="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    className="input w-full p-2 text-sm"
-                  >
-                    <option value="">Select Category</option>
-                    <option>General</option>
-                    <option>OBC</option>
-                    <option>SC</option>
-                    <option>ST</option>
-                  </select>
-                </div>
-                   <div>
-                  <label
-                    htmlFor="category"
-                    className="block text-gray-700  font-medium mb-1"
-                  >
                     Govt./Private
                   </label>
                   <select
@@ -341,6 +337,30 @@ useEffect(() => {
                     <option>Private</option>
                   </select>
                 </div>
+                {formData.govtOrPvt === "Government" && (
+                  <div>
+                    <label
+                      htmlFor="category"
+                      className="block text-gray-700 font-medium mb-1"
+                    >
+                      Category
+                    </label>
+                    <select
+                      name="category"
+                      id="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className="input w-full p-2 text-sm"
+                    >
+                      <option value="">Select Category</option>
+                      <option>General</option>
+                      <option>OBC</option>
+                      <option>SC</option>
+                      <option>ST</option>
+                    </select>
+                  </div>
+                )}
+
                 <div>
                   <label
                     htmlFor="applicationReceivedOn"
@@ -374,7 +394,7 @@ useEffect(() => {
                     className="input w-full  p-2 text-sm"
                   />
                 </div>
-             
+
                 <div>
                   <label className="block text-gray-700 font-medium mb-1">
                     Yearly fee
