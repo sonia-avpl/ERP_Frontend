@@ -1,202 +1,175 @@
-import { useState } from "react";
-import { Bars3Icon } from "@heroicons/react/24/outline";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { LogOut } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
 import SidebarDropdown from "./SidebarDropDown";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const Sidebar = ({ userRole }) => {
-  const [sidebarWidth, setSidebarWidth] = useState(260);
-  // const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const navigate = useNavigate();
-  const { logout } = useAuth();
   const location = useLocation();
+  const { logout } = useAuth();
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   const [openSupplyChainDropdown, setOpenSupplyChainDropdown] = useState(false);
   const [openPrincipalPanelDropdown, setOpenPrincipalPanelDropdown] =
     useState(false);
   const [openRndModuleDropdown, setOpenRndModuleDropdown] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  // toggle function for the inventory drop down
-  // const toggleDropdown = (name) => {
-  //   setopenSupplyChainDropdown((prev) => ({
-  //     ...prev,
-  //     [name]: !prev[name],
-  //   }));
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (projectName.trim()) {
-  //     addProject(projectName);
-  //     setProjectName("");
-  //     setShowModal(false);
-  //   }
-  // };
-  // const addProject = (newProject) => {
-  //   setData((prev) => [...prev, newProject]);
-  // };
 
   const roleMenus = menuConfig[userRole] || [];
   const topMenus = [...topCommonMenus, ...roleMenus];
   const bottomMenus = [...bottomCommonMenus];
 
-  return (
-    <div className="flex text-sm">
-      <button
-        className="fixed top-4 left-4 z-50 md:hidden"
-        onClick={() => setIsMobileOpen((p) => !p)}
-      >
-        <Bars3Icon className="h-6 w-6" />
-      </button>
+  useEffect(() => {
+    document.body.style.overflow = isMobileOpen ? "hidden" : "auto";
+  }, [isMobileOpen]);
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const sidebarWidth = isSidebarExpanded ? "w-64" : "w-16";
+
+  return (
+    <>
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
           onClick={() => setIsMobileOpen(false)}
         />
       )}
 
-      <div
-        className={`bg-white h-screen fixed inset-y-0 left-0 z-40 overflow-y-auto transition-transform duration-300 ease-in-out ${
-          isSidebarExpanded ? "w-64" : "w-16"
-        } md:relative md:translate-x-0 ${
-          isMobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        style={{
-          width: isSidebarExpanded ? sidebarWidth : 64,
-        }}
+      <button
+        className="fixed top-4 left-4 z-50 md:hidden"
+        onClick={() => setIsMobileOpen((prev) => !prev)}
+        aria-label={isMobileOpen ? "Close sidebar" : "Open sidebar"}
+        aria-expanded={isMobileOpen}
       >
-        <div className="flex flex-col justify-between h-full px-2">
-          <div>
-            <div className="space-y-6 px-2">
-              <div
-                className={`text-xl font-semibold px-4 ${
-                  !isSidebarExpanded && "hidden md:block"
-                }`}
-              >
-                <div className="flex justify-end p-4 md:hidden">
-                  <button onClick={() => setIsMobileOpen(false)}>
-                    <XMarkIcon className="h-6 w-6 text-gray-700 hover:text-gray-900" />
-                    <span className="sr-only">Close sidebar</span>
-                  </button>
-                </div>
+        {isMobileOpen ? (
+          <XMarkIcon className="h-6 w-6 text-gray-700" />
+        ) : (
+          <Bars3Icon className="h-6 w-6 text-gray-700" />
+        )}
+      </button>
 
-                <div className="px-4 mb-4">
-                  <img src="/logo/logo.png" alt="Logo" className="w-12" />
-                </div>
-              </div>
-              <div className="flex flex-col h-full justify-between">
-                <div>
-                  {topMenus.map((section, idx) => (
-                    <div key={idx} className="p-2">
-                      {section.items.map((item, itemIdx) => {
-                        const isSupplyChain = item.name === "Supply Chain";
-                        const isPrincipalPanel =
-                          item.name === "Principal Panel";
-                        const isRndModule = item.name === "R&D Modules";
-                        const isActive = location.pathname === item.to;
+      <div
+        className={`
+          fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
+          overflow-y-auto shadow-md
+          ${sidebarWidth}
+          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+          bg-slate-100
+          md:relative md:translate-x-0 md:block
+        `}
+      >
+        <div className="flex flex-col h-full px-2 py-4 text-gray-700">
+          <div className="flex items-center justify-center h-16">
+            <img
+              src="/logo/logo.png"
+              alt="Logo"
+              className={`transition-all duration-300 ease-in-out object-contain
+      ${isSidebarExpanded ? "h-10 w-auto" : "h-10 w-10"}
+    `}
+            />
+          </div>
 
-                        if (isPrincipalPanel) {
-                          return (
-                            <SidebarDropdown
-                              key={item.name}
-                              item={item}
-                              isOpen={openPrincipalPanelDropdown}
-                              toggle={() =>
-                                setOpenPrincipalPanelDropdown((prev) => !prev)
-                              }
-                              isSidebarExpanded={isSidebarExpanded}
-                              navigate={navigate}
-                              location={location}
-                              // basePath="/supply-chain"
-                              isMobileOpen={isMobileOpen}
-                              setIsMobileOpen={setIsMobileOpen}
-                            />
-                          );
+          <div className="absolute top-4 right-1 hidden md:block">
+            <button
+              onClick={() => setIsSidebarExpanded((prev) => !prev)}
+              className="rounded-full bg-transparent hover:ring-2 hover:ring-gray-400 transition duration-200"
+              aria-label="Toggle sidebar"
+            >
+              {isSidebarExpanded ? (
+                <IoIosArrowBack className="h-5 w-5" />
+              ) : (
+                <IoIosArrowForward className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+
+          {/* Top Menus */}
+          <div className="flex-1 space-y-4">
+            {topMenus.map((section, idx) => (
+              <div key={idx} className="p-2 border-b border-gray-300">
+                {section.items.map((item, itemIdx) => {
+                  const isActive = location.pathname === item.to;
+                  const props = {
+                    key: item.name,
+                    item,
+                    isSidebarExpanded,
+                    navigate,
+                    location,
+                    isMobileOpen,
+                    setIsMobileOpen,
+                  };
+
+                  if (item.name === "Supply Chain")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openSupplyChainDropdown}
+                        toggle={() => setOpenSupplyChainDropdown((p) => !p)}
+                      />
+                    );
+                  if (item.name === "Principal Panel")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openPrincipalPanelDropdown}
+                        toggle={() => setOpenPrincipalPanelDropdown((p) => !p)}
+                      />
+                    );
+                  if (item.name === "R&D Modules")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openRndModuleDropdown}
+                        toggle={() => setOpenRndModuleDropdown((p) => !p)}
+                      />
+                    );
+
+                  return (
+                    <button
+                      key={itemIdx}
+                      onClick={() => {
+                        navigate(item.to);
+                        setIsMobileOpen(false);
+                      }}
+                      className={`flex items-center gap-2 p-2 rounded w-full transition-colors duration-200
+                        ${
+                          isActive
+                            ? "bg-indigo-600 text-white"
+                            : "hover:bg-indigo-500 hover:text-white"
                         }
-
-                        if (isRndModule) {
-                          return (
-                            <SidebarDropdown
-                              key={item.name}
-                              item={item}
-                              isOpen={openRndModuleDropdown}
-                              toggle={() =>
-                                setOpenRndModuleDropdown((prev) => !prev)
-                              }
-                              isSidebarExpanded={isSidebarExpanded}
-                              navigate={navigate}
-                              location={location}
-                              // basePath="/supply-chain"
-                              isMobileOpen={isMobileOpen}
-                              setIsMobileOpen={setIsMobileOpen}
-                            />
-                          );
-                        }
-
-                        if (isSupplyChain) {
-                          return (
-                            <SidebarDropdown
-                              key={item.name}
-                              item={item}
-                              isOpen={openSupplyChainDropdown}
-                              toggle={() =>
-                                setOpenSupplyChainDropdown((prev) => !prev)
-                              }
-                              isSidebarExpanded={isSidebarExpanded}
-                              navigate={navigate}
-                              location={location}
-                              // basePath="/supply-chain"
-                              isMobileOpen={isMobileOpen}
-                              setIsMobileOpen={setIsMobileOpen}
-                            />
-                          );
-                        }
-
-                        // Default item rendering
-                        return (
-                          <button
-                            key={itemIdx}
-                            onClick={() => navigate(item.to)}
-                            className={`flex items-center gap-2 p-2 rounded w-full ${
-                              isActive
-                                ? "bg-gray-800 text-white"
-                                : "hover:bg-gray-800 hover:text-white"
-                            }`}
-                          >
-                            {item.icon}
-                            {isSidebarExpanded && <span>{item.name}</span>}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
+                      `}
+                    >
+                      <span className="text-lg text-gray-600">{item.icon}</span>
+                      {isSidebarExpanded && <span>{item.name}</span>}
+                    </button>
+                  );
+                })}
               </div>
+            ))}
+          </div>
 
-              {/* Logout Button */}
-              <div className="mt-4">
-                <button
-                  onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}
-                  className="flex items-center gap-2 hover:bg-gray-800 hover:text-white p-2 rounded w-full"
-                >
-                  <LogOut className="h-5 w-5" />
-                  {isSidebarExpanded && <span>Logout</span>}
-                </button>
-              </div>
-            </div>
+          {/* Logout */}
+          <div className="mt-auto p-2">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 hover:bg-red-500 hover:text-white text-red-600 p-2 rounded w-full"
+            >
+              <LogOut className="h-5 w-5" />
+              {isSidebarExpanded && <span>Logout</span>}
+            </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
