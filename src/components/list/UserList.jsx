@@ -13,7 +13,6 @@ const UserList = ({
   return (
     <motion.div className="overflow-x-auto bg-white rounded-xl shadow-lg p-6 w-full">
       <div className="mb-4">{filtersUI}</div>
-
       <AnimatePresence mode="wait">
         <motion.table
           key={users.length}
@@ -69,7 +68,7 @@ const UserList = ({
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {user.email}
                   </td>
-                 
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
                       className={`inline-flex text-xs leading-5 font-semibold rounded-full ${
