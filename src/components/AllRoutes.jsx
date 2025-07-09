@@ -39,6 +39,7 @@ import GRNProcessing from "../Pages/SupplyChain/GRNProcessing";
 import Items from "../Pages/SupplyChain/Inventory/Items";
 import ItemGroups from "../Pages/SupplyChain/Inventory/ItemGroups";
 import InventoryAdjustment from "../Pages/SupplyChain/Inventory/InventoryAdjustment";
+import ArchiveData from "../Pages/SupplyChain/Inventory/ArchiveData"
 
 // Sales pages
 import Customers from "../Pages/SupplyChain/Sales/Customers";
@@ -93,6 +94,7 @@ const AllRoutes = () => {
             <Route path="/inventory/items" element={<Items />} />
             <Route path="/inventory/items/new" element={<NewItemForm />} />
             {/* <Route path="/inventory/items/:id" element={<ItemDetails />} /> */}
+            <Route path="/inventory/archive" element={<ArchiveData />} />
             <Route path="/inventory/:itemId" element={<ItemsDetails />} />
             <Route path="/inventory/item-groups" element={<ItemGroups />} />
             <Route

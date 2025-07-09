@@ -6,41 +6,81 @@ import { debounce } from "lodash";
 import { useGet } from "../../../hooks/useGet";
 import { HiOutlineEye } from "react-icons/hi2";
 import LoadinSpinner from "../../../components/common/LoadinSpinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Items = () => {
   const [showItemForm, setShowItemForm] = useState();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const [page, setPage] = useState(1);
+  const limit = 10;
   const {
     data: res,
     loading,
     refetch,
-  } = useGet(`/inventory?search=${searchTerm}`);
-  // console.log("Raw response from API:", res);
+  } = useGet(`/inventory?page=${page}&limit=${limit}&search=${debouncedSearchTerm}`);
 
   const itemData = res?.data || [];
+  const totalPages = res?.totalPages || 1;
 
-  // console.log("Extracted itemData:", itemData);
-
-  // debounce search method
   const debouncedSearch = useCallback(
-    debounce((value) => {
-      setSearchTerm(value);
-    }, 500),
+    debounce((value) => setDebouncedSearchTerm(value), 500),
     []
   );
   useEffect(() => {
-    refetch();
-    return () => {
-      debouncedSearch.cancel();
-    };
+    return () => debouncedSearch.cancel();
   }, [debouncedSearch]);
+
+  const handleCheckboxChange = (itemsId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(itemsId)
+        ? prevSelected.filter((id) => id !== itemsId)
+        : [...prevSelected, itemsId]
+    );
+  };
+
+  const handleSelectAll = () => {
+    const currentPageVendorIds = itemData.map((item) => item._id);
+
+    if (currentPageVendorIds.every((id) => selectedItems.includes(id))) {
+      setSelectedItems((prevSelected) =>
+        prevSelected.filter((id) => !currentPageVendorIds.includes(id))
+      );
+    } else {
+      setSelectedItems((prevSelected) => [
+        ...new Set([...prevSelected, ...currentPageVendorIds]),
+      ]);
+    }
+  };
+
+  const currentPageVendorIds = itemData.map((item) => item._id);
+  const allSelectedOnPage = currentPageVendorIds.every((id) =>
+    selectedItems.includes(id)
+  );
+
+  const handleSelectChange = (e) => {
+    const value = e.target.value;
+    if(value === "archive") {
+      if(selectedItems.length === 0){
+        toast.error("Please select at least one item to archive.")
+      }
+    }
+    
+  };
 
   return (
     <>
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white rounded-xl my-6 mx-4">
         <div className="w-1/6 text-sm border-gray-300 rounded px-3 py-2 mr-10">
-          All Items
+          <select
+            onChange={handleSelectChange}
+            className="text-sm border border-gray-300 rounded px-3 py-2 mr-10"
+          >
+            <option value="all">All Items</option>
+            <option value="archive">Add to archive</option>
+          </select>
         </div>
 
         <div className="w-4/6 rounded">
@@ -67,6 +107,13 @@ const Items = () => {
         <table className="min-w-full table-fixed text-sm text-left border border-gray-200 rounded-lg overflow-hidden ">
           <thead className="bg-gray-50 text-gray-600 text-xs uppercase sticky top-0 z-1">
             <tr>
+              <th className="px-4 py-3">
+                <input
+                  type="checkbox"
+                  checked={allSelectedOnPage}
+                  onChange={handleSelectAll}
+                />
+              </th>
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">SKU</th>
               <th className="px-4 py-3">Created By</th>
@@ -91,6 +138,13 @@ const Items = () => {
             ) : (
               itemData?.map((item) => (
                 <tr key={item._id}>
+                  <td className="px-4 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.includes(item._id)}
+                      onChange={() => handleCheckboxChange(item._id)}
+                    />
+                  </td>
                   <td className="px-4 py-2 font-medium text-gray-800">
                     {item.name}
                   </td>
@@ -118,6 +172,49 @@ const Items = () => {
             )}
           </tbody>
         </table>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-end px-4 py-3 bg-white rounded-b-xl shadow md:px-6">
+            {/* Previous */}
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className="px-3 py-1.5 rounded border text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            {/* Page numbers */}
+            <div className="inline-flex gap-1">
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`px-3 py-1.5 rounded text-sm border
+              ${
+                pageNum === page
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-gray-50"
+              }
+            `}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Next */}
+            <button
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-3 py-1.5 rounded border text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

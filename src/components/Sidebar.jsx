@@ -74,9 +74,9 @@ const Sidebar = ({ userRole }) => {
                 }`}
               >
                 <img
-                  src="logo/logo.png"
+                  src="/logo/logo.png"
                   alt="erp-logo"
-                  className="w-10/12"
+                  className="w-12"
                 />
               </div>
               <div className="flex flex-col h-full justify-between">

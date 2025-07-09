@@ -13,7 +13,7 @@ const OtherDetails = ({ data, setData }) => {
   const handleDocumentChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    console.log("file",file)
+    console.log("file", file);
     setData((prev) => ({
       ...prev,
       otherDetails: {
@@ -61,8 +61,8 @@ const OtherDetails = ({ data, setData }) => {
           className={inputClass}
         >
           <option value="">Select a currency</option>
-          <option value="$">$</option>
           <option value="₹">₹</option>
+          <option value="$">$</option>
         </select>
       </div>
       <div>
@@ -77,7 +77,6 @@ const OtherDetails = ({ data, setData }) => {
         >
           <option value="">Payment Term</option>
           <option value="Due on Receipt">Due on Receipt</option>
-          <option value="Lorem ipsum dolor sit">Lorem ipsum dolor sit</option>
         </select>
       </div>
       <div>
