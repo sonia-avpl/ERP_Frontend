@@ -35,6 +35,7 @@ import {
   BanknoteIcon,
   CreditCardIcon,
   FileTextIcon,
+  icons,
   PackageIcon,
   RefreshCcwIcon,
   RotateCcwIcon,
@@ -119,54 +120,6 @@ export const menuConfig = {
       items: [
         {
           name: "Supply Chain",
-          to: "/supply-chain-dashboard",
-          icon: <TruckIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Inventory & SCM",
-          to: "/inventory",
-          icon: <ArchiveBoxIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Quality Control",
-          to: "quality-control",
-          icon: <ShieldCheckIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Reporting",
-          to: "reporting-supply-chain",
-          icon: <ChartBarIcon className="h-5 w-5" />,
-        },
-      ],
-    },
-  ],
-  "Supply Chain": [
-    {
-      section: "Supply Chain",
-      items: [
-        {
-          name: "SKU Management ",
-          to: "/sku-management",
-          icon: <SiAmazondocumentdb className="h-5 w-5" />,
-        },
-        {
-          name: "Procurement",
-          to: "/procurement",
-          icon: <FaStore className="h-5 w-5" />,
-        },
-        {
-          name: "GRN Processing",
-          to: "/grn-processing",
-          icon: <TruckIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Quality Control",
-          to: "quality-control",
-          icon: <ShieldCheckIcon className="h-5 w-5" />,
-        },
-
-        {
-          name: "Inventory",
           icon: <ArchiveBoxXMarkIcon className="h-5 w-5" />,
           children: [
             {
@@ -175,15 +128,46 @@ export const menuConfig = {
               icon: <PiCubeTransparentLight className="h-4 w-4" />,
             },
             {
-              name: "Item Groups",
-              to: "/inventory/item-groups",
-              icon: <HiOutlineSquares2X2 className="h-4 w-4" />,
+              name: "SKU Management ",
+              to: "/sku-management",
+              icon: <SiAmazondocumentdb className="h-5 w-5" />,
             },
             {
-              name: "Inventory Adjustments",
-              to: "/inventory/adjustments",
-              icon: <HiAdjustmentsHorizontal className="h-4 w-4" />,
+              name: "Procurement",
+              to: "/procurement",
+              icon: <FaStore className="h-5 w-5" />,
             },
+            {
+              name: "GRN Processing",
+              to: "/grn-processing",
+              icon: <TruckIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Quality Control",
+              to: "quality-control",
+              icon: <ShieldCheckIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Vendors",
+              to: "/purchases/vendors",
+              icon: <UsersIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Reporting",
+              to: "reporting-supply-chain",
+              icon: <ChartBarIcon className="h-5 w-5" />,
+            },
+
+            // {
+            //   name: "Item Groups",
+            //   to: "/inventory/item-groups",
+            //   icon: <HiOutlineSquares2X2 className="h-4 w-4" />,
+            // },
+            // {
+            //   name: "Inventory Adjustments",
+            //   to: "/inventory/adjustments",
+            //   icon: <HiAdjustmentsHorizontal className="h-4 w-4" />,
+            // },
           ],
         },
 
@@ -239,51 +223,42 @@ export const menuConfig = {
         //   ],
         // },
 
-        {
-          name: "Purchases",
-          icon: <ShoppingBagIcon className="h-5 w-5" />,
-          children: [
-            {
-              name: "Vendors",
-              to: "/purchases/vendors",
-              icon: <UsersIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Purchase Orders",
-              to: "/purchases/orders",
-              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Purchase Receives",
-              to: "/purchases/receives",
-              icon: <TruckElectricIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Bills",
-              to: "/purchases/bills",
-              icon: <FileTextIcon className="h-4 w-4" />,
-            },
-            // {
-            //   name: "Payments Made",
-            //   to: "/purchases/payments",
-            //   icon: <BanknoteIcon className="h-4 w-4" />,
-            // },
-            // {
-            //   name: "Vendor Credits",
-            //   to: "/purchases/credits",
-            //   icon: <RotateCcwIcon className="h-4 w-4" />,
-            // },
-          ],
-        },
+        // {
+        //   name: "Purchases",
+        //   icon: <ShoppingBagIcon className="h-5 w-5" />,
+        //   children: [
 
-        {
-          name: "Reporting",
-          to: "reporting-supply-chain",
-          icon: <ChartBarIcon className="h-5 w-5" />,
-        },
+        //     {
+        //       name: "Purchase Orders",
+        //       to: "/purchases/orders",
+        //       icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Purchase Receives",
+        //       to: "/purchases/receives",
+        //       icon: <TruckElectricIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Bills",
+        //       to: "/purchases/bills",
+        //       icon: <FileTextIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Payments Made",
+        //       to: "/purchases/payments",
+        //       icon: <BanknoteIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Vendor Credits",
+        //       to: "/purchases/credits",
+        //       icon: <RotateCcwIcon className="h-4 w-4" />,
+        //     },
+        //   ],
+        // },
       ],
     },
   ],
+  "Supply Chai": [],
   HR: [
     {
       section: "HR Tools",
@@ -336,78 +311,72 @@ export const menuConfig = {
     },
   ],
   Admin: [
+    // Principal Panel
     {
       section: "Principal Panel",
       items: [
         {
-          name: "Student List",
-          to: "/all-students",
+          name: "Principal Panel",
           icon: <FolderIcon className="h-5 w-5" />,
-        },
-        {
-          name: "New Admission",
-          to: "/admission-form",
-          icon: <AcademicCapIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Student List",
+              to: "/all-students",
+              icon: <FolderIcon className="h-5 w-5" />,
+            },
+            {
+              name: "New Admission",
+              to: "/admission-form",
+              icon: <AcademicCapIcon className="h-5 w-5" />,
+            },
+          ],
         },
       ],
     },
+
+    // R&D Modules
     {
       section: "R&D Modules",
       items: [
         {
-          name: "Component Design",
-          to: "/component-design",
+          name: "R&D Modules",
           icon: <CubeIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Prototype Management",
-          to: "/prototype-management",
-          icon: <BeakerIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Testing & Validation",
-          to: "/testing-validation",
-          icon: <ClipboardDocumentCheckIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Compliance & Docs",
-          to: "/compliance-docs",
-          icon: <PuzzlePieceIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Reporting",
-          to: "/reporting",
-          icon: <ChartBarIcon className="h-5 w-5" />,
+          children: [
+            {
+              name: "Component Design",
+              to: "/component-design",
+              icon: <CubeIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Prototype",
+              to: "/prototype-management",
+              icon: <BeakerIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Testing & Validation",
+              to: "/testing-validation",
+              icon: <ClipboardDocumentCheckIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Compliance & Docs",
+              to: "/compliance-docs",
+              icon: <PuzzlePieceIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Reporting",
+              to: "/reporting",
+              icon: <ChartBarIcon className="h-5 w-5" />,
+            },
+          ],
         },
       ],
     },
-
+    // Supply chain
     {
       section: "Supply Chain",
       items: [
         {
-          name: "SKU Management ",
-          to: "/sku-management",
-          icon: <SiAmazondocumentdb className="h-5 w-5" />,
-        },
-        {
-          name: "Procurement",
-          to: "/procurement",
-          icon: <FaStore className="h-5 w-5" />,
-        },
-        {
-          name: "GRN Processing",
-          to: "/grn-processing",
-          icon: <TruckIcon className="h-5 w-5" />,
-        },
-        {
-          name: "Quality Control",
-          to: "quality-control",
-          icon: <ShieldCheckIcon className="h-5 w-5" />,
-        },
-
-        {
-          name: "Inventory",
+          name: "Supply Chain",
           icon: <ArchiveBoxXMarkIcon className="h-5 w-5" />,
           children: [
             {
@@ -416,15 +385,46 @@ export const menuConfig = {
               icon: <PiCubeTransparentLight className="h-4 w-4" />,
             },
             {
-              name: "Item Groups",
-              to: "/inventory/item-groups",
-              icon: <HiOutlineSquares2X2 className="h-4 w-4" />,
+              name: "SKU Management ",
+              to: "/sku-management",
+              icon: <SiAmazondocumentdb className="h-5 w-5" />,
             },
             {
-              name: "Inventory Adjustments",
-              to: "/inventory/adjustments",
-              icon: <HiAdjustmentsHorizontal className="h-4 w-4" />,
+              name: "Procurement",
+              to: "/procurement",
+              icon: <FaStore className="h-5 w-5" />,
             },
+            {
+              name: "GRN Processing",
+              to: "/grn-processing",
+              icon: <TruckIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Quality Control",
+              to: "quality-control",
+              icon: <ShieldCheckIcon className="h-5 w-5" />,
+            },
+            {
+              name: "Vendors",
+              to: "/purchases/vendors",
+              icon: <UsersIcon className="h-4 w-4" />,
+            },
+            {
+              name: "Reporting",
+              to: "reporting-supply-chain",
+              icon: <ChartBarIcon className="h-5 w-5" />,
+            },
+
+            // {
+            //   name: "Item Groups",
+            //   to: "/inventory/item-groups",
+            //   icon: <HiOutlineSquares2X2 className="h-4 w-4" />,
+            // },
+            // {
+            //   name: "Inventory Adjustments",
+            //   to: "/inventory/adjustments",
+            //   icon: <HiAdjustmentsHorizontal className="h-4 w-4" />,
+            // },
           ],
         },
 
@@ -480,48 +480,38 @@ export const menuConfig = {
         //   ],
         // },
 
-        {
-          name: "Purchases",
-          icon: <ShoppingBagIcon className="h-5 w-5" />,
-          children: [
-            {
-              name: "Vendors",
-              to: "/purchases/vendors",
-              icon: <UsersIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Purchase Orders",
-              to: "/purchases/orders",
-              icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Purchase Receives",
-              to: "/purchases/receives",
-              icon: <TruckElectricIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Bills",
-              to: "/purchases/bills",
-              icon: <FileTextIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Payments Made",
-              to: "/purchases/payments",
-              icon: <BanknoteIcon className="h-4 w-4" />,
-            },
-            {
-              name: "Vendor Credits",
-              to: "/purchases/credits",
-              icon: <RotateCcwIcon className="h-4 w-4" />,
-            },
-          ],
-        },
+        // {
+        //   name: "Purchases",
+        //   icon: <ShoppingBagIcon className="h-5 w-5" />,
+        //   children: [
 
-        {
-          name: "Reporting",
-          to: "reporting-supply-chain",
-          icon: <ChartBarIcon className="h-5 w-5" />,
-        },
+        //     {
+        //       name: "Purchase Orders",
+        //       to: "/purchases/orders",
+        //       icon: <ClipboardDocumentListIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Purchase Receives",
+        //       to: "/purchases/receives",
+        //       icon: <TruckElectricIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Bills",
+        //       to: "/purchases/bills",
+        //       icon: <FileTextIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Payments Made",
+        //       to: "/purchases/payments",
+        //       icon: <BanknoteIcon className="h-4 w-4" />,
+        //     },
+        //     {
+        //       name: "Vendor Credits",
+        //       to: "/purchases/credits",
+        //       icon: <RotateCcwIcon className="h-4 w-4" />,
+        //     },
+        //   ],
+        // },
       ],
     },
   ],
