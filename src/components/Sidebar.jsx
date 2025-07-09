@@ -1,52 +1,48 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { useGet } from "../hooks/useGet";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "./context/AuthContext";
 import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
-
-// react icons
-import { FaSortUp } from "react-icons/fa";
-import { FaCaretDown } from "react-icons/fa";
+import SidebarDropdown from "./SidebarDropDown";
 
 const Sidebar = ({ userRole }) => {
   const [sidebarWidth, setSidebarWidth] = useState(260);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  // const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const navigate = useNavigate();
   const { logout } = useAuth();
   const location = useLocation();
 
-  // Inventory drop down
-  const [openInventoryDropdown, setOpenInventoryDropdown] = useState(false);
-  // sales drop down
-  const [openSalesDropdown, setOpenSalesDropdown] = useState(false);
-  // purchase drop down
-  const [openPurchasesDropdown, setOpenPurchasesDropdown] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [openSupplyChainDropdown, setOpenSupplyChainDropdown] = useState(false);
+  const [openPrincipalPanelDropdown, setOpenPrincipalPanelDropdown] =
+    useState(false);
+  const [openRndModuleDropdown, setOpenRndModuleDropdown] = useState(false);
 
   // toggle function for the inventory drop down
-  const toggleDropdown = (name) => {
-    setOpenInventoryDropdown((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
-  };
+  // const toggleDropdown = (name) => {
+  //   setopenSupplyChainDropdown((prev) => ({
+  //     ...prev,
+  //     [name]: !prev[name],
+  //   }));
+  // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (projectName.trim()) {
-      addProject(projectName);
-      setProjectName("");
-      setShowModal(false);
-    }
-  };
-  const addProject = (newProject) => {
-    setData((prev) => [...prev, newProject]);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (projectName.trim()) {
+  //     addProject(projectName);
+  //     setProjectName("");
+  //     setShowModal(false);
+  //   }
+  // };
+  // const addProject = (newProject) => {
+  //   setData((prev) => [...prev, newProject]);
+  // };
 
   const roleMenus = menuConfig[userRole] || [];
   const topMenus = [...topCommonMenus, ...roleMenus];
   const bottomMenus = [...bottomCommonMenus];
+
   return (
     <div className="flex text-sm">
       <button
@@ -73,182 +69,67 @@ const Sidebar = ({ userRole }) => {
                   !isSidebarExpanded && "hidden md:block"
                 }`}
               >
-                <img
-                  src="/logo/logo.png"
-                  alt="erp-logo"
-                  className="w-12"
-                />
+                <img src="/logo/logo.png" alt="erp-logo" className="w-12" />
               </div>
               <div className="flex flex-col h-full justify-between">
                 <div>
                   {topMenus.map((section, idx) => (
-                    <div key={idx} className="mb-4">
-                      <div className="text-xs uppercase mb-2 px-2">
-                        {section.section}
-                      </div>
+                    <div key={idx} className="p-2">
                       {section.items.map((item, itemIdx) => {
-                        const isInventory = item.name === "Inventory";
-                        // const isSales = item.name === "Sales";
-                        const isPurchases = item.name === "Purchases";
-
+                        const isSupplyChain = item.name === "Supply Chain";
+                        const isPrincipalPanel =
+                          item.name === "Principal Panel";
+                        const isRndModule = item.name === "R&D Modules";
                         const isActive = location.pathname === item.to;
 
-                        if (isInventory) {
+                        if (isPrincipalPanel) {
                           return (
-                            <div key={itemIdx} className="w-full">
-                              <button
-                                onClick={() =>
-                                  setOpenInventoryDropdown(
-                                    !openInventoryDropdown
-                                  )
-                                }
-                                className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                                  isActive
-                                    ? "bg-gray-800 text-white"
-                                    : "hover:bg-gray-800 hover:text-white"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  {item.icon}
-                                  {isSidebarExpanded && (
-                                    <span>{item.name}</span>
-                                  )}
-                                </div>
-                                {isSidebarExpanded && (
-                                  <span className="ml-auto">
-                                    {openInventoryDropdown ? (
-                                      <FaSortUp />
-                                    ) : (
-                                      <FaCaretDown />
-                                    )}
-                                  </span>
-                                )}
-                              </button>
-                              {openInventoryDropdown && isSidebarExpanded && (
-                                <div className="ml-8 mt-1 space-y-1 text-sm">
-                                  {item.children.map((child, idx) => (
-                                    <button
-                                      key={idx}
-                                      onClick={() => navigate(child.to)}
-                                      className={`flex items-center gap-2 p-2 rounded w-full ${
-                                        location.pathname === child.to
-                                          ? "bg-gray-700 text-white"
-                                          : "hover:bg-gray-700 hover:text-white"
-                                      }`}
-                                    >
-                                      {child.icon}
-                                      {child.name}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
+                            <SidebarDropdown
+                              key={item.name}
+                              item={item}
+                              isOpen={openPrincipalPanelDropdown}
+                              toggle={() =>
+                                setOpenPrincipalPanelDropdown((prev) => !prev)
+                              }
+                              isSidebarExpanded={isSidebarExpanded}
+                              navigate={navigate}
+                              location={location}
+                              // basePath="/supply-chain"
+                            />
                           );
                         }
 
-                        // if (isSales) {
-                        //   return (
-                        //     <div key={itemIdx} className="w-full">
-                        //       <button
-                        //         onClick={() =>
-                        //           setOpenSalesDropdown(!openSalesDropdown)
-                        //         }
-                        //         className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                        //           location.pathname.startsWith("/sales")
-                        //             ? "bg-gray-800 text-white"
-                        //             : "hover:bg-gray-800 hover:text-white"
-                        //         }`}
-                        //       >
-                        //         <div className="flex items-center gap-2">
-                        //           {item.icon}
-                        //           {isSidebarExpanded && (
-                        //             <span>{item.name}</span>
-                        //           )}
-                        //         </div>
-                        //         {isSidebarExpanded && (
-                        //           <span>
-                        //             {openSalesDropdown ? (
-                        //               <FaSortUp />
-                        //             ) : (
-                        //               <FaCaretDown />
-                        //             )}
-                        //           </span>
-                        //         )}
-                        //       </button>
-
-                        //       {openSalesDropdown && isSidebarExpanded && (
-                        //         <div className="ml-8 mt-1 space-y-1 text-sm">
-                        //           {item.children.map((child, idx) => (
-                        //             <button
-                        //               key={idx}
-                        //               onClick={() => navigate(child.to)}
-                        //               className={`flex items-center gap-2 p-2 rounded w-full ${
-                        //                 location.pathname === child.to
-                        //                   ? "bg-gray-700 text-white"
-                        //                   : "hover:bg-gray-700 hover:text-white"
-                        //               }`}
-                        //             >
-                        //               {child.icon}
-                        //               <span>{child.name}</span>
-                        //             </button>
-                        //           ))}
-                        //         </div>
-                        //       )}
-                        //     </div>
-                        //   );
-                        // }
-
-                        if (isPurchases) {
+                        if (isRndModule) {
                           return (
-                            <div key={itemIdx} className="w-full">
-                              <button
-                                onClick={() =>
-                                  setOpenPurchasesDropdown(
-                                    !openPurchasesDropdown
-                                  )
-                                }
-                                className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                                  location.pathname.startsWith("/purchases")
-                                    ? "bg-gray-800 text-white"
-                                    : "hover:bg-gray-800 hover:text-white"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  {item.icon}
-                                  {isSidebarExpanded && (
-                                    <span>{item.name}</span>
-                                  )}
-                                </div>
-                                {isSidebarExpanded && (
-                                  <span>
-                                    {openPurchasesDropdown ? (
-                                      <FaSortUp />
-                                    ) : (
-                                      <FaCaretDown />
-                                    )}
-                                  </span>
-                                )}
-                              </button>
+                            <SidebarDropdown
+                              key={item.name}
+                              item={item}
+                              isOpen={openRndModuleDropdown}
+                              toggle={() =>
+                                setOpenRndModuleDropdown((prev) => !prev)
+                              }
+                              isSidebarExpanded={isSidebarExpanded}
+                              navigate={navigate}
+                              location={location}
+                              // basePath="/supply-chain"
+                            />
+                          );
+                        }
 
-                              {openPurchasesDropdown && isSidebarExpanded && (
-                                <div className="ml-8 mt-1 space-y-1 text-sm">
-                                  {item.children.map((child, idx) => (
-                                    <button
-                                      key={idx}
-                                      onClick={() => navigate(child.to)}
-                                      className={`flex items-center gap-2 p-2 rounded w-full ${
-                                        location.pathname === child.to
-                                          ? "bg-gray-700 text-white"
-                                          : "hover:bg-gray-700 hover:text-white"
-                                      }`}
-                                    >
-                                      {child.icon}
-                                      <span>{child.name}</span>
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
+                        if (isSupplyChain) {
+                          return (
+                            <SidebarDropdown
+                              key={item.name}
+                              item={item}
+                              isOpen={openSupplyChainDropdown}
+                              toggle={() =>
+                                setOpenSupplyChainDropdown((prev) => !prev)
+                              }
+                              isSidebarExpanded={isSidebarExpanded}
+                              navigate={navigate}
+                              location={location}
+                              // basePath="/supply-chain"
+                            />
                           );
                         }
 
@@ -271,27 +152,6 @@ const Sidebar = ({ userRole }) => {
                     </div>
                   ))}
                 </div>
-                {/* {topMenus.map((section, idx) => (
-              <div key={idx} className="mb-4 lg:pt-0 pt-5">
-                <div className="text-xs uppercase mb-2 px-2 hidden md:block">
-                  {section.section}
-                </div>
-                {section.items.map((item, itemIdx) => (
-                  <button
-                    key={itemIdx}
-                    onClick={() => navigate(item.to)}
-                    className={`flex items-center gap-2 p-2 rounded w-full ${
-                      location.pathname === item.to
-                        ? "bg-gray-800 text-white"
-                        : "hover:bg-gray-800 hover:text-white"
-                    }`}
-                  >
-                    {item.icon}
-                    {isSidebarExpanded && <span>{item.name}</span>}
-                  </button>
-                ))}
-              </div>
-            ))} */}
               </div>
 
               {/* Logout Button */}
