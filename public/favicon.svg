@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="304.8mm" height="304.8mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 30480 30480"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <font id="FontID0" horiz-adv-x="771" font-variant="normal" class="str1" style="fill-rule:nonzero" font-weight="400">
+	<font-face 
+		font-family="BankGothic Md BT">
+		<font-face-src>
+			<font-face-name name="Bank Gothic Medium BT"/>
+		</font-face-src>
+	</font-face>
+   <missing-glyph><path d="M0 0z"/></missing-glyph>
+   <glyph unicode="A" horiz-adv-x="771" d="M264 206l226.333 0 -111.5 209.999 -114.832 -209.999zm-231.001 -206l292.168 516 115.833 0 296 -516 -134.833 0 -62.0011 113 -327.332 0 -60.1674 -113 -119.667 0z"/>
+   <glyph unicode="E" horiz-adv-x="754" d="M132 0l0 516 528 0 0 -87.9997 -408.001 0 0 -115 238 0 0 -87.9997 -238 0 0 -128.001 413 0 0 -96.9994 -533 0z"/>
+   <glyph unicode="P" horiz-adv-x="743" d="M519.834 427l-269.834 0 0 -137 269.834 0c20.8326,0 34.9995,2.9995 42.6658,8.99973 7.66757,6.00023 11.5001,16.8337 11.5001,32.1664l0 55.1678c0,15 -3.83256,25.4994 -11.5001,31.666 -7.66635,6.00023 -21.8332,8.99973 -42.6658,8.99973zm-387.834 -427l0 516 441 0c41.1661,0 70.9996,-7.83394 89.3331,-23.667 18.4998,-15.6666 27.6671,-40.9997 27.6671,-76.1668l0 -115.333c0,-34.9995 -9.16732,-60.3338 -27.6671,-76.1668 -18.3334,-15.833 -48.167,-23.667 -89.3331,-23.667l-323.001 0 0 -201 -118 0z"/>
+   <glyph unicode="X" horiz-adv-x="717" d="M53.3329 0l244.501 265 -248.834 251 159.167 0 164.833 -175.166 156.666 175.166 138.167 0 -224.999 -237.166 278.166 -278.834 -162.999 0 -188.834 200.167 -174.167 -200.167 -141.667 0z"/>
+  </font>
+  <style type="text/css">
+   <![CDATA[
+    @font-face { font-family:"BankGothic Md BT";font-variant:normal;font-weight:normal;src:url("#FontID0") format(svg)}
+    .str1 {stroke-width:36.7;stroke-miterlimit:22.9256}
+    .str2 {stroke:#373435;stroke-width:300;stroke-miterlimit:22.9256}
+    .str0 {stroke:#95111E;stroke-width:20;stroke-miterlimit:22.9256}
+    .fil4 {fill:#373435}
+    .fil3 {fill:#650004}
+    .fil1 {fill:#95111E}
+    .fil2 {fill:#9A1214}
+    .fil0 {fill:#E91D26}
+    .fnt0 {font-weight:normal;font-size:8174.69px;font-family:'BankGothic Md BT'}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_1915527943840">
+   <g>
+    <polygon class="fil0 str0" points="5047.14,20554.93 15233.07,2661.65 15238.89,6990.13 8210.94,19360.63 "/>
+    <polygon class="fil1 str0" points="9233.54,17509.16 13051.74,17504.03 8078.84,19382.33 9166.83,17504.03 "/>
+    <polygon class="fil2 str0" points="25432.86,20554.92 15246.93,2661.64 15241.11,6990.12 22269.06,19360.62 "/>
+    <polygon class="fil3 str0" points="21212.22,17509.16 17394.03,17504.03 22366.92,19382.33 21278.94,17504.03 "/>
+   </g>
+   <text x="2883.95" y="27818.35"  class="fil4 str2 fnt0">APEX</text>
+  </g>
+ </g>
+</svg>
