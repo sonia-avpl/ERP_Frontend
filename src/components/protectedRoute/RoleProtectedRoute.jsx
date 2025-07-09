@@ -2,8 +2,8 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"; // Adjust path
 
 const RoleProtectedRoute = ({ allowedRoles }) => {
-  const { user, roleName, loading } = useAuth();
-
+  const { user, loading } = useAuth();
+  const roleName = localStorage.getItem("roleName");
   if (!user) return <Navigate to="/login" replace />;
 
   if (loading) return <div>Loading...</div>;

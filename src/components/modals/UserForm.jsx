@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import InputPassword from "../form/InputPassword";
 import SelectField from "../form/SelectField";
 import InputField from "../form/InputField";
-import { departments, role } from "../../utills/enum";
+import { departments } from "../../utills/enum";
 import { usePost } from "../../hooks/usePost";
 import { usePatch } from "../../hooks/usePatch";
+import { useGet } from "../../hooks/useGet";
+import SelectCategory from "../form/SelectCategory";
 
 const UserForm = ({ initialUser, onCancel, refetch }) => {
+  const { data: role } = useGet(`auth/all-role`);
+  console.log("role", role);
   const [user, setUser] = useState(
     initialUser || {
       id: "",
@@ -15,8 +19,7 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
       phone: "",
       address: "",
       password: "",
-      department: departments[0],
-      role: role[0],
+      role: "",
     }
   );
   const [errors, setErrors] = useState({});
@@ -24,14 +27,21 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
   const { patchData } = usePatch();
   useEffect(() => {
     setUser(
-      initialUser || {
-        id: "",
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        role: role[0],
-      }
+      initialUser
+        ? {
+            ...initialUser,
+            role: initialUser.role?._id || initialUser.role || "",
+          }
+        : {
+            id: "",
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            password: "",
+
+            role: "",
+          }
     );
     setErrors({});
   }, [initialUser]);
@@ -50,9 +60,6 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
     if (!user.email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(user.email))
       newErrors.email = "Invalid email.";
-    // if (!user.phone.trim()) newErrors.phone = "Phone number is required.";
-    // else if (!/^\d{10}$/.test(user.phone))
-    //   newErrors.phone = "Phone must be 10 digits.";
     if (!user.address.trim()) newErrors.address = "Address is required.";
     if (!user.department) newErrors.department = "Department is required.";
     if (!user.role) newErrors.role = "Role is required.";
@@ -62,6 +69,7 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("hit")
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -85,8 +93,7 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
         phone: "",
         address: "",
         password: "",
-        department: departments[0],
-        role: role[0],
+        role: "",
       });
       setErrors({});
     }
@@ -171,15 +178,18 @@ const UserForm = ({ initialUser, onCancel, refetch }) => {
               <p className="text-red-500 text-xs mt-1">{errors.address}</p>
             )}
             <div className="grid md:grid-cols-2 gap-4 pt-5">
-             
-              <SelectField
+              <SelectCategory
                 label="Role"
                 id="role"
                 name="role"
                 value={user.role}
                 onChange={handleChange}
-                options={role}
+                options={role?.map((role) => ({
+                  label: role.name,
+                  value: role._id,
+                }))}
               />
+
               {errors.department && (
                 <p className="text-red-500 text-xs mt-1">{errors.role}</p>
               )}
