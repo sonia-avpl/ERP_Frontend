@@ -7,7 +7,9 @@ const SidebarDropdown = ({
   isSidebarExpanded,
   navigate,
   location,
-  basePath
+  basePath,
+  isMobileOpen,
+  setIsMobileOpen,
 }) => {
   const active = location.pathname.startsWith(basePath);
 
@@ -17,7 +19,9 @@ const SidebarDropdown = ({
         onClick={toggle}
         aria-expanded={isOpen}
         className={`flex items-center justify-between p-2 rounded w-full ${
-          active ? "bg-gray-800 text-white" : "hover:bg-gray-800 hover:text-white"
+          active
+            ? "bg-gray-800 text-white"
+            : "hover:bg-gray-800 hover:text-white"
         }`}
       >
         <div className="flex items-center gap-2">
@@ -29,10 +33,13 @@ const SidebarDropdown = ({
 
       {isOpen && isSidebarExpanded && (
         <div className="ml-8 mt-1 space-y-1 text-sm">
-          {item.children.map(child => (
+          {item.children.map((child) => (
             <button
               key={child.to}
-              onClick={() => navigate(child.to)}
+              onClick={() => {
+                navigate(child.to);
+                if (isMobileOpen) setIsMobileOpen(false); 
+              }}
               className={`flex items-center gap-2 p-2 rounded w-full ${
                 location.pathname === child.to
                   ? "bg-gray-700 text-white"
@@ -49,4 +56,4 @@ const SidebarDropdown = ({
   );
 };
 
-export default SidebarDropdown
+export default SidebarDropdown;
