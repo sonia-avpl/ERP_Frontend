@@ -22,9 +22,9 @@ function Login() {
     console.log(data);
     if (data) {
       localStorage.setItem("token", JSON.stringify(data.token));
-      localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("acl", JSON.stringify(data.acl));
       navigate("/");
+      window.location.reload();
     }
   };
 

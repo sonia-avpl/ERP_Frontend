@@ -1,4 +1,4 @@
-import { useGet } from "../hooks/useGet";
+import { useAuth } from "../components/context/AuthContext";
 import AdminDashboard from "./AdminDashboard";
 import DroneDashboard from "./DroneR&DSystem/DroneDashboard";
 import SupplyChain from "./DroneR&DSystem/SupplyChain/SupplyChain";
@@ -6,10 +6,8 @@ import HrDashboard from "./HrSystem/HrDashboard";
 import PrincipalDashboard from "./Lms/PrincipalDashboard";
 
 const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const { data } = useGet(`auth/role/${user?.role}`);
-
-  const userRole = data.roleName;
+  const { user ,roleName:userRole} =useAuth();
+  console.log("userRole",userRole)
 
   return (
     <div>

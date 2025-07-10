@@ -3,6 +3,7 @@ import StudentList from "../../components/list/StudentList";
 import { useGet } from "../../hooks/useGet";
 import LoadinSpinner from "../../components/common/LoadinSpinner";
 import { itiLocations, polytechnicLocations } from "../../utills/helper";
+import { useAuth } from "../../components/context/AuthContext";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,6 +17,7 @@ const StudentPage = () => {
   const [inputValue, setInputValue] = useState("");
   const [feeStatusFilter, setFeeStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const { roleName } = useAuth();
 
   const allLocations = [...itiLocations, ...polytechnicLocations];
   useEffect(() => {
@@ -66,18 +68,20 @@ const StudentPage = () => {
         <option value="Submitted">Submitted</option>
         <option value="Pending">Pending</option>
       </select>
-      <select
-        value={locationFilter}
-        onChange={(e) => setLocationFilter(e.target.value)}
-        className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
-      >
-        <option value="">All Locations</option>
-        {allLocations.map((loc, index) => (
-          <option key={index} value={loc}>
-            {loc}
-          </option>
-        ))}
-      </select>
+      {roleName === "Admin" && (
+        <select
+          value={locationFilter}
+          onChange={(e) => setLocationFilter(e.target.value)}
+          className="px-3 py-1.5 border border-gray-300 rounded-md text-sm"
+        >
+          <option value="">All Locations</option>
+          {allLocations.map((loc, index) => (
+            <option key={index} value={loc}>
+              {loc}
+            </option>
+          ))}
+        </select>
+      )}
     </div>
   );
   if (loading) {

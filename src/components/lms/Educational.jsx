@@ -4,35 +4,65 @@ import { subjectOptions } from "../../utills/enum";
 const Educational = ({ formData, handleEducationChange }) => {
   const [openSubjectDropdownForIndex, setOpenSubjectDropdownForIndex] =
     useState(null);
+  const [customSubjectInput, setCustomSubjectInput] = useState({});
   const dropdownRefs = useRef([]);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (openSubjectDropdownForIndex !== null) {
         const currentDropdownRef =
           dropdownRefs.current[openSubjectDropdownForIndex];
         if (currentDropdownRef && !currentDropdownRef.contains(event.target)) {
-          setOpenSubjectDropdownForIndex(null); // Close the dropdown
+          setOpenSubjectDropdownForIndex(null);
         }
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openSubjectDropdownForIndex]);
 
   const handleCheckboxChange = (index, subject, isChecked) => {
-    const currentSubjects = formData.education[index].subjects;
-    let newSubjects;
+    const currentSubjects = formData.education[index].subjects || [];
+    let newSubjects = [...currentSubjects];
 
-    if (isChecked) {
-      newSubjects = [...currentSubjects, subject];
+    if (subject === "Other") {
+      if (!isChecked) {
+        setCustomSubjectInput((prev) => {
+          const updated = { ...prev };
+          delete updated[index];
+          return updated;
+        });
+        newSubjects = newSubjects.filter(
+          (s) => s !== "Other" && !subjectOptions.includes(s)
+        );
+      } else {
+        newSubjects.push("Other");
+      }
     } else {
-      newSubjects = currentSubjects.filter((s) => s !== subject);
+      newSubjects = isChecked
+        ? [...newSubjects, subject]
+        : newSubjects.filter((s) => s !== subject);
     }
-    // Call the parent handler with the updated array
+
     handleEducationChange(index, "subjects", newSubjects);
+  };
+
+  const handleOtherSubjectChange = (index, value) => {
+    setCustomSubjectInput((prev) => ({ ...prev, [index]: value }));
+
+    const currentSubjects = formData.education[index].subjects || [];
+    const standardSubjects = currentSubjects.filter((s) =>
+      subjectOptions.includes(s)
+    );
+
+    if (value.trim()) {
+      handleEducationChange(index, "subjects", [
+        ...standardSubjects,
+        value.trim(),
+      ]);
+    } else {
+      handleEducationChange(index, "subjects", [...standardSubjects]);
+    }
   };
 
   const toggleSubjectsDropdown = (index) => {
@@ -42,11 +72,13 @@ const Educational = ({ formData, handleEducationChange }) => {
   };
 
   return (
-     <section className="bg-yellow-50 lg:p-6 rounded-lg shadow-sm">
+    <section className="bg-yellow-50 lg:p-6 rounded-lg shadow-sm">
       <h2 className="lg:text-xl font-semibold text-yellow-700 mb-4">
         Educational Qualification
       </h2>
-      <div className="space-y-4  lg:text-base text-xs"> {/* Responsive text size */}
+      <div className="space-y-4  lg:text-base text-xs">
+        {" "}
+        {/* Responsive text size */}
         <div className="hidden lg:grid grid-cols-8 gap-2 font-medium text-gray-700 mb-2 ">
           <span className="col-span-1">Exam Passed</span>
           <span className="col-span-1">Board</span>
@@ -57,13 +89,17 @@ const Educational = ({ formData, handleEducationChange }) => {
           <span className="col-span-1">CGPA</span>
           <span className="col-span-1">Subjects</span>
         </div>
-
         {formData.education.map((edu, index) => (
           // Main row container: grid on large screens, stack on small
-          <div key={index} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-4 lg:gap-2 p-4 sm:p-2 border border-gray-200 rounded-lg lg:border-none lg:rounded-none lg:p-0">
+          <div
+            key={index}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-4 lg:gap-2 p-4 sm:p-2 border border-gray-200 rounded-lg lg:border-none lg:rounded-none lg:p-0"
+          >
             {/* Exam Passed - Readonly */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Exam Passed</label>
+              <label className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">
+                Exam Passed
+              </label>
               <input
                 readOnly
                 value={edu.examPassed}
@@ -73,7 +109,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* Board */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`board-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Board</label>
+              <label
+                htmlFor={`board-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+                Board
+              </label>
               <input
                 id={`board-${index}`}
                 placeholder="Board"
@@ -87,7 +128,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* Year */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`year-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Year</label>
+              <label
+                htmlFor={`year-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+                Year
+              </label>
               <input
                 id={`year-${index}`}
                 placeholder="Year"
@@ -101,7 +147,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* Marks Obtained */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`marksObtained-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Marks Obtained</label>
+              <label
+                htmlFor={`marksObtained-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+                Marks Obtained
+              </label>
               <input
                 id={`marksObtained-${index}`}
                 placeholder="Marks Obtained"
@@ -116,7 +167,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* Total Marks */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`totalMarks-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Total Marks</label>
+              <label
+                htmlFor={`totalMarks-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+                Total Marks
+              </label>
               <input
                 id={`totalMarks-${index}`}
                 placeholder="Total Marks"
@@ -131,7 +187,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* Percentage */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`percentage-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Percentage(%)</label>
+              <label
+                htmlFor={`percentage-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+               %age
+              </label>
               <input
                 id={`percentage-${index}`}
                 type="number"
@@ -149,7 +210,12 @@ const Educational = ({ formData, handleEducationChange }) => {
 
             {/* CGPA */}
             <div className="flex flex-col col-span-full lg:col-span-1">
-              <label htmlFor={`cgpa-${index}`} className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">CGPA</label>
+              <label
+                htmlFor={`cgpa-${index}`}
+                className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
+              >
+                CGPA
+              </label>
               <input
                 id={`cgpa-${index}`}
                 placeholder="CGPA"
@@ -166,8 +232,13 @@ const Educational = ({ formData, handleEducationChange }) => {
             </div>
 
             {/* Subject Selection with Checkboxes */}
-            <div className="flex flex-col col-span-full lg:col-span-1 relative" ref={el => dropdownRefs.current[index] = el}>
-              <label className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">Subjects</label>
+            <div
+              className="flex flex-col col-span-full lg:col-span-1 relative"
+              ref={(el) => (dropdownRefs.current[index] = el)}
+            >
+              <label className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">
+                Subjects
+              </label>
               <div
                 className="input p-2 cursor-pointer flex justify-between items-center bg-white border border-gray-300 rounded shadow-sm"
                 onClick={() => toggleSubjectsDropdown(index)}
@@ -194,9 +265,12 @@ const Educational = ({ formData, handleEducationChange }) => {
               </div>
 
               {openSubjectDropdownForIndex === index && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg max-h-48 overflow-y-auto">
                   {subjectOptions.map((subject) => (
-                    <label key={subject} className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                    <label
+                      key={subject}
+                      className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         value={subject}
@@ -209,6 +283,33 @@ const Educational = ({ formData, handleEducationChange }) => {
                       {subject}
                     </label>
                   ))}
+
+                  {/* Other Option */}
+                  <label className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={edu.subjects.includes("Other")}
+                      onChange={(e) =>
+                        handleCheckboxChange(index, "Other", e.target.checked)
+                      }
+                      className="mr-2"
+                    />
+                    Other
+                  </label>
+
+                  {edu.subjects.includes("Other") && (
+                    <div className="p-2">
+                      <input
+                        type="text"
+                        placeholder="Enter custom subject"
+                        value={customSubjectInput[index] || ""}
+                        onChange={(e) =>
+                          handleOtherSubjectChange(index, e.target.value)
+                        }
+                        className="input w-full p-2 border rounded"
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>

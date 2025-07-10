@@ -5,42 +5,22 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      return storedUser ? JSON.parse(storedUser) : null;
-    } catch (err) {
-      console.error("Invalid user in localStorage", err);
-      return null;
-    }
-  });
-
-  const {
-    data,
-    loading: isLoading,
-    error,
-  } = useGet(user?.role ? `auth/role/${user.role}` : null);
-  const { data: userData } = useGet(`auth/me`);
-  console.log("userData",userData)
-  const [roleName, setRoleName] = useState(() =>
-    localStorage.getItem("roleName")
-  );
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [roleName, setRoleName] = useState("");
+  const { data: userData, loading } = useGet(`auth/me`);
 
   useEffect(() => {
-    if (data?.roleName) {
-      setRoleName(data.roleName);
-      localStorage.setItem("roleName", data.roleName);
-      setLoading(false);
-    } else if (!isLoading && !data) {
-      setLoading(false);
+    if (userData) {
+      setUser(userData); 
+      setRoleName(userData?.role?.name || "");
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("roleName", userData?.role?.name || "");
     }
-  }, [data, isLoading]);
+  }, [userData]);
 
-  // Handle logout
   const logout = () => {
     setUser(null);
-    setRoleName(null);
+    setRoleName("");
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("roleName");
