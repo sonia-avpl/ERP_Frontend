@@ -1,317 +1,177 @@
-import { useState, useRef } from "react";
-import { Bars3Icon } from "@heroicons/react/24/outline";
-import { useGet } from "../hooks/useGet";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { bottomCommonMenus, menuConfig, topCommonMenus } from "../data/menu";
-
-// react icons
-import { FaSortUp } from "react-icons/fa";
-import { FaCaretDown } from "react-icons/fa";
+import SidebarDropdown from "./SidebarDropDown";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const Sidebar = ({ userRole }) => {
-  const [sidebarWidth, setSidebarWidth] = useState(260);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const navigate = useNavigate();
-  const { logout } = useAuth();
   const location = useLocation();
+  const { logout } = useAuth();
 
-  // Inventory drop down
-  const [openInventoryDropdown, setOpenInventoryDropdown] = useState(false);
-  // sales drop down
-  const [openSalesDropdown, setOpenSalesDropdown] = useState(false);
-  // purchase drop down
-  const [openPurchasesDropdown, setOpenPurchasesDropdown] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // toggle function for the inventory drop down
-  const toggleDropdown = (name) => {
-    setOpenInventoryDropdown((prev) => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (projectName.trim()) {
-      addProject(projectName);
-      setProjectName("");
-      setShowModal(false);
-    }
-  };
-  const addProject = (newProject) => {
-    setData((prev) => [...prev, newProject]);
-  };
+  const [openSupplyChainDropdown, setOpenSupplyChainDropdown] = useState(false);
+  const [openPrincipalPanelDropdown, setOpenPrincipalPanelDropdown] =
+    useState(false);
+  const [openRndModuleDropdown, setOpenRndModuleDropdown] = useState(false);
 
   const roleMenus = menuConfig[userRole] || [];
   const topMenus = [...topCommonMenus, ...roleMenus];
   const bottomMenus = [...bottomCommonMenus];
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileOpen ? "hidden" : "auto";
+  }, [isMobileOpen]);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const sidebarWidth = isSidebarExpanded ? "w-64" : "w-16";
+
   return (
-    <div className="flex text-sm">
+    <>
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 z-30 md:hidden"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
       <button
-        className="md:hidden fixed top-2 left-4 z-50 rounded shadow"
-        onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+        className="fixed top-4 left-4 z-50 md:hidden"
+        onClick={() => setIsMobileOpen((prev) => !prev)}
+        aria-label={isMobileOpen ? "Close sidebar" : "Open sidebar"}
+        aria-expanded={isMobileOpen}
       >
-        <Bars3Icon className="h-6 w-6 " />
+        {isMobileOpen ? (
+          <XMarkIcon className="h-6 w-6 text-gray-700" />
+        ) : (
+          <Bars3Icon className="h-6 w-6 text-gray-700" />
+        )}
       </button>
 
       <div
-        className={`bg-white h-screen relative overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out ${
-          isSidebarExpanded ? "w-64 pt-16" : "w-16"
-        } md:pt-0`}
-        style={{
-          width: isSidebarExpanded ? sidebarWidth : 64,
-        }}
+        className={`
+    fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
+    overflow-visible md:overflow-visible shadow-md
+    ${sidebarWidth}
+    ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+    bg-slate-100
+    md:relative md:translate-x-0 md:block
+  `}
       >
-        <div className="flex flex-col justify-between h-full px-2 py-4">
-          <div>
-            <div className="space-y-6 px-2">
-              
-              <div
-                className={`text-xl font-semibold px-4 ${
-                  !isSidebarExpanded && "hidden md:block"
-                }`}
-              >
-                <img
-                  src="/logo/logo.png"
-                  alt="erp-logo"
-                  className="w-12"
-                />
-              </div>
-              <div className="flex flex-col h-full justify-between">
-                <div>
-                  {topMenus.map((section, idx) => (
-                    <div key={idx} className="mb-4">
-                      <div className="text-xs uppercase mb-2 px-2">
-                        {section.section}
-                      </div>
-                      {section.items.map((item, itemIdx) => {
-                        const isInventory = item.name === "Inventory";
-                        // const isSales = item.name === "Sales";
-                        const isPurchases = item.name === "Purchases";
+        <div className="flex flex-col h-full px-2 py-4 text-gray-700">
+          <div className="flex items-center justify-center h-16">
+            <Link to="/">
+              <img
+                src="/logo/logo.png"
+                alt="Logo"
+                className={`transition-all duration-300 ease-in-out object-contain
+      ${isSidebarExpanded ? "h-10 w-auto" : "h-10 w-10"}
+    `}
+              />
+            </Link>
+          </div>
 
-                        const isActive = location.pathname === item.to;
+          <div className="absolute top-4 right-1 hidden md:block">
+            <button
+              onClick={() => setIsSidebarExpanded((prev) => !prev)}
+              className="rounded-full bg-transparent hover:ring-2 hover:ring-gray-400 transition duration-200"
+              aria-label="Toggle sidebar"
+            >
+              {isSidebarExpanded ? (
+                <IoIosArrowBack className="h-5 w-5 text-gray-400" />
+              ) : (
+                <IoIosArrowForward className="h-5 w-5 text-gray-400" />
+              )}
+            </button>
+          </div>
 
-                        if (isInventory) {
-                          return (
-                            <div key={itemIdx} className="w-full">
-                              <button
-                                onClick={() =>
-                                  setOpenInventoryDropdown(
-                                    !openInventoryDropdown
-                                  )
-                                }
-                                className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                                  isActive
-                                    ? "bg-gray-800 text-white"
-                                    : "hover:bg-gray-800 hover:text-white"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  {item.icon}
-                                  {isSidebarExpanded && (
-                                    <span>{item.name}</span>
-                                  )}
-                                </div>
-                                {isSidebarExpanded && (
-                                  <span className="ml-auto">
-                                    {openInventoryDropdown ? (
-                                      <FaSortUp />
-                                    ) : (
-                                      <FaCaretDown />
-                                    )}
-                                  </span>
-                                )}
-                              </button>
-                              {openInventoryDropdown && isSidebarExpanded && (
-                                <div className="ml-8 mt-1 space-y-1 text-sm">
-                                  {item.children.map((child, idx) => (
-                                    <button
-                                      key={idx}
-                                      onClick={() => navigate(child.to)}
-                                      className={`flex items-center gap-2 p-2 rounded w-full ${
-                                        location.pathname === child.to
-                                          ? "bg-gray-700 text-white"
-                                          : "hover:bg-gray-700 hover:text-white"
-                                      }`}
-                                    >
-                                      {child.icon}
-                                      {child.name}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
+          {/* Top Menus */}
+          <div className="flex-1 space-y-4">
+            {topMenus.map((section, idx) => (
+              <div key={idx} className="p-2 border-b border-gray-300">
+                {section.items.map((item, itemIdx) => {
+                  const isActive = location.pathname === item.to;
+                  const props = {
+                    key: item.name,
+                    item,
+                    isSidebarExpanded,
+                    navigate,
+                    location,
+                    isMobileOpen,
+                    setIsMobileOpen,
+                  };
+
+                  if (item.name === "Supply Chain")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openSupplyChainDropdown}
+                        toggle={() => setOpenSupplyChainDropdown((p) => !p)}
+                      />
+                    );
+                  if (item.name === "Principal Panel")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openPrincipalPanelDropdown}
+                        toggle={() => setOpenPrincipalPanelDropdown((p) => !p)}
+                      />
+                    );
+                  if (item.name === "R&D Modules")
+                    return (
+                      <SidebarDropdown
+                        {...props}
+                        isOpen={openRndModuleDropdown}
+                        toggle={() => setOpenRndModuleDropdown((p) => !p)}
+                      />
+                    );
+
+                  return (
+                    <button
+                      key={itemIdx}
+                      onClick={() => {
+                        navigate(item.to);
+                        setIsMobileOpen(false);
+                      }}
+                      className={`flex items-center gap-2 p-2 rounded w-full transition-colors duration-200
+                        ${
+                          isActive
+                            ? "bg-indigo-600 text-white"
+                            : "hover:bg-indigo-500 hover:text-white"
                         }
-
-                        // if (isSales) {
-                        //   return (
-                        //     <div key={itemIdx} className="w-full">
-                        //       <button
-                        //         onClick={() =>
-                        //           setOpenSalesDropdown(!openSalesDropdown)
-                        //         }
-                        //         className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                        //           location.pathname.startsWith("/sales")
-                        //             ? "bg-gray-800 text-white"
-                        //             : "hover:bg-gray-800 hover:text-white"
-                        //         }`}
-                        //       >
-                        //         <div className="flex items-center gap-2">
-                        //           {item.icon}
-                        //           {isSidebarExpanded && (
-                        //             <span>{item.name}</span>
-                        //           )}
-                        //         </div>
-                        //         {isSidebarExpanded && (
-                        //           <span>
-                        //             {openSalesDropdown ? (
-                        //               <FaSortUp />
-                        //             ) : (
-                        //               <FaCaretDown />
-                        //             )}
-                        //           </span>
-                        //         )}
-                        //       </button>
-
-                        //       {openSalesDropdown && isSidebarExpanded && (
-                        //         <div className="ml-8 mt-1 space-y-1 text-sm">
-                        //           {item.children.map((child, idx) => (
-                        //             <button
-                        //               key={idx}
-                        //               onClick={() => navigate(child.to)}
-                        //               className={`flex items-center gap-2 p-2 rounded w-full ${
-                        //                 location.pathname === child.to
-                        //                   ? "bg-gray-700 text-white"
-                        //                   : "hover:bg-gray-700 hover:text-white"
-                        //               }`}
-                        //             >
-                        //               {child.icon}
-                        //               <span>{child.name}</span>
-                        //             </button>
-                        //           ))}
-                        //         </div>
-                        //       )}
-                        //     </div>
-                        //   );
-                        // }
-
-                        if (isPurchases) {
-                          return (
-                            <div key={itemIdx} className="w-full">
-                              <button
-                                onClick={() =>
-                                  setOpenPurchasesDropdown(
-                                    !openPurchasesDropdown
-                                  )
-                                }
-                                className={`flex items-center justify-between gap-2 p-2 rounded w-full ${
-                                  location.pathname.startsWith("/purchases")
-                                    ? "bg-gray-800 text-white"
-                                    : "hover:bg-gray-800 hover:text-white"
-                                }`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  {item.icon}
-                                  {isSidebarExpanded && (
-                                    <span>{item.name}</span>
-                                  )}
-                                </div>
-                                {isSidebarExpanded && (
-                                  <span>
-                                    {openPurchasesDropdown ? (
-                                      <FaSortUp />
-                                    ) : (
-                                      <FaCaretDown />
-                                    )}
-                                  </span>
-                                )}
-                              </button>
-
-                              {openPurchasesDropdown && isSidebarExpanded && (
-                                <div className="ml-8 mt-1 space-y-1 text-sm">
-                                  {item.children.map((child, idx) => (
-                                    <button
-                                      key={idx}
-                                      onClick={() => navigate(child.to)}
-                                      className={`flex items-center gap-2 p-2 rounded w-full ${
-                                        location.pathname === child.to
-                                          ? "bg-gray-700 text-white"
-                                          : "hover:bg-gray-700 hover:text-white"
-                                      }`}
-                                    >
-                                      {child.icon}
-                                      <span>{child.name}</span>
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-
-                        // Default item rendering
-                        return (
-                          <button
-                            key={itemIdx}
-                            onClick={() => navigate(item.to)}
-                            className={`flex items-center gap-2 p-2 rounded w-full ${
-                              isActive
-                                ? "bg-gray-800 text-white"
-                                : "hover:bg-gray-800 hover:text-white"
-                            }`}
-                          >
-                            {item.icon}
-                            {isSidebarExpanded && <span>{item.name}</span>}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-                {/* {topMenus.map((section, idx) => (
-              <div key={idx} className="mb-4 lg:pt-0 pt-5">
-                <div className="text-xs uppercase mb-2 px-2 hidden md:block">
-                  {section.section}
-                </div>
-                {section.items.map((item, itemIdx) => (
-                  <button
-                    key={itemIdx}
-                    onClick={() => navigate(item.to)}
-                    className={`flex items-center gap-2 p-2 rounded w-full ${
-                      location.pathname === item.to
-                        ? "bg-gray-800 text-white"
-                        : "hover:bg-gray-800 hover:text-white"
-                    }`}
-                  >
-                    {item.icon}
-                    {isSidebarExpanded && <span>{item.name}</span>}
-                  </button>
-                ))}
+                      `}
+                    >
+                      <span className="text-lg text-gray-600">{item.icon}</span>
+                      {isSidebarExpanded && <span>{item.name}</span>}
+                    </button>
+                  );
+                })}
               </div>
-            ))} */}
-              </div>
+            ))}
+          </div>
 
-              {/* Logout Button */}
-              <div className="mt-4">
-                <button
-                  onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }}
-                  className="flex items-center gap-2 hover:bg-gray-800 hover:text-white p-2 rounded w-full"
-                >
-                  <LogOut className="h-5 w-5" />
-                  {isSidebarExpanded && <span>Logout</span>}
-                </button>
-              </div>
-            </div>
+          {/* Logout */}
+          <div className="mt-auto p-2">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 hover:bg-red-500 hover:text-white text-red-600 p-2 rounded w-full"
+            >
+              <LogOut className="h-5 w-5" />
+              {isSidebarExpanded && <span>Logout</span>}
+            </button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
