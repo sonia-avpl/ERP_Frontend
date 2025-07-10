@@ -4,7 +4,6 @@ import InputField from "../../components/form/InputField";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../utills/enum";
 
-
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [forgotEmail, setForgotEmail] = useState("");
@@ -19,12 +18,12 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await postData("auth/login", form);
-    console.log(data)
+    console.log(data);
     if (data) {
       localStorage.setItem("token", JSON.stringify(data.token));
-      localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("acl", JSON.stringify(data.acl));
       navigate("/");
+      window.location.reload();
     }
   };
 

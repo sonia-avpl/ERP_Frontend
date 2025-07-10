@@ -8,7 +8,11 @@ import { getTodayDate } from "../../utills/functions";
 import { usePostFile } from "../../hooks/usePostFile";
 import { usePost } from "../../hooks/usePost";
 import { FileModules } from "../../utills/enum";
-import { itiLocations, polytechnicLocations } from "../../utills/helper";
+import {
+  emailCollegeMap,
+  itiLocations,
+  polytechnicLocations,
+} from "../../utills/helper";
 import ApiService from "../../services/axiosInstance";
 import { useAuth } from "../../components/context/AuthContext";
 
@@ -18,11 +22,11 @@ const AdmissionForm = () => {
   const [courseType, setCourseType] = useState("");
   const [collegeLocation, setCollegeLocation] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const { user } = useAuth();
-  console.log("use", user);
+  const { user, roleName } = useAuth();
+ 
 
   const [formData, setFormData] = useState({
-    applicationReceivedOn: getTodayDate(),
+    applicationReceivedOn: "",
     registrationNo: "",
     totalFees: "",
     govtOrPvt: "",
@@ -138,6 +142,24 @@ const AdmissionForm = () => {
     fetchCourseFeeDetails();
   }, [formData.courseName, formData.category, formData.govtOrPvt]);
 
+  useEffect(() => {
+    const isAdmin = roleName === "Admin";
+    const email = user?.email;
+    const assignedCollege = emailCollegeMap[email];
+
+    if (!isAdmin && courseType) {
+      // Only set if location matches selected course type
+      if (
+        (courseType === "iti" && itiLocations.includes(assignedCollege)) ||
+        (courseType === "polytechnic" &&
+          polytechnicLocations.includes(assignedCollege))
+      ) {
+        setCollegeLocation(assignedCollege);
+      } else {
+        setCollegeLocation(""); // fallback if no match
+      }
+    }
+  }, [courseType, user]);
   const handleSignatureChange = (e, declarationType) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -236,11 +258,31 @@ const AdmissionForm = () => {
       }
     }
   };
+
   const getFilteredLocations = () => {
-    if (courseType === "iti") return itiLocations;
-    if (courseType === "polytechnic") return polytechnicLocations;
-    return [];
+    const isAdmin = roleName === "Admin";
+    if (isAdmin) {
+      if (courseType === "iti") return itiLocations;
+      if (courseType === "polytechnic") return polytechnicLocations;
+      return [];
+    } else {
+      const email = user?.email;
+      const assignedCollege = emailCollegeMap[email];
+      if (!assignedCollege) return []; // fallback if email is not in the map
+
+      // Return only if college belongs to selected courseType
+      if (
+        (courseType === "iti" && itiLocations.includes(assignedCollege)) ||
+        (courseType === "polytechnic" &&
+          polytechnicLocations.includes(assignedCollege))
+      ) {
+        return [assignedCollege];
+      }
+
+      return [];
+    }
   };
+
   return (
     <>
       {!showForm ? (
@@ -267,21 +309,32 @@ const AdmissionForm = () => {
 
             {courseType && (
               <div>
-                <label className="block font-semibold text-gray-700 mb-2">
-                  Select College Location
-                </label>
-                <select
-                  value={collegeLocation}
-                  onChange={(e) => setCollegeLocation(e.target.value)}
-                  className="input w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
-                >
-                  <option value="">-- Select College --</option>
-                  {getFilteredLocations().map((location, i) => (
-                    <option key={i} value={location}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
+                {roleName === "Admin" ? (
+                  <>
+                    <label className="block font-semibold text-gray-700 mb-2">
+                      Select College Location
+                    </label>
+                    <select
+                      value={collegeLocation}
+                      onChange={(e) => setCollegeLocation(e.target.value)}
+                      className="input w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
+                    >
+                      <option value="">-- Select College --</option>
+                      {getFilteredLocations().map((location, i) => (
+                        <option key={i} value={location}>
+                          {location}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  <input
+                    type="text"
+                    value={collegeLocation}
+                    readOnly
+                    className="input w-full p-2 bg-gray-100 text-gray-700 cursor-not-allowed border rounded-md"
+                  />
+                )}
               </div>
             )}
 

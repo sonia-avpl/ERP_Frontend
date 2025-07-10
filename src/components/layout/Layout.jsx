@@ -6,13 +6,15 @@ import { useRef } from "react";
 import UserProfileCard from "../card/UserProfileCard";
 import { getTitle } from "../../utills/functions";
 import { useGet } from "../../hooks/useGet";
+import { useAuth } from "../context/AuthContext";
 
 const Layout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
   const path = location.pathname;
-  const {data}=useGet(`auth/role/${user.role}`)
+    const { user ,roleName} =useAuth();
+    console.log("user",user)
+  // const {data}=useGet(`auth/role/${user.role}`)
 
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef();
@@ -30,7 +32,7 @@ const Layout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
 
-      {user && <Sidebar userRole={data.roleName} />}
+      {user && <Sidebar userRole={roleName} />}
       <main className="flex-1 overflow-y-auto h-full">
         <header className="bg-white shadow-sm border-b">
           <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 py-4 gap-4 lg:gap-0">
@@ -44,12 +46,12 @@ const Layout = () => {
                   onClick={() => setOpen(!open)}
                   className="flex items-center gap-2 p-2 rounded-full hover:bg-gray-100 transition"
                 >
-                  <div className="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold">
-                    AD
+                  <div className="p-2 bg-violet-600 text-white rounded-full flex items-center justify-center">
+                    {user?.name}
                   </div>
                 </button>
 
-                {open && <UserProfileCard setOpen={setOpen} userRole={data.roleName}/>}
+                {open && <UserProfileCard setOpen={setOpen} userRole={roleName}/>}
               </div>
             </div>
           </div>
