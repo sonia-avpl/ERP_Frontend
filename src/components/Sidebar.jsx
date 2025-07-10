@@ -25,7 +25,13 @@ const Sidebar = ({ userRole }) => {
   const bottomMenus = [...bottomCommonMenus];
 
   useEffect(() => {
+    // Lock scrolling when sidebar is open on mobile
     document.body.style.overflow = isMobileOpen ? "hidden" : "auto";
+
+    // Force expanded sidebar when opened on mobile
+    if (isMobileOpen) {
+      setIsSidebarExpanded(true);
+    }
   }, [isMobileOpen]);
 
   const handleLogout = () => {
@@ -33,7 +39,11 @@ const Sidebar = ({ userRole }) => {
     navigate("/login");
   };
 
-  const sidebarWidth = isSidebarExpanded ? "w-64" : "w-16";
+  const sidebarWidth = isMobileOpen
+    ? "w-64"
+    : isSidebarExpanded
+    ? "w-64"
+    : "w-16";
 
   return (
     <>
@@ -59,23 +69,23 @@ const Sidebar = ({ userRole }) => {
 
       <div
         className={`
-    fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
-    overflow-visible md:overflow-visible shadow-md
-    ${sidebarWidth}
-    ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-    bg-slate-100
-    md:relative md:translate-x-0 md:block
-  `}
+          fixed top-0 left-0 h-full z-40 transition-all duration-300 ease-in-out
+          overflow-y-auto shadow-md bg-slate-100
+          ${sidebarWidth}
+          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:relative md:block
+        `}
       >
         <div className="flex flex-col h-full px-2 py-4 text-gray-700">
+          {/* Logo */}
           <div className="flex items-center justify-center h-16">
             <Link to="/">
               <img
                 src="/logo/logo.png"
                 alt="Logo"
-                className={`transition-all duration-300 ease-in-out object-contain
-      ${isSidebarExpanded ? "h-10 w-auto" : "h-10 w-10"}
-    `}
+                className={`transition-all duration-300 object-contain ${
+                  isSidebarExpanded ? "h-10 w-auto" : "h-10 w-10"
+                }`}
               />
             </Link>
           </div>
@@ -94,7 +104,6 @@ const Sidebar = ({ userRole }) => {
             </button>
           </div>
 
-          {/* Top Menus */}
           <div className="flex-1 space-y-4">
             {topMenus.map((section, idx) => (
               <div key={idx} className="p-2 border-b border-gray-300">
@@ -110,7 +119,7 @@ const Sidebar = ({ userRole }) => {
                     setIsMobileOpen,
                   };
 
-                  if (item.name === "Supply Chain")
+                  if (item.name === "Supply Chain") {
                     return (
                       <SidebarDropdown
                         {...props}
@@ -118,7 +127,8 @@ const Sidebar = ({ userRole }) => {
                         toggle={() => setOpenSupplyChainDropdown((p) => !p)}
                       />
                     );
-                  if (item.name === "Principal Panel")
+                  }
+                  if (item.name === "Principal Panel") {
                     return (
                       <SidebarDropdown
                         {...props}
@@ -126,7 +136,8 @@ const Sidebar = ({ userRole }) => {
                         toggle={() => setOpenPrincipalPanelDropdown((p) => !p)}
                       />
                     );
-                  if (item.name === "R&D Modules")
+                  }
+                  if (item.name === "R&D Modules") {
                     return (
                       <SidebarDropdown
                         {...props}
@@ -134,6 +145,7 @@ const Sidebar = ({ userRole }) => {
                         toggle={() => setOpenRndModuleDropdown((p) => !p)}
                       />
                     );
+                  }
 
                   return (
                     <button
@@ -142,13 +154,11 @@ const Sidebar = ({ userRole }) => {
                         navigate(item.to);
                         setIsMobileOpen(false);
                       }}
-                      className={`flex items-center gap-2 p-2 rounded w-full transition-colors duration-200
-                        ${
-                          isActive
-                            ? "bg-indigo-600 text-white"
-                            : "hover:bg-indigo-500 hover:text-white"
-                        }
-                      `}
+                      className={`flex items-center gap-2 p-2 rounded w-full transition-colors duration-200 ${
+                        isActive
+                          ? "bg-indigo-600 text-white"
+                          : "hover:bg-indigo-500 hover:text-white"
+                      }`}
                     >
                       <span className="text-lg text-gray-600">{item.icon}</span>
                       {isSidebarExpanded && <span>{item.name}</span>}
