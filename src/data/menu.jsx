@@ -31,6 +31,8 @@ import {
 // } from "@heroicons/react/24/outline";
 import { SiAmazondocumentdb } from "react-icons/si";
 import { FaStore } from "react-icons/fa";
+import { FaShoppingBag } from "react-icons/fa";
+
 import {
   BanknoteIcon,
   CreditCardIcon,
@@ -389,7 +391,12 @@ export const menuConfig = {
               to: "/purchases/vendors",
               icon: <UsersIcon className="h-4 w-4" />,
             },
-            
+            {
+              name: "Purchase Orders",
+              to: "/purchases/orders",
+              icon: <FaShoppingBag className="h-4 w-4" />,
+            },
+
             // {
             //   name: "SKU Management ",
             //   to: "/sku-management",
