@@ -5,7 +5,6 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  // Initialize from localStorage
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -15,14 +14,15 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("roleName") || "";
   });
 
-  const { data: userData, loading } = useGet(`auth/me`);
+  const { data: userData, loading } = useGet("auth/me");
 
   useEffect(() => {
     if (userData) {
-      setUser(userData); 
-      setRoleName(userData?.role?.name || "");
+      setUser(userData);
+      const role = userData?.role?.name || "";
+      setRoleName(role);
       localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("roleName", userData?.role?.name || "");
+      localStorage.setItem("roleName", role);
     }
   }, [userData]);
 

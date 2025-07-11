@@ -4,30 +4,49 @@ import { toWords } from "number-to-words";
 const handleDownloadFeeReceipt = (students) => {
   if (!students || students.length === 0) return;
 
-  const logoUrl = "/logo/iti_logo.png";
-
   students.forEach((student, index) => {
     const doc = new jsPDF();
     const img = new Image();
     img.crossOrigin = "anonymous";
 
-    img.onload = () => {
-      // Add logo
-      doc.addImage(img, "PNG", 150, 10, 40, 30);
+    const logoMap = {
+      polytechnic: "/logo/polytechnic_logo.jpg",
+      iti: "/logo/iti_logo.png",
+    };
 
-      // College Name (centered and larger)
-      const collegeName = student.collegeLocation || "ABC College";
-      doc.setFontSize(18);
+    const logoUrl = logoMap[student.courseType] || "/logo/default_logo.png";
+
+    img.onload = () => {
+      doc.addImage(img, "PNG", 150, 10, 40, 20);
+
       const pageWidth = doc.internal.pageSize.getWidth();
-      const collegeTextWidth = doc.getTextWidth(collegeName);
-      const collegeX = (pageWidth - collegeTextWidth) / 2;
+
+      // College Name
+      const collegeName = student.collegeLocation || "ABC College";
+      doc.setFontSize(16);
+      const collegeX = (pageWidth - doc.getTextWidth(collegeName)) / 2;
       doc.text(collegeName, collegeX, 20);
+
+      // Address from createdByDetails
+      const address =
+        student.createdByDetails?.address || "Mirzapur, Uttar Pradesh";
+      doc.setFontSize(8);
+      const addressX = (pageWidth - doc.getTextWidth(address)) / 2;
+      doc.text(address, addressX, 27);
+
+      // Phone from createdByDetails
+      const phone = student.createdByDetails?.phone || "+91-XXXXXXXXXX";
+      const phoneX = (pageWidth - doc.getTextWidth(phone)) / 2;
+      doc.text(phone, phoneX, 33);
 
       // Date Format
       const rawDate = new Date(student.createdAt || Date.now());
-      const formattedDate = `${String(rawDate.getDate()).padStart(2, "0")}-${String(
-        rawDate.getMonth() + 1
-      ).padStart(2, "0")}-${String(rawDate.getFullYear()).slice(2)}`;
+      const formattedDate = `${String(rawDate.getDate()).padStart(
+        2,
+        "0"
+      )}-${String(rawDate.getMonth() + 1).padStart(2, "0")}-${String(
+        rawDate.getFullYear()
+      ).slice(2)}`;
 
       const receiptNo = student.registrationNo || `#${1000 + index}`;
 
@@ -39,7 +58,7 @@ const handleDownloadFeeReceipt = (students) => {
       doc.setFontSize(12);
       doc.text(`Fee Receipt No: ${receiptNo}`, 20, 50);
 
-      // Body Section
+      // Body
       let y = 70;
       const rowHeight = 10;
       const labelX = 20;
@@ -64,7 +83,7 @@ const handleDownloadFeeReceipt = (students) => {
       });
 
       // Installments
-      const installmentValues = student.installments || ["Rs. 1000", "Rs. 500", "Rs. 500"];
+      const installmentValues = student.installments || ["I", "II", "III"];
       const thirdWidth = valueWidth / 3;
 
       doc.rect(labelX, y, labelWidth, rowHeight);
@@ -73,7 +92,11 @@ const handleDownloadFeeReceipt = (students) => {
       for (let i = 0; i < 3; i++) {
         const partX = valueX + i * thirdWidth;
         doc.rect(partX, y, thirdWidth, rowHeight);
-        doc.text((installmentValues[i] || "Rs. 0").toString(), partX + 2, y + 7);
+        doc.text(
+          (installmentValues[i] || "Rs. 0").toString(),
+          partX + 2,
+          y + 7
+        );
       }
       y += rowHeight;
 
@@ -87,15 +110,33 @@ const handleDownloadFeeReceipt = (students) => {
       y += rowHeight + 5;
       const totalAmount = Number(student.totalFees) || 0;
 
+      const cautionFee = isNaN(Number(student.cautionFee))
+        ? 300
+        : Number(student.cautionFee);
+
+      const paidAmount = Number(student.totalPaid) || 0;
+      const balanceAmount = totalAmount - paidAmount;
+
       const particulars = [
+        { label: "Registration Fee", value: "Rs. 0" },
         { label: "Tuition Fee", value: "Rs. 40 per month" },
+        { label: "Examination Fee", value: "Rs. 0" },
+        { label: "Library Fee", value: "Rs. 0" },
         {
           label: "Caution Money",
-          value: student.cautionFee ? `Rs. ${student.cautionFee}` : "Rs. 300",
+          value: `Rs. ${cautionFee}`,
         },
         {
           label: "Total Amount",
-          value: `Rs. ${totalAmount}`,
+          value: `Rs. ${totalAmount.toLocaleString("en-IN")}`,
+        },
+        {
+          label: "Paid Amount",
+          value: `Rs. ${paidAmount.toLocaleString("en-IN")}`,
+        },
+        {
+          label: "Balance",
+          value: `Rs. ${balanceAmount.toLocaleString("en-IN")}`,
         },
       ];
 
@@ -108,6 +149,13 @@ const handleDownloadFeeReceipt = (students) => {
       y += rowHeight;
 
       particulars.forEach((item) => {
+        // Bold only "Balance"
+        if (item.label === "Balance") {
+          doc.setFont(undefined, "bold");
+        } else {
+          doc.setFont(undefined, "normal");
+        }
+
         doc.rect(labelX, y, labelWidth, rowHeight);
         doc.rect(valueX, y, valueWidth, rowHeight);
         doc.text(item.label.toString(), labelX + 2, y + 7);
@@ -119,17 +167,23 @@ const handleDownloadFeeReceipt = (students) => {
       y += 10;
       const amountInWords = toWords(totalAmount);
       doc.text(
-        `Amount in Words: ${amountInWords.charAt(0).toUpperCase() + amountInWords.slice(1)} Only`,
+        `Amount in Words: ${
+          amountInWords.charAt(0).toUpperCase() + amountInWords.slice(1)
+        } Only`,
         labelX,
         y
       );
       y += rowHeight;
 
-      // Received By
-      doc.text("Received by: ___________________________ (Signature with Date)", labelX, y);
+      // Signature
+      doc.text(
+        "Received by: ___________________________ (Signature with Date)",
+        labelX,
+        y
+      );
       y += rowHeight;
 
-      // Footer note (center aligned)
+      // Footer Note
       doc.setFontSize(9);
       doc.setTextColor(100);
       const note =
@@ -142,12 +196,20 @@ const handleDownloadFeeReceipt = (students) => {
       const pdfBlob = doc.output("blob");
       const blobUrl = URL.createObjectURL(pdfBlob);
       const link = document.createElement("a");
+      const safeFileName = (student.name || "fee-receipt").replace(/\s+/g, "_");
       link.href = blobUrl;
-      link.download = `${student.name || "fee-receipt"}.pdf`;
+      link.download = `${safeFileName}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(blobUrl);
+    };
+
+    img.onerror = () => {
+      console.error(
+        "Failed to load logo image for course type:",
+        student.courseType
+      );
     };
 
     img.src = logoUrl;

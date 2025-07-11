@@ -2,12 +2,8 @@ import { handleDownload } from "../../utills/functions";
 
 import handleDownloadFeeReceipt from "../pdf/handleDownloadFeeReceipt";
 
-
-
-
-
-
 const DropDown = ({ dropdownOpen, setDropdownOpen, selectedStudents }) => {
+  console.log("selectedStudents",selectedStudents)
   return (
     <div className="relative inline-block text-left lg:mt-0 mt-5">
       <button
