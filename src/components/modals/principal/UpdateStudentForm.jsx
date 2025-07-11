@@ -6,24 +6,30 @@ import Educational from "../../lms/Educational";
 import OtherInformation from "../../lms/OtherInformation";
 import Decrations from "../../lms/Decrations";
 import { usePatchFile } from "../../../hooks/usePatchFile";
+import { usePost } from "../../../hooks/usePost";
 
-const UpdateStudentForm = ({ initialData,onClose }) => {
+const UpdateStudentForm = ({ initialData, onClose }) => {
+  console.log("initialData", initialData);
   const { patchData, loading } = usePatchFile();
   const [formData, setFormData] = useState({
-    applicationReceivedOn: getTodayDate(),
+    studentImage: "",
+    applicationReceivedOn: "",
     registrationNo: "",
     totalFees: "",
+    govtOrPvt: "",
     courseName: "",
-    courseType:"",
+    yearlyFee: "",
     name: "",
     fatherName: "",
     motherName: "",
     dob: "",
+    age: "",
     gender: "",
     fatherOccupation: "",
     category: "",
     nationality: "",
     permanentAddress: "",
+    presentAddress: "",
     mobile: "",
     parentMobile: "",
     email: "",
@@ -75,7 +81,12 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
       signatureImage: "",
     },
   });
-
+  const { uploadImageOnSWithModule } = usePost();
+  const [uploads, setUploads] = useState({
+    studentImage: null,
+    candidateImage: null,
+    parentImage: null,
+  });
   const [candidateSignaturePreview, setCandidateSignaturePreview] =
     useState(null);
   const [parentSignaturePreview, setParentSignaturePreview] = useState(null);
@@ -209,11 +220,52 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
   };
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
-    console.log(formData);
+
     const result = await patchData(`admission/${initialData._id}`, formData);
-    onClose()
-    console.log("result", result);
+
+    if (result?.success) {
+      if (uploads.studentImage) {
+        await uploadImageOnSWithModule(
+          [uploads.studentImage],
+          result.data._id,
+          FileModules.StudentImage
+        );
+      }
+      if (uploads.candidateImage) {
+        await uploadImageOnSWithModule(
+          [uploads.candidateImage],
+          result.data._id,
+          FileModules.CanditateSignature
+        );
+      }
+      if (uploads.parentImage) {
+        await uploadImageOnSWithModule(
+          [uploads.parentImage],
+          result.data._id,
+          FileModules.ParentSignature
+        );
+      }
+    }
+
+    onClose();
+  };
+
+  const handleStudentImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploads((prev) => ({ ...prev, studentImage: file }));
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          studentImage: reader.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -227,6 +279,30 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
           <h2 className="lg:text-xl text-sm font-semibold text-blue-700 mb-4">
             Application Details
           </h2>
+          <div>
+            <label
+              htmlFor="studentImage"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Student Image
+            </label>
+            <input
+              type="file"
+              name="studentImage"
+              id="studentImage"
+              accept="image/*"
+              onChange={(e) => handleStudentImageChange(e)}
+              className="input w-full p-2"
+            />
+            {formData.studentImage &&
+              typeof formData.studentImage === "string" && (
+                <img
+                  src={formData.studentImage}
+                  alt="Student Preview"
+                  className="mt-2 h-32 w-32 object-cover rounded"
+                />
+              )}
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:text-base text-xs">
             <div>
@@ -282,7 +358,11 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
           </div>
         </section>
 
-        <Courses formData={formData} handleCourseToggle={handleCourseToggle} courseType={formData.courseType}/>
+        <Courses
+          formData={formData}
+          handleCourseToggle={handleCourseToggle}
+          courseType={formData.courseType}
+        />
         <PersonalInformation formData={formData} handleChange={handleChange} />
         <Educational
           formData={formData}
@@ -311,7 +391,6 @@ const UpdateStudentForm = ({ initialData,onClose }) => {
           </button>
         </div>
       </form>
-      
     </div>
   );
 };

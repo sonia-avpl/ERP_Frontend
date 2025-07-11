@@ -4,7 +4,6 @@ import { subjectOptions } from "../../utills/enum";
 const Educational = ({ formData, handleEducationChange }) => {
   const [openSubjectDropdownForIndex, setOpenSubjectDropdownForIndex] =
     useState(null);
-  const [customSubjectInput, setCustomSubjectInput] = useState({});
   const dropdownRefs = useRef([]);
 
   useEffect(() => {
@@ -25,44 +24,11 @@ const Educational = ({ formData, handleEducationChange }) => {
     const currentSubjects = formData.education[index].subjects || [];
     let newSubjects = [...currentSubjects];
 
-    if (subject === "Other") {
-      if (!isChecked) {
-        setCustomSubjectInput((prev) => {
-          const updated = { ...prev };
-          delete updated[index];
-          return updated;
-        });
-        newSubjects = newSubjects.filter(
-          (s) => s !== "Other" && !subjectOptions.includes(s)
-        );
-      } else {
-        newSubjects.push("Other");
-      }
-    } else {
-      newSubjects = isChecked
-        ? [...newSubjects, subject]
-        : newSubjects.filter((s) => s !== subject);
-    }
+    newSubjects = isChecked
+      ? [...newSubjects, subject]
+      : newSubjects.filter((s) => s !== subject);
 
     handleEducationChange(index, "subjects", newSubjects);
-  };
-
-  const handleOtherSubjectChange = (index, value) => {
-    setCustomSubjectInput((prev) => ({ ...prev, [index]: value }));
-
-    const currentSubjects = formData.education[index].subjects || [];
-    const standardSubjects = currentSubjects.filter((s) =>
-      subjectOptions.includes(s)
-    );
-
-    if (value.trim()) {
-      handleEducationChange(index, "subjects", [
-        ...standardSubjects,
-        value.trim(),
-      ]);
-    } else {
-      handleEducationChange(index, "subjects", [...standardSubjects]);
-    }
   };
 
   const toggleSubjectsDropdown = (index) => {
@@ -76,26 +42,24 @@ const Educational = ({ formData, handleEducationChange }) => {
       <h2 className="lg:text-xl font-semibold text-yellow-700 mb-4">
         Educational Qualification
       </h2>
-      <div className="space-y-4  lg:text-base text-xs">
-        {" "}
-        {/* Responsive text size */}
-        <div className="hidden lg:grid grid-cols-8 gap-2 font-medium text-gray-700 mb-2 ">
+      <div className="space-y-4 lg:text-base text-xs">
+        <div className="hidden lg:grid grid-cols-8 gap-2 font-medium text-gray-700 mb-2">
           <span className="col-span-1">Exam Passed</span>
           <span className="col-span-1">Board</span>
           <span className="col-span-1">Year</span>
           <span className="col-span-1">Marks Obtained</span>
           <span className="col-span-1">Total Marks</span>
-          <span className="col-span-1">Percentage(%)</span>
+          <span className="col-span-1"> %age</span>
           <span className="col-span-1">CGPA</span>
           <span className="col-span-1">Subjects</span>
         </div>
+
         {formData.education.map((edu, index) => (
-          // Main row container: grid on large screens, stack on small
           <div
             key={index}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-4 lg:gap-2 p-4 sm:p-2 border border-gray-200 rounded-lg lg:border-none lg:rounded-none lg:p-0"
           >
-            {/* Exam Passed - Readonly */}
+            {/* Exam Passed */}
             <div className="flex flex-col col-span-full lg:col-span-1">
               <label className="block text-gray-700 text-xs font-medium mb-1 lg:hidden">
                 Exam Passed
@@ -161,7 +125,10 @@ const Educational = ({ formData, handleEducationChange }) => {
                 onChange={(e) =>
                   handleEducationChange(index, "marksObtained", e.target.value)
                 }
-                className="input p-2"
+                disabled={edu.cgpa !== ""}
+                className={`input p-2 ${
+                  edu.cgpa !== "" ? "bg-gray-100 cursor-not-allowed" : ""
+                }`}
               />
             </div>
 
@@ -181,7 +148,10 @@ const Educational = ({ formData, handleEducationChange }) => {
                 onChange={(e) =>
                   handleEducationChange(index, "totalMarks", e.target.value)
                 }
-                className="input p-2"
+                disabled={edu.cgpa !== ""}
+                className={`input p-2 ${
+                  edu.cgpa !== "" ? "bg-gray-100 cursor-not-allowed" : ""
+                }`}
               />
             </div>
 
@@ -191,7 +161,7 @@ const Educational = ({ formData, handleEducationChange }) => {
                 htmlFor={`percentage-${index}`}
                 className="block text-gray-700 text-xs font-medium mb-1 lg:hidden"
               >
-               %age
+                %age
               </label>
               <input
                 id={`percentage-${index}`}
@@ -224,14 +194,20 @@ const Educational = ({ formData, handleEducationChange }) => {
                 onChange={(e) =>
                   handleEducationChange(index, "cgpa", e.target.value)
                 }
-                disabled={edu.percentage !== ""}
+                disabled={
+                  edu.percentage !== "" ||
+                  (edu.marksObtained !== "" && edu.totalMarks !== "")
+                }
                 className={`input p-2 ${
-                  edu.percentage !== "" ? "bg-gray-100 cursor-not-allowed" : ""
+                  edu.percentage !== "" ||
+                  (edu.marksObtained !== "" && edu.totalMarks !== "")
+                    ? "bg-gray-100 cursor-not-allowed"
+                    : ""
                 }`}
               />
             </div>
 
-            {/* Subject Selection with Checkboxes */}
+            {/* Subjects Dropdown */}
             <div
               className="flex flex-col col-span-full lg:col-span-1 relative"
               ref={(el) => (dropdownRefs.current[index] = el)}
@@ -283,33 +259,6 @@ const Educational = ({ formData, handleEducationChange }) => {
                       {subject}
                     </label>
                   ))}
-
-                  {/* Other Option */}
-                  <label className="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={edu.subjects.includes("Other")}
-                      onChange={(e) =>
-                        handleCheckboxChange(index, "Other", e.target.checked)
-                      }
-                      className="mr-2"
-                    />
-                    Other
-                  </label>
-
-                  {edu.subjects.includes("Other") && (
-                    <div className="p-2">
-                      <input
-                        type="text"
-                        placeholder="Enter custom subject"
-                        value={customSubjectInput[index] || ""}
-                        onChange={(e) =>
-                          handleOtherSubjectChange(index, e.target.value)
-                        }
-                        className="input w-full p-2 border rounded"
-                      />
-                    </div>
-                  )}
                 </div>
               )}
             </div>

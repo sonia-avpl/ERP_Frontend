@@ -29,6 +29,7 @@ import { useState } from "react";
 import { EditStudentModalWrapper } from "../../components/modals/principal/EditStudentModalWrapper";
 import { PencilIcon } from "lucide-react";
 import GroupedPayment from "../../components/lms/GroupedPayments";
+import { useAuth } from "../../components/context/AuthContext";
 
 const StudentDetail = () => {
   const { id } = useParams();
@@ -38,12 +39,10 @@ const StudentDetail = () => {
     `fees/getSingleFeeDetails/${data?.data?.studentId}`
   );
   const student = data?.data;
-
+  const { roleName } = useAuth();
   const totalPaid =
     feeTransaction?.reduce((acc, txn) => acc + txn.payingAmt, 0) || 0;
   const dueAmount = student?.totalFees - totalPaid;
-
-  console.log("data", data);
 
   if (loading) {
     return <LoadinSpinner text="Loading users..." />;
@@ -107,11 +106,13 @@ const StudentDetail = () => {
               {student.name.toUpperCase()}
             </h1>
 
+            {/* Registration Info */}
             <p className="text-xs text-gray-600 flex items-center mt-2">
               <ClipboardDocumentCheckIcon className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" />
               <span className="font-semibold">REG No:</span>{" "}
               {student.registrationNo}
             </p>
+
             <p className="text-xs text-gray-500 flex items-center mt-1">
               <CalendarDaysIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
               <span className="font-medium">Applied:</span>{" "}
@@ -123,12 +124,12 @@ const StudentDetail = () => {
               <span className="font-medium">{student.courseName}</span>
             </div>
 
-            <div className="text-xs text-gray-500 flex items-center mt-1 ">
+            <div className="text-xs text-gray-500 flex items-center mt-1">
               <MapPinIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
               <span className="font-medium">{student.collegeLocation}</span>
             </div>
 
-            <div className="text-xs text-gray-500 flex items-center mt-1 ">
+            <div className="text-xs text-gray-500 flex items-center mt-1">
               <ClockIcon className="h-4 w-4 text-gray-500 mr-1 flex-shrink-0" />
               <span className="font-medium">{student.courseDuration}</span>
             </div>
@@ -144,20 +145,31 @@ const StudentDetail = () => {
               </button>
             </div>
 
+            {/* Student Image */}
+            <div className="mt-2 border">
+              <img
+                src={student.studentImage}
+                alt="Student"
+                className="w-full h-32 object-cover rounded-md shadow-md border border-gray-200"
+              />
+            </div>
+
             <div className="flex items-center gap-4 mt-2">
               <span
                 className={`inline-flex items-center px-4 py-2 rounded-full text-md font-bold shadow-sm ${
                   student.feeStatus
-                    ? "bg-green-500 text-white"
-                    : "bg-red-500 text-white"
+                    ? "text-green-500 "
+                    : "text-red-500 "
                 }`}
               >
-                <CreditCardIcon className="h-5 w-5 mr-2" />
+              
                 {student.feeStatus ? "PAID" : "DUE"}
               </span>
 
               <div className="flex flex-col text-gray-800">
-                <div className="flex items-center text-2xl font-bold">
+                <div className={`flex items-center text-2xl font-bold ${ student.feeStatus
+                    ? "text-green-500 "
+                    : "text-red-500 "}`}>
                   <CurrencyRupeeIcon className="h-6 w-6 text-gray-600 mr-2" />
                   <p>{dueAmount}</p>
                 </div>
@@ -409,6 +421,28 @@ const StudentDetail = () => {
             </div>
           </div>
         </div>
+        {roleName === "Admin" && (
+          <div className="border border-gray-200 rounded-lg p-6 bg-white my-10">
+            <SectionHeader icon={UserIcon} title="Created By" />
+            <div className="space-y-2">
+              <DetailItem
+                icon={UserIcon}
+                label="Name"
+                value={student.createdBy?.name || "—"}
+              />
+              <DetailItem
+                icon={EnvelopeIcon}
+                label="Email"
+                value={student.createdBy?.email || "—"}
+              />
+              <DetailItem
+                icon={PhoneIcon}
+                label="Phone"
+                value={student.createdBy?.phone || "—"}
+              />
+            </div>
+          </div>
+        )}
         {showEditModal && (
           <EditStudentModalWrapper
             initialData={student}

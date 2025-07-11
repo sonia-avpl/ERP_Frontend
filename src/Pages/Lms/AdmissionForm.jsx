@@ -15,6 +15,7 @@ import {
 } from "../../utills/helper";
 import ApiService from "../../services/axiosInstance";
 import { useAuth } from "../../components/context/AuthContext";
+import UploadStudentPhoto from "../../components/lms/UploadStudentPhoto";
 
 const AdmissionForm = () => {
   const { postData, loading } = usePostFile();
@@ -23,9 +24,9 @@ const AdmissionForm = () => {
   const [collegeLocation, setCollegeLocation] = useState("");
   const [showForm, setShowForm] = useState(false);
   const { user, roleName } = useAuth();
- 
 
   const [formData, setFormData] = useState({
+    studentImage: "",
     applicationReceivedOn: "",
     registrationNo: "",
     totalFees: "",
@@ -94,13 +95,17 @@ const AdmissionForm = () => {
       signatureImage: "",
     },
   });
+
   const [uploads, setUpload] = useState({
+    studentImage: null,
     candidateImage: null,
     parentImage: null,
   });
   const [candidateSignaturePreview, setCandidateSignaturePreview] =
     useState(null);
   const [parentSignaturePreview, setParentSignaturePreview] = useState(null);
+  const [studentImagePreview, setstudentImagePreview] = useState(null);
+
   useEffect(() => {
     const fetchCourseFeeDetails = async () => {
       const selectedCourse = formData.courseName;
@@ -148,7 +153,6 @@ const AdmissionForm = () => {
     const assignedCollege = emailCollegeMap[email];
 
     if (!isAdmin && courseType) {
-      // Only set if location matches selected course type
       if (
         (courseType === "iti" && itiLocations.includes(assignedCollege)) ||
         (courseType === "polytechnic" &&
@@ -160,6 +164,7 @@ const AdmissionForm = () => {
       }
     }
   }, [courseType, user]);
+
   const handleSignatureChange = (e, declarationType) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -172,6 +177,9 @@ const AdmissionForm = () => {
       } else if (declarationType === "parentDeclaration") {
         setUpload((prev) => ({ ...prev, parentImage: file }));
         setParentSignaturePreview(reader.result);
+      } else if (declarationType === "studentImage") {
+        setUpload((prev) => ({ ...prev, studentImage: file }));
+        setstudentImagePreview(reader.result);
       }
     };
     reader.readAsDataURL(file);
@@ -199,7 +207,6 @@ const AdmissionForm = () => {
           [name]: type === "checkbox" ? checked : value,
         };
 
-        // Reset category if user selects "Private"
         if (name === "govtOrPvt" && value === "Private") {
           updatedData.category = "";
         }
@@ -211,16 +218,28 @@ const AdmissionForm = () => {
 
   const handleEducationChange = (index, field, value) => {
     const updatedEducation = [...formData.education];
-    if (field === "subjects") {
-      updatedEducation[index][field] = value;
-    } else {
-      updatedEducation[index][field] = value;
+    const edu = updatedEducation[index];
+
+    // Update value
+    edu[field] = value;
+
+    // Logic to auto-calculate percentage if marks are provided
+    if (field === "marksObtained" || field === "totalMarks") {
+      const marks = parseFloat(edu.marksObtained);
+      const total = parseFloat(edu.totalMarks);
+      if (!isNaN(marks) && !isNaN(total) && total > 0) {
+        edu.percentage = ((marks / total) * 100).toFixed(2);
+        edu.cgpa = ""; // Clear CGPA if percentage is used
+      } else {
+        edu.percentage = "";
+      }
     }
 
+    // Logic to disable marks and percentage if CGPA is entered
     if (field === "cgpa" && value !== "") {
-      updatedEducation[index].percentage = "";
-    } else if (field === "percentage" && value !== "") {
-      updatedEducation[index].cgpa = "";
+      edu.marksObtained = "";
+      edu.totalMarks = "";
+      edu.percentage = "";
     }
 
     setFormData((prev) => ({ ...prev, education: updatedEducation }));
@@ -242,6 +261,13 @@ const AdmissionForm = () => {
     console.log("payload", payload);
     const result = await postData(`admission/add`, payload);
     if (result?.success) {
+      if (uploads.studentImage) {
+        await uploadImageOnSWithModule(
+          [uploads.studentImage],
+          result.data._id,
+          FileModules.StudentImage
+        );
+      }
       if (uploads.candidateImage) {
         await uploadImageOnSWithModule(
           [uploads.candidateImage],
@@ -364,6 +390,13 @@ const AdmissionForm = () => {
 
           <form onSubmit={handleSubmit} className="space-y-8">
             <section className="bg-blue-50 p-6 rounded-lg shadow-sm">
+              <UploadStudentPhoto
+                studentImage={uploads.studentImage}
+                setUpload={setUpload}
+                handleSignatureChange={handleSignatureChange}
+                studentImagePreview={studentImagePreview}
+              />
+
               <Courses
                 formData={formData}
                 handleCourseToggle={handleCourseToggle}

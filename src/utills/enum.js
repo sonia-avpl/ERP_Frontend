@@ -29,7 +29,10 @@ export const subjectOptions = [
   "Social Science",
   "PCM",
   "PCB",
- 
+  "Commerce",
+  "Arts",
+  "Agriculture",
+  "Other"
 ];
 
 export const FileModules = {
@@ -39,6 +42,7 @@ export const FileModules = {
   Category: "category",
   CanditateSignature: "canditateSignature",
   ParentSignature: "parentSignature",
+  StudentImage:"studentImage"
 };
 
 export const departments = [
@@ -69,3 +73,5 @@ export const role = [
 
 
              
+
+

@@ -58,3 +58,5 @@ export const polytechnicCourses = [
   "Diploma in Fashion Design and Technology",
   "Diploma in Apparel Design and Fashion Technology",
 ];
+
+

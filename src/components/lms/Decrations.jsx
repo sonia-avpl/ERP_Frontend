@@ -4,7 +4,7 @@ const Decrations = ({
   parentSignaturePreview,
   candidateSignaturePreview,
   handleSignatureChange,
-  setUpload,
+ 
 }) => {
   return (
     <section className="bg-blue-50 p-6 rounded-lg shadow-sm">
