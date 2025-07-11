@@ -31,6 +31,8 @@ import {
 // } from "@heroicons/react/24/outline";
 import { SiAmazondocumentdb } from "react-icons/si";
 import { FaStore } from "react-icons/fa";
+import { FaShoppingBag } from "react-icons/fa";
+
 import {
   BanknoteIcon,
   CreditCardIcon,
@@ -127,11 +129,11 @@ export const menuConfig = {
               to: "/inventory/items",
               icon: <PiCubeTransparentLight className="h-4 w-4" />,
             },
-            {
-              name: "SKU Management ",
-              to: "/sku-management",
-              icon: <SiAmazondocumentdb className="h-5 w-5" />,
-            },
+            // {
+            //   name: "SKU Management ",
+            //   to: "/sku-management",
+            //   icon: <SiAmazondocumentdb className="h-5 w-5" />,
+            // },
             {
               name: "Procurement",
               to: "/procurement",
@@ -385,10 +387,21 @@ export const menuConfig = {
               icon: <PiCubeTransparentLight className="h-4 w-4" />,
             },
             {
-              name: "SKU Management ",
-              to: "/sku-management",
-              icon: <SiAmazondocumentdb className="h-5 w-5" />,
+              name: "Vendors",
+              to: "/purchases/vendors",
+              icon: <UsersIcon className="h-4 w-4" />,
             },
+            {
+              name: "Purchase Orders",
+              to: "/purchases/orders",
+              icon: <FaShoppingBag className="h-4 w-4" />,
+            },
+
+            // {
+            //   name: "SKU Management ",
+            //   to: "/sku-management",
+            //   icon: <SiAmazondocumentdb className="h-5 w-5" />,
+            // },
             {
               name: "Procurement",
               to: "/procurement",
@@ -404,11 +417,7 @@ export const menuConfig = {
               to: "quality-control",
               icon: <ShieldCheckIcon className="h-5 w-5" />,
             },
-            {
-              name: "Vendors",
-              to: "/purchases/vendors",
-              icon: <UsersIcon className="h-4 w-4" />,
-            },
+
             {
               name: "Reporting",
               to: "reporting-supply-chain",
